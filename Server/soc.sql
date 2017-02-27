@@ -1,1 +1,0 @@
--- Database for societies app
