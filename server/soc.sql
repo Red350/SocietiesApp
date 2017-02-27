@@ -14,19 +14,17 @@ CREATE TABLE member(
 	pass_hash VARCHAR(64),
 	salt VARCHAR(64),
 	name VARCHAR(50),
-	email VARCHAR(50),
+	email VARCHAR(50) UNIQUE,
 	dob DATE,
 	mobile VARCHAR(20),
 	emergency_ph VARCHAR(20),
 	date_joined DATE,
-	fullPartTime CHAR CHECK (fullPartTime IN ('F', 'P')),
+	full_part_time CHAR CHECK (fullPartTime IN ('F', 'P')),
 	verified CHAR CHECK (verfied IN ('Y', 'N'))
 );
 
 CREATE TABLE society(
 	society_id INTEGER(6) PRIMARY KEY,
-	pass_hash VARCHAR(64),
-	salt VARCHAR(64),
 	name VARCHAR(50),
 	email VARCHAR(50),
 	description VARCHAR(400),
@@ -36,7 +34,7 @@ CREATE TABLE society(
 );
 
 CREATE TABLE admin(
-	member_id INTEGER(6),
+	member_id INTEGER(6) PRIMARY KEY,
 
 	FOREIGN KEY(member_id) REFERENCES member(member_id)
 );
@@ -45,6 +43,7 @@ CREATE TABLE committee_society(
 	member_id INTEGER(6),
 	society_id INTEGER(6),
 
+	PRIMARY KEY(member_id, society_id),
 	FOREIGN KEY(member_id) REFERENCES member(member_id),
 	FOREIGN KEY(society_id) REFERENCES society(society_id)
 );	
@@ -53,6 +52,7 @@ CREATE TABLE member_society(
 	member_id INTEGER(6),
 	society_id INTEGER(6),
 
+	PRIMARY KEY(member_id, society_id),
 	FOREIGN KEY(member_id) REFERENCES member(member_id),
 	FOREIGN KEY(society_id) REFERENCES society(society_id)
 );
