@@ -41,3 +41,6 @@ captures/
 
 # Server stuff
 server/load.txt
+
+# Vim swap files
+*.swp
