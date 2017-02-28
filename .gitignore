@@ -40,7 +40,7 @@ captures/
 *.jks
 
 # Server stuff
-server/load.txt
+server/db/load.txt
 
 # Vim swap files
 *.swp
