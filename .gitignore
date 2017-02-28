@@ -40,7 +40,9 @@ captures/
 *.jks
 
 # Server stuff
-server/db/load.txt
+db/load.txt
+server/.idea/
+server/connect.py
 
 # Vim swap files
 *.swp
