@@ -10,7 +10,10 @@ def get_request():
     return cgi.FieldStorage()
 
 
-def send_response(response):
+def send_header():
     print("Content-type: text/html\n\n")
+
+
+def send_response(response):
     json_data = json.dumps(response)
     print(json_data)

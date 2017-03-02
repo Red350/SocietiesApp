@@ -21,10 +21,10 @@ cur = conn.cursor()
 cur.execute("SELECT * FROM member")
 
 # Display query data
-# print(cur.description)
-# print()
-# for row in cur:
-#     print(row, "<br>")
+print(cur.description)
+print()
+for row in cur:
+    print(row, "<br>")
 
 cur.close()
 conn.close()

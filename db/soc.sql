@@ -59,7 +59,7 @@ CREATE TABLE member_society(
 
 CREATE TABLE session(
 	member_id INTEGER(6) PRIMARY KEY,
-	session_id VARCHAR(40),
+	session_id VARCHAR(32),
 	
 	FOREIGN KEY(member_id) REFERENCES member(member_id)
 );
