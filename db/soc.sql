@@ -19,7 +19,7 @@ CREATE TABLE member(
 	mobile VARCHAR(20),
 	emergency_ph VARCHAR(20),
 	date_joined DATE,
-	full_part_time CHAR CHECK (fullPartTime IN ('F', 'P')),
+	full_part_time CHAR CHECK (fullPartTime IN ('F', 'P', 'N')),
 	verified CHAR CHECK (verfied IN ('Y', 'N'))
 );
 
@@ -57,3 +57,9 @@ CREATE TABLE member_society(
 	FOREIGN KEY(society_id) REFERENCES society(society_id)
 );
 
+CREATE TABLE session(
+	member_id INTEGER(6) PRIMARY KEY,
+	session_id VARCHAR(40),
+	
+	FOREIGN KEY(member_id) REFERENCES member(member_id)
+);

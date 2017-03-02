@@ -42,6 +42,7 @@ captures/
 # Server stuff
 db/load.txt
 server/.idea/
+server/__pycache__
 server/connect.py
 
 # Vim swap files
