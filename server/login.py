@@ -1,21 +1,20 @@
 #!C:\Python\python.exe
 
 import uuid
-import connect
+import database
 import http
 
 data = http.get_request()
 http.send_header()
-conn = connect.get_conn()
+conn = database.get_conn()
 cur = conn.cursor()
 
 member_id = data["member_id"].value
 password = data["password"].value
 
 # Clear any old session IDs
-if connect.check_login(member_id):
-    sql = "DELETE FROM session WHERE(member_id = " + member_id + ");"
-    cur.execute(sql)
+sql = "DELETE FROM session WHERE(member_id = " + member_id + ");"
+cur.execute(sql)
 
 # Check user's password
 sql = "SELECT * FROM member WHERE( member_id = " + member_id + " AND pass_hash='" + password + "');"
@@ -31,7 +30,7 @@ if cur.rowcount == 1:
 
     response = {"return_code": "0", "session_id": session_id}
 else:
-    response = {"return_code": "1", "error_msg": "Invalid username or password"}
+    response = http.generate_error(2)
 
 # Send response
 http.send_response(response)

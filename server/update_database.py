@@ -3,7 +3,7 @@
 import cgi
 import cgitb
 import json
-import connect
+import database
 
 cgitb.enable()
 
@@ -16,7 +16,7 @@ json_data = json.dumps(data)
 print(json_data)
 
 # Query database
-conn = connect.get_conn()
+conn = database.get_conn()
 cur = conn.cursor()
 cur.execute("SELECT * FROM member")
 
