@@ -1,5 +1,3 @@
-#!C:\Python\python.exe
-
 import cgi
 import cgitb
 import json
