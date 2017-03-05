@@ -22,6 +22,7 @@ def generate_error(code):
 
     response['error_msg'] = {
         1: "Invalid session id",
-        2: "Invalid username or password"
+        2: "Invalid username or password",
+        3: "Email already in use"
     }[code]
     return response
