@@ -17,7 +17,7 @@ def send_response(response):
     print(json_data)
 
 
-def generate_error(code):
+def generate_returncode(code):
     response = {"return_code": str(code)}
 
     response['return_msg'] = {

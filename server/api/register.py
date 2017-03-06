@@ -27,7 +27,7 @@ pass_hash = password
 sql = "SELECT email FROM member WHERE(email = '" + email + "');"
 cur.execute(sql)
 if cur.rowcount != 0:
-    response = http.generate_error(3)
+    response = http.generate_returncode(3)
 else:
     sql = ("INSERT INTO member(student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified) VALUES("
            + "'" + student_num + "'" + ", "

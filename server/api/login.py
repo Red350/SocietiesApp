@@ -31,7 +31,7 @@ if cur.rowcount == 1:
     response = http.generate_returncode(0)
     response["session_id"] = session_id
 else:
-    response = http.generate_error(2)
+    response = http.generate_returncode(2)
 
 # Send response
 http.send_response(response)
