@@ -9,7 +9,7 @@ DROP TABLE society;
 DROP TABLE member;
 
 CREATE TABLE member(
-	member_id INTEGER(6) PRIMARY KEY,
+	member_id INTEGER(6) PRIMARY KEY AUTO_INCREMENT,
 	student_num VARCHAR(9),
 	pass_hash VARCHAR(64),
 	salt VARCHAR(64),
@@ -24,7 +24,7 @@ CREATE TABLE member(
 );
 
 CREATE TABLE society(
-	society_id INTEGER(6) PRIMARY KEY,
+	society_id INTEGER(6) PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(50),
 	email VARCHAR(50),
 	description VARCHAR(400),
