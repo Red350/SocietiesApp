@@ -16,20 +16,24 @@ password = data["password"].value
 sql = "DELETE FROM session WHERE(member_id = " + member_id + ");"
 cur.execute(sql)
 
-# Check user's password
-sql = "SELECT * FROM member WHERE( member_id = " + member_id + " AND pass_hash='" + password + "');"
+# Check user's password, and that they are verified
+sql = "SELECT verified FROM member WHERE( member_id = " + member_id + " AND pass_hash='" + password + "');"
 cur.execute(sql)
 if cur.rowcount == 1:
-    # Generate random session ID for user
-    session_id = str(uuid.uuid4().hex)
+    row = cur.fetchone()
+    if row[0] == 'N':
+        response = http.generate_returncode(4)
+    else:
+        # Generate random session ID for user
+        session_id = str(uuid.uuid4().hex)
 
-    # Store session ID for that user in the database
-    sql = "INSERT INTO session VALUES(" + str(member_id) + ",'" + str(session_id) + "');"
-    cur.execute(sql)
-    conn.commit()
+        # Store session ID for that user in the database
+        sql = "INSERT INTO session VALUES(" + str(member_id) + ",'" + str(session_id) + "');"
+        cur.execute(sql)
+        conn.commit()
 
-    response = http.generate_returncode(0)
-    response["session_id"] = session_id
+        response = http.generate_returncode(0)
+        response["session_id"] = session_id
 else:
     response = http.generate_returncode(2)
 

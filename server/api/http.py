@@ -24,6 +24,7 @@ def generate_returncode(code):
         0: "Success",
         1: "Invalid session id",
         2: "Invalid username or password",
-        3: "Email already in use"
+        3: "Email already in use",
+        4: "Email not verified"
     }[code]
     return response
