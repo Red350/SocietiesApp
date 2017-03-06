@@ -10,7 +10,7 @@ conn = database.get_conn()
 cur = conn.cursor()
 
 
-student_num = data["student_id"].value
+student_num = data["student_num"].value
 password = data["password"].value
 name = data["name"].value
 email = data["email"].value
@@ -29,20 +29,20 @@ cur.execute(sql)
 if cur.rowcount != 0:
     response = http.generate_error(3)
 else:
-    sql = ("INSERT INTO member(student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified) VALUES"
-           + student_num + ", "
-           + pass_hash + ", "
-           + salt + ", "
-           + name + ", "
-           + email + ", "
-           + dob+ ", "
-           + mobile + ", "
-           + emergency_ph + ", "
-           + date_joined + ", "
-           + full_part_time + ", N);"
+    sql = ("INSERT INTO member(student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified) VALUES("
+           + "'" + student_num + "'" + ", "
+           + "'" + pass_hash + "'" + ", "
+           + "'" + salt + "'" + ", "
+           + "'" + name + "'" + ", "
+           + "'" + email + "'" + ", "
+           + "'" + dob+ "'" + ", "
+           + "'" + mobile + "'" + ", "
+           + "'" + emergency_ph + "'" + ", "
+           + "'" + date_joined + "'" + ", "
+           + "'" + full_part_time + "'" + ", 'N');"
            )
     print(sql)
-
+    response = {"return_code": "0"}
 
 # Send response
 http.send_response(response)

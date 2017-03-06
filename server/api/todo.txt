@@ -1,0 +1,3 @@
+Validate incoming data
+Hash passwords
+Turn http and database into objects
