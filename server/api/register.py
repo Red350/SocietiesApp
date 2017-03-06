@@ -41,8 +41,8 @@ else:
            + "'" + date_joined + "'" + ", "
            + "'" + full_part_time + "'" + ", 'N');"
            )
-    print(sql)
-    response = {"return_code": "0"}
+    cur.execute(sql)
+    response = http.generate_returncode(0)
 
 # Send response
 http.send_response(response)

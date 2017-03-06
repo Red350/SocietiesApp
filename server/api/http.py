@@ -20,7 +20,8 @@ def send_response(response):
 def generate_error(code):
     response = {"return_code": str(code)}
 
-    response['error_msg'] = {
+    response['return_msg'] = {
+        0: "Success",
         1: "Invalid session id",
         2: "Invalid username or password",
         3: "Email already in use"
