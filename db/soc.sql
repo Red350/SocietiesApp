@@ -2,6 +2,7 @@
 -- Unique IDs 6 digits
 -- Names and emails 50 characters
 
+DROP TABLE session;
 DROP TABLE member_society;
 DROP TABLE committee_society;
 DROP TABLE admin;
