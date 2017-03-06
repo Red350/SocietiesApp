@@ -12,8 +12,8 @@ DROP TABLE member;
 CREATE TABLE member(
 	member_id INTEGER(6) PRIMARY KEY AUTO_INCREMENT,
 	student_num VARCHAR(9),
-	pass_hash VARCHAR(64),
-	salt VARCHAR(64),
+	pass_hash CHAR(64),
+	salt CHAR(32),
 	name VARCHAR(50),
 	email VARCHAR(50) UNIQUE,
 	dob DATE,
