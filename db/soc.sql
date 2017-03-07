@@ -2,6 +2,7 @@
 -- Unique IDs 6 digits
 -- Names and emails 50 characters
 
+DROP TABLE join_token;
 DROP TABLE session;
 DROP TABLE member_society;
 DROP TABLE committee_society;
@@ -64,3 +65,13 @@ CREATE TABLE session(
 	
 	FOREIGN KEY(member_id) REFERENCES member(member_id)
 );
+
+CREATE TABLE join_token(
+	society_id INTEGER(6),
+	token VARCHAR(32),
+	creation_time DATE,
+
+	PRIMARY KEY(society_id, token),
+	FOREIGN KEY(society_id) REFERENCES society(society_id)
+);
+
