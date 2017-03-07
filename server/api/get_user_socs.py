@@ -11,8 +11,8 @@ if database.check_session(member_id, session_id):
     database.cur.execute(sql)
     result = database.cur.fetchall()
     list_of_socs = []
-    for soc_id in result:
-        list_of_socs.append(str(soc_id[0]))
+    for row in result:
+        list_of_socs.append(str(row[0]))
     response = http.generate_returncode(0)
     response["society_id"] = list_of_socs
 else:

@@ -8,12 +8,16 @@ def get_request():
     return cgi.FieldStorage()
 
 
+def print_post():
+    print(post)
+
+
 def send_header():
     print("Content-type: text/html\n\n")
 
 
 def send_response(response):
-    json_data = json.dumps(response)
+    json_data = json.dumps(response, sort_keys=True, indent=4)
     print(json_data)
 
 
