@@ -15,7 +15,8 @@ http.send_header()
 # Ensure user is a committee member for the society
 if database.check_session(member_id, session_id) and database.check_committee(member_id, society_id):
     token = str(uuid.uuid4().hex)
-    qrdata = token + society_id
+    qrdata = "{ \"token\": \"" + token + "\", \"society_id\": \"" + society_id + "\"}"
+    print(qrdata)
 
     # Generate qr code
     qr = QRCode(version=20, error_correction=ERROR_CORRECT_L)
@@ -24,6 +25,11 @@ if database.check_session(member_id, session_id) and database.check_committee(me
 
     im = qr.make_image()
     im.save("/var/www/html/img/" + token + ".png")
+
+    # Store the token in the database
+    sql = "INSERT INTO join_token VALUES(" + society_id + ", '" + token + "', NULL)"
+    print(sql)
+    database.cur.execute(sql)
 
     response = http.generate_returncode(0)
 else:
