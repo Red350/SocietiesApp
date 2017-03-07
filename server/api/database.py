@@ -15,3 +15,12 @@ def check_session(member_id, session_id):
         return True
     else:
         return False
+
+
+def close():
+    conn.commit()
+    conn.close()
+
+
+conn = get_conn()
+cur = conn.cursor()

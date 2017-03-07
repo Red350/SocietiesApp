@@ -28,3 +28,7 @@ def generate_returncode(code):
         4: "Email not verified"
     }[code]
     return response
+ 
+
+post = get_request()
+send_header()

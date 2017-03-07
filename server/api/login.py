@@ -5,20 +5,16 @@ import database
 import http
 import encrypt
 
-data = http.get_request()
-http.send_header()
-conn = database.get_conn()
-cur = conn.cursor()
 
-email = data["email"].value
-password = data["password"].value
+email = http.post["email"].value
+password = http.post["password"].value
 
 
 # Check user's password, and that they are verified
 sql = "SELECT verified, pass_hash, salt, member_id FROM member WHERE( email = '" + email + "');"
-cur.execute(sql)
-if cur.rowcount == 1:
-    row = cur.fetchone()
+database.cur.execute(sql)
+if database.cur.rowcount == 1:
+    row = database.cur.fetchone()
     if row[0] == 'N':
         response = http.generate_returncode(4)
     else:
@@ -31,15 +27,14 @@ if cur.rowcount == 1:
             # Clear any old session IDs before generating a new one
             member_id = row[3]
             sql = "DELETE FROM session WHERE(member_id = " + str(member_id) + ");"
-            cur.execute(sql)
+            database.cur.execute(sql)
 
             # Generate random session ID for user
             session_id = str(uuid.uuid4().hex)
 
             # Store session ID for that user in the database
             sql = "INSERT INTO session VALUES(" + str(member_id) + ",'" + str(session_id) + "');"
-            cur.execute(sql)
-            conn.commit()
+            database.cur.execute(sql)
 
             response = http.generate_returncode(0)
             response["session_id"] = session_id
@@ -52,4 +47,4 @@ else:
 http.send_response(response)
 
 # Close db connection
-conn.close()
+database.close()
