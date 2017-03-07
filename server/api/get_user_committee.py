@@ -3,6 +3,9 @@
 import database
 import http
 
+# Send header
+http.send_header()
+
 member_id = http.post["member_id"].value
 session_id = http.post["session_id"].value
 

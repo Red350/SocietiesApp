@@ -10,7 +10,7 @@ member_id = http.post["member_id"].value
 session_id = http.post["session_id"].value
 
 if database.check_session(member_id, session_id):
-    sql = "SELECT society_id FROM member_society WHERE(member_id = " + member_id + ");"
+    sql = "SELECT society_id FROM society WHERE(chair_id = " + member_id + ");"
     database.cur.execute(sql)
     result = database.cur.fetchall()
     list_of_socs = []

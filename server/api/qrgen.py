@@ -1,13 +1,38 @@
 #!/usr/bin/env python3
 
+import database
 from qrcode import *
+import http
+import uuid
 
-print("Content-type: text/html\n\n")
+member_id = http.post["member_id"].value
+session_id = http.post["session_id"].value
+society_id = http.post["society_id"].value
 
-qr = QRCode(version=20, error_correction=ERROR_CORRECT_L)
-qr.add_data("Random data")
-qr.make()
+# Send header
+http.send_header()
 
-im = qr.make_image()
+# Ensure user is a committee member for the society
+if database.check_session(member_id, session_id) and database.check_committee(member_id, society_id):
+    token = str(uuid.uuid4().hex)
+    qrdata = token + society_id
 
-im.save("qr.png")
+    # Generate qr code
+    qr = QRCode(version=20, error_correction=ERROR_CORRECT_L)
+    qr.add_data(qrdata)
+    qr.make()
+
+    im = qr.make_image()
+    im.save("/var/www/html/img/" + token + ".png")
+
+    response = http.generate_returncode(0)
+else:
+    response = http.generate_returncode(1)
+    
+
+# Send response
+http.send_response(response)
+
+# Close db connection
+database.close()
+

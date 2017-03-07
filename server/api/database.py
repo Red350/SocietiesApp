@@ -17,6 +17,14 @@ def check_session(member_id, session_id):
         return False
 
 
+def check_committee(member_id, society_id):
+    sql = "SELECT * FROM committee_society WHERE(member_id = " + member_id + " AND society_id = " + society_id + ")"
+    cur.execute(sql)
+    if cur.rowcount == 1:
+        return True
+    else:
+        return False
+
 def close():
     conn.commit()
     conn.close()

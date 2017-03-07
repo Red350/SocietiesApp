@@ -35,4 +35,4 @@ def generate_returncode(code):
  
 
 post = get_request()
-send_header()
+

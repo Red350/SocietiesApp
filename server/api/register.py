@@ -5,6 +5,8 @@ import database
 import http
 import encrypt
 
+# Send header
+http.send_header()
 
 student_num = http.post["student_num"].value
 password = http.post["password"].value

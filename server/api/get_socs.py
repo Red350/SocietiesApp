@@ -3,9 +3,11 @@
 import database
 import http
 
+# Send header
+http.send_header()
+
 member_id = http.post["member_id"].value
 session_id = http.post["session_id"].value
-
 
 if database.check_session(member_id, session_id):
     response = http.generate_returncode(0)
