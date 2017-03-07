@@ -1,3 +1,8 @@
 Validate incoming data
-Hash passwords
 Turn http and database into objects
+Generate qr code for joining soc
+Page to confirm joining a soc
+Return all socs that user is a member of
+Return all socs that user is on committee
+Return all socs that user is a chair of
+Return details of requested socs
