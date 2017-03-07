@@ -1,8 +1,6 @@
-Validate incoming data
+Validate incoming data (currently relying on the app to provide perfect data each time)
 Turn http and database into objects
-Generate qr code for joining soc
-Page to confirm joining a soc
-Return all socs that user is a member of
-Return all socs that user is on committee
-Return all socs that user is a chair of
-Return details of requested socs
+Script to confirm joining a soc when the user scans qr.
+Modify get_socs to be able to return details of every society. (Maybe get app to send number of societies its requesting, with 0 meaning send all)
+Modify qrgen to delete any old tokens from the database when it's adding the new token
+Send validation email when a user registers.
