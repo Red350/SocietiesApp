@@ -69,7 +69,7 @@ CREATE TABLE session(
 CREATE TABLE join_token(
 	society_id INTEGER(6),
 	token VARCHAR(32),
-	creation_time DATE,
+	creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
 	PRIMARY KEY(society_id, token),
 	FOREIGN KEY(society_id) REFERENCES society(society_id)
