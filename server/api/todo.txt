@@ -1,6 +1,8 @@
 Validate incoming data (currently relying on the app to provide perfect data each time)
 Turn http and database into objects
 Script to confirm joining a soc when the user scans qr.
+Script to return all the data of a societies members.
+	Should email it as a csv to the societies email address.
 Modify get_socs to be able to return details of every society. (Maybe get app to send number of societies its requesting, with 0 meaning send all)
 Modify qrgen to delete any old tokens from the database when it's adding the new token
 Send validation email when a user registers.
