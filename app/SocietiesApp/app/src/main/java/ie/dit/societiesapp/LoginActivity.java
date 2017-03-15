@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -326,14 +327,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             HttpURLConnection client = null;
 
             try{
-                url = new URL("http://padraig.red/cgi-bin/api/test.py");
+                url = new URL("http://padraig.red/cgi-bin/test.py");
                 client = (HttpURLConnection)url.openConnection();
                 client.setRequestMethod("POST");
                 client.setRequestProperty("Email", mEmail);
                 client.setRequestProperty("Password", mPassword);
                 client.setDoOutput(true);
                 OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-                writeStream(outputPost);
+//                outputPost.write(client.getContent().toString().getBytes());
                 outputPost.flush();
                 outputPost.close();
             } catch(MalformedURLException error) {
@@ -341,6 +342,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } catch(SocketTimeoutException error) {
                 error.printStackTrace();
             } catch (IOException error) {
+                error.printStackTrace();
+            } catch(Exception error) {
                 error.printStackTrace();
             } finally {
                 if(client != null) // Make sure the connection is not null.
