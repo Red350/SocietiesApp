@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +31,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -327,15 +337,43 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            // TODO: attempt authentication against a network service
+            URL url;
+            HttpURLConnection client = null;
 
+            try{
+                url = new URL("http://padraig.red/cgi-bin/test.py");
+                client = (HttpURLConnection)url.openConnection();
+                client.setRequestMethod("POST");
+                client.setRequestProperty("Email", mEmail);
+                client.setRequestProperty("Password", mPassword);
+                client.setDoOutput(true);
+                OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
+//                outputPost.write(client.getContent().toString().getBytes());
+                outputPost.flush();
+                outputPost.close();
+            } catch(MalformedURLException error) {
+                error.printStackTrace();
+            } catch(SocketTimeoutException error) {
+                error.printStackTrace();
+            } catch (IOException error) {
+                error.printStackTrace();
+            } catch(Exception error) {
+                error.printStackTrace();
+            } finally {
+                if(client != null) // Make sure the connection is not null.
+                    client.disconnect();
+            }
+
+            /*
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
-
+            */
+            /*
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
@@ -343,7 +381,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return pieces[1].equals(mPassword);
                 }
             }
-
+            */
             // TODO: register the new account here.
             return true;
         }
@@ -355,7 +393,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
-
                 // if login is successful transition to main activity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
