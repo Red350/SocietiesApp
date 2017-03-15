@@ -1,6 +1,7 @@
 Validate incoming data (currently relying on the app to provide perfect data each time)
 Turn http and database into objects
 Script to confirm joining a soc when the user scans qr.
+Script for chair to add/remove committee member
 Script to return all the data of a societies members.
 	Should email it as a csv to the societies email address.
 Modify get_socs to be able to return details of every society. (Maybe get app to send number of societies its requesting, with 0 meaning send all)
