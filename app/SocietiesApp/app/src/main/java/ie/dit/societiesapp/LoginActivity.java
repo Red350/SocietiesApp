@@ -349,7 +349,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 client.setRequestProperty("Password", mPassword);
                 client.setDoOutput(true);
                 OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-//                outputPost.write(client.getContent().toString().getBytes());
+                // outputPost.write(client.getContent().toString().getBytes());
                 outputPost.flush();
                 outputPost.close();
             } catch(MalformedURLException error) {
@@ -358,10 +358,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 error.printStackTrace();
             } catch (IOException error) {
                 error.printStackTrace();
-            } catch(Exception error) {
-                error.printStackTrace();
             } finally {
-                if(client != null) // Make sure the connection is not null.
+                if(client != null)
                     client.disconnect();
             }
 
