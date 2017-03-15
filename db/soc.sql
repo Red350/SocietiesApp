@@ -36,7 +36,10 @@ CREATE TABLE society(
 );
 
 CREATE TABLE admin(
-	member_id INTEGER(6) PRIMARY KEY,
+	admin_id INTEGER(6) PRIMARY KEY,
+	email VARCHAR(50) UNIQUE,
+	pass_hash CHAR(64),
+	salt CHAR(32),
 
 	FOREIGN KEY(member_id) REFERENCES member(member_id)
 );
@@ -64,6 +67,13 @@ CREATE TABLE session(
 	session_id VARCHAR(32),
 	
 	FOREIGN KEY(member_id) REFERENCES member(member_id)
+);
+
+CREATE TABLE admin_session(
+	admin_id INTEGER(6) PRIMARY KEY,
+	session_id VARCHAR(32),
+	
+	FOREIGN KEY(admin_id) REFERENCES admin(admin_id)
 );
 
 CREATE TABLE join_token(
