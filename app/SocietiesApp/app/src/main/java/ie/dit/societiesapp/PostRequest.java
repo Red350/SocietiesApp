@@ -13,15 +13,18 @@ import java.net.URL;
  * Created by Simon on 15/03/2017.
  */
 
-public abstract class PostRequest extends AsyncTask {
-    protected void doInBackGround(){
+public class PostRequest extends AsyncTask {
 
+    @Override
+    protected Object doInBackground(Object[] params) {
+        return null;
     }
-
+    
     public static String executePost(String targetURL, String urlParameters)
     {
         URL url;
         HttpURLConnection connection = null;
+
         try {
             //Create connection
             url = new URL(targetURL);
