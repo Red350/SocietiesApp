@@ -1,3 +1,4 @@
+Fix bug with only requesting a single society through get_socs
 Validate incoming data (currently relying on the app to provide perfect data each time)
 Turn http and database into objects
 Script to confirm joining a soc when the user scans qr.
