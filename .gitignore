@@ -46,3 +46,6 @@ server/api/__pycache__
 
 # Vim swap files
 *.swp
+
+#pycharm
+.idea
