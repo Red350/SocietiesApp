@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -335,39 +336,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service
-            URL url;
-            HttpURLConnection client = null;
 
-            try{
-                url = new URL("http://padraig.red/cgi-bin/test.py");
-                client = (HttpURLConnection)url.openConnection();
-                client.setRequestMethod("POST");
-                client.setRequestProperty("Email", mEmail);
-                client.setRequestProperty("Password", mPassword);
-                client.setDoOutput(true);
-                OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-                // outputPost.write(client.getContent().toString().getBytes());
-                outputPost.flush();
-                outputPost.close();
-            } catch(MalformedURLException error) {
-                error.printStackTrace();
-            } catch(SocketTimeoutException error) {
-                error.printStackTrace();
-            } catch (IOException error) {
-                error.printStackTrace();
-            } finally {
-                if(client != null)
-                    client.disconnect();
-            }
+            Http conn = new Http();
 
-            /*
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+            ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
+            args.add(new NameValuePair("email", "test@test.com"));
+            args.add(new NameValuePair("password", "pass"));
+
+            String url = "http://www.padraig.red/cgi-bin/api/login.py";
+
+            try
+            {
+                String s = conn.post(url, args);
+                Log.d("Look Here", s);
             }
-            */
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+             
             /*
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
