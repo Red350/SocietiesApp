@@ -354,7 +354,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             {
                 e.printStackTrace();
             }
-             
+
             /*
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");

@@ -36,33 +36,5 @@ public class Http
 		Response response = client.newCall(request).execute();
 		return response.body().string();
 	}
-
-
-	//public static void main(String[] args)
-	//{
-	//	Http conn = new Http();
-
-	//	ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-	//	params.add(new NameValuePair("email", "test@test.com"));
-	//	params.add(new NameValuePair("password", "pass"));
-	//	String url = "http://www.padraig.red/cgi-bin/api/login.py";
-//		params.add(new NameValuePair("member_id", "6"));
-//		params.add(new NameValuePair("session_id", "cfd59024462a4f66a2d0014837ce4f32"));
-//		params.add(new NameValuePair("society_id", "1"));
-//		params.add(new NameValuePair("society_id", "2"));
-//		String url = "http://www.padraig.red/cgi-bin/api/get_socs.py";
-	//	try
-		{
-	//		String s = conn.post(url, params);
-	//		System.out.println(s);
-	//	}
-	//	catch(Exception e)
-	//	{
-	//		e.printStackTrace();
-	//	}
-
-		// get socs
-
-	}
 }
 
