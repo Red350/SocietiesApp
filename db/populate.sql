@@ -13,6 +13,10 @@ INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mo
 INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified)
 	VALUES(6, 'C6', '01619183f6d8027223349084438db860a3a3c219459f3c63d459a7a4ebbb419f', '8887050dd11c4ba3919e7317a7da9399', 'Simon', 'test@test.com', '1990-01-01', '1234', '1234', '2017-02-27', 'F', 'Y');
 
+-- Create an admin
+INSERT INTO admin(admin_id, email, pass_hash, salt)
+	VALUES(1, 'blah@blah.blah', '13f78571c402d2fded28dfa1fa10ca5f11ede839a43d7b44a79f9c0a62b0e46c', 'e740c300b567480e872a6eb287218596');
+
 -- Create compsoc and chess soc
 -- Rob and Mary are chairs of compsoc and chess respectively
 INSERT INTO society(society_id, name, email, description, chair_id) VALUES (1, 'CompSoc', 'compsoc@example.com', 'Best society', 5);

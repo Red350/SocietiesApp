@@ -37,7 +37,7 @@ CREATE TABLE society(
 );
 
 CREATE TABLE admin(
-	admin_id INTEGER(6) PRIMARY KEY,
+	admin_id INTEGER(6) PRIMARY KEY AUTO_INCREMENT,
 	email VARCHAR(50) UNIQUE,
 	pass_hash CHAR(64),
 	salt CHAR(32)
