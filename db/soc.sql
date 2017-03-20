@@ -6,6 +6,7 @@ DROP TABLE join_token;
 DROP TABLE session;
 DROP TABLE member_society;
 DROP TABLE committee_society;
+DROP TABLE admin_session;
 DROP TABLE admin;
 DROP TABLE society;
 DROP TABLE member;
@@ -39,9 +40,7 @@ CREATE TABLE admin(
 	admin_id INTEGER(6) PRIMARY KEY,
 	email VARCHAR(50) UNIQUE,
 	pass_hash CHAR(64),
-	salt CHAR(32),
-
-	FOREIGN KEY(member_id) REFERENCES member(member_id)
+	salt CHAR(32)
 );
 
 CREATE TABLE committee_society(

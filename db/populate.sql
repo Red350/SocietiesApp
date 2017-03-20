@@ -18,9 +18,6 @@ INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mo
 INSERT INTO society(society_id, name, email, description, chair_id) VALUES (1, 'CompSoc', 'compsoc@example.com', 'Best society', 5);
 INSERT INTO society(society_id, name, email, description, chair_id) VALUES (2, 'Chess Soc', 'chess@example.com', 'We play chess', 2);
 
--- John is an admin
-INSERT INTO admin(member_id) VALUES(1);
-
 -- Rob and Eoghan are committee members of compsoc
 INSERT INTO committee_society(member_id, society_id) VALUES (3, 1); 
 INSERT INTO committee_society(member_id, society_id) VALUES (4, 1); 
