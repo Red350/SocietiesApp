@@ -21,7 +21,7 @@ CREATE TABLE member(
 	dob DATE,
 	mobile VARCHAR(20),
 	emergency_ph VARCHAR(20),
-	date_joined DATE,
+	date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	full_part_time CHAR CHECK (fullPartTime IN ('F', 'P', 'N')),
 	verified CHAR CHECK (verfied IN ('Y', 'N'))
 );

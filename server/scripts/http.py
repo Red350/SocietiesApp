@@ -12,8 +12,8 @@ def print_post():
     print(post)
 
 
-def send_header():
-    print("Content-type: text/html\n\n")
+def send_json_header():
+    print("Content-type: application/json\n\n")
 
 
 def send_response(response):
@@ -29,10 +29,18 @@ def generate_returncode(code):
         1: "Invalid session id",
         2: "Invalid username or password",
         3: "Email already in use",
-        4: "Email not verified"
+        4: "Email not verified",
+        5: "Incorrectly formatted request"
     }[code]
     return response
  
+
+def check_keys(keys):
+    for key in keys:
+        if key not in post:
+            return False
+    return True
+
 
 post = get_request()
 
