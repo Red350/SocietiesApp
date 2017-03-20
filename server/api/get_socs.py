@@ -7,27 +7,17 @@ import http
 http.send_json_header()
 
 # Ensure the correct post keys were sent
-if http.check_keys(("member_id", "session_id")):
+if http.check_keys(("member_id", "session_id", "society_id")):
     member_id = http.post["member_id"].value
     session_id = http.post["session_id"].value
     
     if database.check_session(member_id, session_id):
         response = http.generate_returncode(0)
-    
-        # Parse the society IDs that are being requested
-        soc_ids = []
-        for i in range(len(http.post["society_id"])):
-            soc_ids.append(http.post["society_id"][i].value)
+        # Split the society_id string and store in list
+        soc_ids = [id.strip() for id in http.post['society_id'].value.split(',')] 
     
         # Get the data for each society
-        #sql = "SELECT society_id, name, email, description FROM member_society WHERE(society_id IN(" + str(soc_ids) + "));"
-        sql = "SELECT society_id, name, email, description FROM society WHERE("
-        for id in soc_ids:
-            sql += "society_id = "
-            sql += id
-            sql += " OR "
-        sql = sql[:-4]  # Remove the trailing " OR "
-        sql += ")"
+        sql = "SELECT society_id, name, email, description FROM society WHERE(society_id IN(" + ','.join(soc_ids) + "));"
         database.cur.execute(sql)
         result = database.cur.fetchall()
     

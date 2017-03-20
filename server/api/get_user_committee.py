@@ -10,6 +10,7 @@ http.send_json_header()
 if http.check_keys(("member_id", "session_id")):
     member_id = http.post["member_id"].value
     session_id = http.post["session_id"].value
+    
     if database.check_session(member_id, session_id):
         sql = "SELECT society_id FROM committee_society WHERE(member_id = " + member_id + ");"
         database.cur.execute(sql)
