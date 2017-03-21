@@ -31,6 +31,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONStringer;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -348,7 +350,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try
             {
                 String s = conn.post(url, args);
-                Log.d("Look Here", s);
+                Log.d("Look:", s);
             }
             catch(Exception e)
             {
@@ -364,7 +366,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
             */
-            // TODO: register the new account here.
+
             return true;
         }
 
