@@ -1,10 +1,20 @@
 package ie.dit.societiesapp;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +28,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity
 {
@@ -29,6 +41,11 @@ public class RegisterActivity extends AppCompatActivity
     private EditText dobView;
     private EditText mobileView;
     private EditText emergancyView;
+
+    private View progressView;
+    private View registerFormView;
+
+    private RegisterActivity.UserRegisterTask mAuthTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,6 +72,9 @@ public class RegisterActivity extends AppCompatActivity
                 attemptRegister();
             }
         });
+
+        registerFormView = findViewById(R.id.register_form);
+        progressView = findViewById(R.id.register_progress);
     }
 
     public void sendMessage(View view)
@@ -65,12 +85,11 @@ public class RegisterActivity extends AppCompatActivity
 
     private void attemptRegister()
     {
-        /*
         if (mAuthTask != null)
         {
             return;
-        }
-        */
+        }//end if
+
         nameView.setError(null);
         idView.setError(null);
         emailView.setError(null);
@@ -145,15 +164,46 @@ public class RegisterActivity extends AppCompatActivity
         }
         else
         {
-            finish();
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            /*
             showProgress(true);
-            mAuthTask = new UserRegisterTask(email, password);
+            mAuthTask = new UserRegisterTask(name, id, email, password1, DOB, mobile, emergancy);
             mAuthTask.execute((Void) null);
-            */
+        }
+    }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show)
+    {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2)
+        {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            registerFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            registerFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    registerFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        }
+        else
+        {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            registerFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -183,61 +233,78 @@ public class RegisterActivity extends AppCompatActivity
 
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean>
     {
-        private final String email;
-        private final String password;
+        private String name = "";
+        private String id = "";
+        private String email = "";
+        private String password = "";
+        private String dob = "";
+        private String number = "";
+        private String emergancy = "";
+        private String fullTime = "";
 
-        UserRegisterTask(String userEmail, String userPassword) {
-            email = userEmail;
-            password = userPassword;
+        UserRegisterTask(String name, String id, String email, String password,
+                         String dob, String number, String emergancy)
+        {
+            this.name = name;
+            this.id = id;
+            this.email = email;
+            this.password = password;
+            this.dob = dob;
+            this.number = number;
+            this.emergancy = emergancy;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service
-            URL url;
-            HttpURLConnection client = null;
 
-            try{
-                url = new URL("http://padraig.red/cgi-bin/test.py");
-                client = (HttpURLConnection)url.openConnection();
-                client.setRequestMethod("POST");
-                client.setRequestProperty("Email", email);
-                client.setRequestProperty("Password", password);
-                client.setDoOutput(true);
-                OutputStream outputPost = new BufferedOutputStream(client.getOutputStream());
-                // outputPost.write(client.getContent().toString().getBytes());
-                outputPost.flush();
-                outputPost.close();
-            } catch(MalformedURLException error) {
-                error.printStackTrace();
-            } catch(SocketTimeoutException error) {
-                error.printStackTrace();
-            } catch (IOException error) {
-                error.printStackTrace();
-            } finally {
-                if(client != null)
-                    client.disconnect();
+            Http conn = new Http();
+
+            ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
+            args.add(new NameValuePair("student_num", id));
+            args.add(new NameValuePair("password", password));
+            args.add(new NameValuePair("name", name));
+            args.add(new NameValuePair("email", email));
+            args.add(new NameValuePair("dob", dob));
+            args.add(new NameValuePair("mobile", number));
+            args.add(new NameValuePair("emergency_ph", emergancy));
+            //Delete me Soon
+            args.add(new NameValuePair("date_joined", ""));
+            args.add(new NameValuePair("full_part_time", fullTime));
+
+            String url = "http://www.padraig.red/cgi-bin/api/login.py";
+
+            try
+            {
+                String s = conn.post(url, args);
+                Log.d("Look Here", s);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
             }
 
-            /*
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-            */
-            /*
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-            */
-            // TODO: register the new account here.
             return true;
+        }
+        @Override
+        protected void onPostExecute(final Boolean success)
+        {
+            mAuthTask = null;
+            showProgress(false);
+
+            if (success)
+            {
+                finish();
+                // if login is successful transition to main activity
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }
+
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            showProgress(false);
         }
     }
 
