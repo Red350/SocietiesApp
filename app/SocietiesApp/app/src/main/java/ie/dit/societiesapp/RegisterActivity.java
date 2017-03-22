@@ -3,6 +3,8 @@ package ie.dit.societiesapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -17,7 +19,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
@@ -29,6 +35,7 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity
@@ -42,8 +49,15 @@ public class RegisterActivity extends AppCompatActivity
     private EditText mobileView;
     private EditText emergancyView;
 
+    private DatePicker datePicker;
+    private Calendar calendar;
+
+    private char radioChoice = 'N';
+
     private View progressView;
     private View registerFormView;
+
+    private int year, month, day;
 
     private RegisterActivity.UserRegisterTask mAuthTask = null;
 
@@ -62,6 +76,12 @@ public class RegisterActivity extends AppCompatActivity
         dobView = (EditText) findViewById(R.id.dobRegText);
         emergancyView = (EditText) findViewById(R.id.emergancyRegText);
 
+        calendar = Calendar.getInstance();
+
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+
         Button registerButton = (Button) findViewById(R.id.registerButton);
         //Register call
         registerButton.setOnClickListener(new View.OnClickListener()
@@ -75,6 +95,71 @@ public class RegisterActivity extends AppCompatActivity
 
         registerFormView = findViewById(R.id.register_form);
         progressView = findViewById(R.id.register_progress);
+    }
+
+    @SuppressWarnings("deprecation")
+    public void setDate(View view) {
+        showDialog(999);
+        Toast.makeText(getApplicationContext(), "Enter your date of birth",
+                Toast.LENGTH_SHORT)
+                .show();
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        // TODO Auto-generated method stub
+        if (id == 999) {
+            return new DatePickerDialog(this,
+                    myDateListener, year, month, day);
+        }
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener myDateListener = new
+            DatePickerDialog.OnDateSetListener()
+            {
+                @Override
+                public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3)
+                {
+                    // TODO Auto-generated method stub
+                    // arg1 = year
+                    // arg2 = month
+                    // arg3 = day
+                    showDate(arg1, arg2+1, arg3);
+                }
+            };
+
+    private void showDate(int year, int month, int day)
+    {
+        dobView.setText(new StringBuilder().append(day).append("/").append(month).append("/").append(year));
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId())
+        {
+            case R.id.radio_full:
+                if (checked)
+                {
+                    radioChoice = 'F';
+                    break;
+                }//end if
+            case R.id.radio_part:
+                if (checked)
+                {
+                    radioChoice = 'P';
+                    break;
+                }//end if
+            case R.id.radio_other:
+                if (checked)
+                {
+                    radioChoice = 'N';
+                    break;
+                }//end if
+        }
     }
 
     public void sendMessage(View view)
@@ -106,7 +191,7 @@ public class RegisterActivity extends AppCompatActivity
         String password1 = password1View.getText().toString();
         String password2= password2View.getText().toString();
         String mobile = mobileView.getText().toString();
-        String DOB = dobView.getText().toString();
+        String DOB = formatDOB(dobView.getText().toString());
         String emergancy= emergancyView.getText().toString();
 
         //System.out.println(name + id + email + password1 + password2 + mobile + DOB + emergancy);
@@ -141,7 +226,7 @@ public class RegisterActivity extends AppCompatActivity
         }
         else if (!isPasswordValid(password1))
         {
-            password1View.setError(getString(R.string.error_invalid_email));
+            password1View.setError(getString(R.string.error_incorrect_password));
             focusView = password1View;
             cancel = true;
         }//end if
@@ -165,10 +250,33 @@ public class RegisterActivity extends AppCompatActivity
         else
         {
             showProgress(true);
-            mAuthTask = new UserRegisterTask(name, id, email, password1, DOB, mobile, emergancy);
+            mAuthTask = new UserRegisterTask(name, id, radioChoice, email, password1, DOB, mobile, emergancy);
             mAuthTask.execute((Void) null);
         }
     }
+
+    private String formatDOB(String inputDate)
+    {
+        int length = inputDate.length();
+        int i = length - 1;
+        String date = "";
+
+        while (i >= 0)
+        {
+            if (inputDate.charAt(i) == '/' || i == 0)
+            {
+                for (int j = i + 1; j < length || inputDate.charAt(j) != '/'; j++)
+                {
+                    date += inputDate.charAt(j);
+                }//end for
+                date += '-';
+            }//end if
+
+            i--;
+        }//end while
+
+        return date;
+    }//end String formatDOB
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show)
@@ -235,6 +343,7 @@ public class RegisterActivity extends AppCompatActivity
     {
         private String name = "";
         private String id = "";
+        char time = 'N';
         private String email = "";
         private String password = "";
         private String dob = "";
@@ -242,11 +351,12 @@ public class RegisterActivity extends AppCompatActivity
         private String emergancy = "";
         private String fullTime = "";
 
-        UserRegisterTask(String name, String id, String email, String password,
+        UserRegisterTask(String name, String id, char time,String email, String password,
                          String dob, String number, String emergancy)
         {
             this.name = name;
             this.id = id;
+            this.time = time;
             this.email = email;
             this.password = password;
             this.dob = dob;
@@ -302,7 +412,8 @@ public class RegisterActivity extends AppCompatActivity
 
 
         @Override
-        protected void onCancelled() {
+        protected void onCancelled()
+        {
             mAuthTask = null;
             showProgress(false);
         }

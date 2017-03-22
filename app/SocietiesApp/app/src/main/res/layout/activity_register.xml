@@ -59,6 +59,37 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hours"
+                android:gravity="center"
+                android:textSize="19sp" />
+
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <RadioButton android:id="@+id/radio_full"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Full Time"
+                    android:onClick="onRadioButtonClicked"/>
+                <RadioButton android:id="@+id/radio_part"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Part Time"
+                    android:onClick="onRadioButtonClicked"/>
+                <RadioButton android:id="@+id/radio_other"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Other"
+                    android:onClick="onRadioButtonClicked"/>
+            </RadioGroup>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -111,7 +142,9 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Date of Birth"
-                    android:inputType="date" />
+                    android:focusable="false"
+                    android:onClick="setDate"
+                    android:inputType="datetime" />
 
             </android.support.design.widget.TextInputLayout>
 
