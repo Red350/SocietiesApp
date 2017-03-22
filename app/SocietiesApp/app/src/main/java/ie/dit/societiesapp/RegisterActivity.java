@@ -381,7 +381,7 @@ public class RegisterActivity extends AppCompatActivity
             args.add(new NameValuePair("date_joined", ""));
             args.add(new NameValuePair("full_part_time", fullTime));
 
-            String url = "http://www.padraig.red/cgi-bin/api/login.py";
+            String url = "http://www.padraig.red/cgi-bin/api/register.py";
 
             try
             {
