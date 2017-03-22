@@ -39,8 +39,13 @@ if http.check_keys(("email", "password", "student_num", "name", "dob", "mobile",
                + "'" + emergency_ph + "'" + ", "
                + "'" + full_part_time + "'" + ", 'Y');"
                )
+        print(sql)
         database.cur.execute(sql)
-        response = http.generate_returncode(0)
+        # Check that the user was created successfully
+        if database.cur.rowcount != 0:
+            response = http.generate_returncode(0)
+        else:
+            response = http.generate_returncode(6)
 else:
     response = http.generate_returncode(5)
 

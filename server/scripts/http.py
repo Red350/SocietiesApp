@@ -30,7 +30,8 @@ def generate_returncode(code):
         2: "Invalid username or password",
         3: "Email already in use",
         4: "Email not verified",
-        5: "Incorrectly formatted request"
+        5: "Incorrectly formatted request",
+        6: "Database error"
     }[code]
     return response
  

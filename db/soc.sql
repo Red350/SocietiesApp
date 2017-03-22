@@ -22,7 +22,7 @@ CREATE TABLE member(
 	mobile VARCHAR(20),
 	emergency_ph VARCHAR(20),
 	date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	full_part_time CHAR CHECK (fullPartTime IN ('F', 'P', 'N')),
+	full_part_time CHAR,
 	verified CHAR CHECK (verfied IN ('Y', 'N'))
 );
 
