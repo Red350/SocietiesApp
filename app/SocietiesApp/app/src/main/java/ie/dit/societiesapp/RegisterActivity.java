@@ -25,6 +25,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import android.util.Log;
+
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -257,25 +259,16 @@ public class RegisterActivity extends AppCompatActivity
 
     private String formatDOB(String inputDate)
     {
-        int length = inputDate.length();
-        int i = length - 1;
-        String date = "";
-
-        while (i >= 0)
+        String[] parts = inputDate.split("/");
+        String result = "";
+        for(int i = 2; i >= 0; i--)
         {
-            if (inputDate.charAt(i) == '/' || i == 0)
-            {
-                for (int j = i + 1; j < length || inputDate.charAt(j) != '/'; j++)
-                {
-                    date += inputDate.charAt(j);
-                }//end for
-                date += '-';
-            }//end if
+            result += parts[i];
+            result += "-";
+        }
 
-            i--;
-        }//end while
-
-        return date;
+        result = result.substring(0, result.length()-1);
+        return result;
     }//end String formatDOB
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -351,9 +344,13 @@ public class RegisterActivity extends AppCompatActivity
         private String emergancy = "";
         private String fullTime = "";
 
+
+
         UserRegisterTask(String name, String id, char time,String email, String password,
                          String dob, String number, String emergancy)
         {
+            Log.d("LOOK HERE", name + " " + id + " " + time + " " + email + " " + password + " " +
+                    dob + " " + number + " " + emergancy);
             this.name = name;
             this.id = id;
             this.time = time;
