@@ -28,6 +28,7 @@ import android.widget.Toast;
 import android.util.Log;
 
 import java.io.BufferedOutputStream;
+import java.io.CharArrayReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -193,10 +194,19 @@ public class RegisterActivity extends AppCompatActivity
         String password1 = password1View.getText().toString();
         String password2= password2View.getText().toString();
         String mobile = mobileView.getText().toString();
-        String DOB = formatDOB(dobView.getText().toString());
+        String DOB = dobView.getText().toString();
         String emergancy= emergancyView.getText().toString();
 
         //System.out.println(name + id + email + password1 + password2 + mobile + DOB + emergancy);
+
+        if (TextUtils.isEmpty(DOB))
+        {
+            DOB = "";
+        }
+        else
+        {
+            DOB = formatDOB(DOB);
+        }
 
         boolean cancel = false;
         View focusView = null;
@@ -336,7 +346,6 @@ public class RegisterActivity extends AppCompatActivity
     {
         private String name = "";
         private String id = "";
-        char time = 'N';
         private String email = "";
         private String password = "";
         private String dob = "";
@@ -353,7 +362,7 @@ public class RegisterActivity extends AppCompatActivity
                     dob + " " + number + " " + emergancy);
             this.name = name;
             this.id = id;
-            this.time = time;
+            this.fullTime += Character.toString(time);
             this.email = email;
             this.password = password;
             this.dob = dob;
@@ -374,7 +383,6 @@ public class RegisterActivity extends AppCompatActivity
             args.add(new NameValuePair("dob", dob));
             args.add(new NameValuePair("mobile", number));
             args.add(new NameValuePair("emergency_ph", emergancy));
-            //Delete me Soon
             args.add(new NameValuePair("date_joined", ""));
             args.add(new NameValuePair("full_part_time", fullTime));
 

@@ -345,8 +345,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Http conn = new Http();
 
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
-            args.add(new NameValuePair("email", "test@test.com"));
-            args.add(new NameValuePair("password", "pass"));
+            args.add(new NameValuePair("email", mEmail));
+            args.add(new NameValuePair("password", mPassword));
 
             String url = "http://www.padraig.red/cgi-bin/api/login.py";
 
