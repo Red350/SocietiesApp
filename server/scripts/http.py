@@ -31,7 +31,8 @@ def generate_returncode(code):
         3: "Email already in use",
         4: "Email not verified",
         5: "Incorrectly formatted request",
-        6: "Database error"
+        6: "Database error",
+        7: "Invalid permissions for this action"
     }[code]
     return response
  
