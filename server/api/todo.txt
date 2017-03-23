@@ -4,7 +4,6 @@ Modify qrgen to delete any old tokens from the database when it's adding the new
 Send validation email when a user registers.
 
 Scripts to be added:
-	Script to check if a session variable is still valid
 	Script to confirm joining a soc when the user scans qr.
 	Script for chair to add/remove committee member
 	Script to return all the data of a societies members.
