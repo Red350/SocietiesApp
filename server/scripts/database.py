@@ -6,7 +6,10 @@ class Database:
 
     def check_session(self, member_id, session_id):
         sql = "SELECT * FROM session WHERE(member_id = " + member_id + " AND session_id = '" + session_id + "');"
-        self.cur.execute(sql)
+        try:
+            self.cur.execute(sql)
+        except:
+            return False
         if self.cur.rowcount >= 1:
             return True
         else:
@@ -14,7 +17,10 @@ class Database:
     
     def check_committee(self, member_id, society_id):
         sql = "SELECT * FROM committee_society WHERE(member_id = " + member_id + " AND society_id = " + society_id + ")"
-        self.cur.execute(sql)
+        try:
+            self.cur.execute(sql)
+        except:
+            return False
         if self.cur.rowcount == 1:
             return True
         else:
@@ -22,11 +28,18 @@ class Database:
     
     def check_chair(self, member_id, society_id):
         sql = "SELECT * FROM society WHERE(chair_id = " + member_id + " AND society_id = " + society_id + ")"
-        self.cur.execute(sql)
+        try:
+            self.cur.execute(sql)
+        except:
+            return false
         if self.cur.rowcount == 1:
             return True
         else:
             return False
+
+    def log(self, query, exception):
+        pass
+        #todo: log exception
     
     def close(self):
         self.conn.commit()

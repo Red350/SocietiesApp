@@ -1,33 +1,37 @@
 #!/usr/bin/env python3
 
 import database
-import http
+import api
 
-# Send header
-http.send_json_header()
+db = database.Database()
+api = api.Api("json")
 
-# Ensure the correct post keys were sent
-if http.check_keys(("member_id", "session_id")):
-    member_id = http.post["member_id"].value
-    session_id = http.post["session_id"].value
+# Ensure the correct request keys were sent
+if api.check_keys(("member_id", "session_id")):
+    member_id = api.request["member_id"].value
+    session_id = api.request["session_id"].value
     
-    if database.check_session(member_id, session_id):
-        sql = "SELECT society_id FROM society WHERE(chair_id = " + member_id + ");"
-        database.cur.execute(sql)
-        result = database.cur.fetchall()
-        list_of_socs = []
-        for row in result:
-            list_of_socs.append(str(row[0]))
-        response = http.generate_returncode(0)
-        response["society_id"] = list_of_socs
+    # Ensure user has a valid session
+    if db.check_session(member_id, session_id):
+        try:
+            sql = "SELECT society_id FROM society WHERE(chair_id = " + member_id + ");"
+            db.cur.execute(sql)
+            result = db.cur.fetchall()
+            list_of_socs = []
+            for row in result:
+                list_of_socs.append(str(row[0]))
+            api.set_returncode(0)
+            api.update_response("society_id", list_of_socs)
+        except:
+            api.set_returncode(6)
     else:
-        response = http.generate_returncode(1)
+        api.set_returncode(1)
 else:
-    response = http.generate_returncode(5)
+    api.set_returncode(5)
 
 # Send response
-http.send_response(response)
+api.send_response()
 
 # Close db connection
-database.close()
+db.close()
 
