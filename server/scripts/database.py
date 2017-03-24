@@ -1,43 +1,36 @@
 import pymysql
 
-
-def get_conn():
+class Database:
     conn = pymysql.connect(host='localhost', port=3306, user='root', passwd='', db='societies')
-    return conn
-
-
-def check_session(member_id, session_id):
-    conn = get_conn()
     cur = conn.cursor()
-    sql = "SELECT * FROM session WHERE(member_id = " + member_id + " AND session_id = '" + session_id + "');"
-    cur.execute(sql)
-    if cur.rowcount >= 1:
-        return True
-    else:
-        return False
+    
+    def check_session(self, member_id, session_id):
+        sql = "SELECT * FROM session WHERE(member_id = " + member_id + " AND session_id = '" + session_id + "');"
+        self.cur.execute(sql)
+        if self.cur.rowcount >= 1:
+            return True
+        else:
+            return False
+    
+    
+    def check_committee(self, member_id, society_id):
+        sql = "SELECT * FROM committee_society WHERE(member_id = " + member_id + " AND society_id = " + society_id + ")"
+        self.cur.execute(sql)
+        if cur.rowcount == 1:
+            return True
+        else:
+            return False
+    
+    def check_chair(self, member_id, society_id):
+        sql = "SELECT * FROM society WHERE(chair_id = " + member_id + " AND society_id = " + society_id + ")"
+        self.cur.execute(sql)
+        if cur.rowcount == 1:
+            return True
+        else:
+            return False
+    
+    
+    def close(self):
+        self.conn.commit()
+        self.conn.close()
 
-
-def check_committee(member_id, society_id):
-    sql = "SELECT * FROM committee_society WHERE(member_id = " + member_id + " AND society_id = " + society_id + ")"
-    cur.execute(sql)
-    if cur.rowcount == 1:
-        return True
-    else:
-        return False
-
-def check_chair(member_id, society_id):
-    sql = "SELECT * FROM society WHERE(chair_id = " + member_id + " AND society_id = " + society_id + ")"
-    cur.execute(sql)
-    if cur.rowcount == 1:
-        return True
-    else:
-        return False
-
-
-def close():
-    conn.commit()
-    conn.close()
-
-
-conn = get_conn()
-cur = conn.cursor()
