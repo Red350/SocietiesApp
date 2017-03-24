@@ -1,11 +1,17 @@
 import cgi
 import cgitb
 import json
+import logging
 
 
 def get_request():
     cgitb.enable()
-    return cgi.FieldStorage()
+    logging.basicConfig(filename='/var/www/html/log/soc.log',level=logging.DEBUG)
+    request = cgi.FieldStorage()
+    logging.info("\n")
+    logging.info("-------------------------------START OF CONNECTION-----------------------------------")
+    logging.info(request)
+    return request
 
 
 def print_post():
@@ -18,6 +24,9 @@ def send_json_header():
 
 def send_response(response):
     json_data = json.dumps(response, sort_keys=True, indent=4)
+    logging.info(json_data)
+    logging.info("-------------------------------END OF CONNECTION-----------------------------------")
+    logging.info("\n")
     print(json_data)
 
 
