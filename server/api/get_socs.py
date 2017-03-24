@@ -1,45 +1,49 @@
 #!/usr/bin/env python3
 
 import database
-import http
+import api
 
-# Send header
-http.send_json_header()
+db = database.Database()
+api = api.Api("json")
 
 # Ensure the correct post keys were sent
-if http.check_keys(("member_id", "session_id", "society_id")):
-    member_id = http.post["member_id"].value
-    session_id = http.post["session_id"].value
+if api.check_keys(("member_id", "session_id", "society_id")):
+    member_id = api.request["member_id"].value
+    session_id = api.request["session_id"].value
     
-    if database.check_session(member_id, session_id):
-        response = http.generate_returncode(0)
+    if db.check_session(member_id, session_id):
         # Split the society_id string and store in list
-        soc_ids = [id.strip() for id in http.post['society_id'].value.split(',')] 
+        soc_ids = [id.strip() for id in api.request['society_id'].value.split(',')] 
     
         # Get the data for each society
         sql = "SELECT society_id, name, email, description FROM society WHERE(society_id IN(" + ','.join(soc_ids) + "));"
-        database.cur.execute(sql)
-        result = database.cur.fetchall()
+        try:
+            db.cur.execute(sql)
+            result = db.cur.fetchall()
     
-        soc_arr = []
-        for row in result:
-            soc_details ={}
-            soc_details["society_id"] = row[0]
-            soc_details["name"] = row[1]
-            soc_details["email"] = row[2]
-            soc_details["description"] = row[3]
+            soc_arr = []
+            for row in result:
+                soc_details ={}
+                soc_details["society_id"] = row[0]
+                soc_details["name"] = row[1]
+                soc_details["email"] = row[2]
+                soc_details["description"] = row[3]
     
-            soc_arr.append(soc_details)
-        response["society_details"] = soc_arr
+                soc_arr.append(soc_details)
+            
+            api.set_returncode(0)
+            api.update_response("society_details", soc_arr)
+        except:
+            api.set_returncode(6)
     
     else:
-        response = http.generate_returncode(1)
+        api.set_returncode(1)
 else:
-    response = http.generate_returncode(5)
+    api.set_returncode(5)
 
 # Send response
-http.send_response(response)
+api.send_response()
 
 # Close db connection
-database.close()
+db.close()
 
