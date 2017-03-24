@@ -32,7 +32,8 @@ def generate_returncode(code):
         4: "Email not verified",
         5: "Incorrectly formatted request",
         6: "Database error",
-        7: "Invalid permissions for this action"
+        7: "Invalid permissions for this action",
+        8: "Invalid join token"
     }[code]
     return response
  

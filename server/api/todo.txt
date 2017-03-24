@@ -5,6 +5,5 @@ Send validation email when a user registers.
 
 Scripts to be added:
 	Script to confirm joining a soc when the user scans qr.
-	Script for chair to add/remove committee member
 	Script to return all the data of a societies members.
 		Should email it as a csv to the societies email address.
