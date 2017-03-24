@@ -2,6 +2,7 @@
 
 import database
 import http
+import subprocess
 
 # Send header
 http.send_json_header()
@@ -22,7 +23,11 @@ if http.check_keys(("member_id", "session_id", "society_id", "token")):
             if database.cur.rowcount != 0:
                 # Insert the user into the database
                 sql = "INSERT INTO member_society(member_id, society_id) VALUES(" + member_id + ", " + society_id + ");"
-                print(sql)
+                database.cur.execute(sql)
+                # Remove the qr code and database entry for the token
+                path = "/var/www/html/img/" + token + ".png"
+                subprocess.call(["rm", path])
+                sql = "DELETE FROM join_token WHERE(token = '" + token + "')";
                 database.cur.execute(sql)
                 response = http.generate_returncode(0)
             else:
