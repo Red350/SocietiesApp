@@ -17,19 +17,21 @@ if http.check_keys(("member_id", "session_id", "society_id", "token")):
     if database.check_session(member_id, session_id):
         # Check if the token is valid
         try:
-            sql = "SELECT * FROM join_token WHERE(society_id = " + society_id " AND token = '" + token + "');"
+            sql = "SELECT * FROM join_token WHERE(society_id = " + society_id + " AND token = '" + token + "');"
             database.cur.execute(sql)
             if database.cur.rowcount != 0:
                 # Insert the user into the database
-                sql = "INSERT INTO member_society(member_id, society_id) VALUES(" + member_id, +", " + society_id + ");"
+                sql = "INSERT INTO member_society(member_id, society_id) VALUES(" + member_id + ", " + society_id + ");"
+                print(sql)
                 database.cur.execute(sql)
                 response = http.generate_returncode(0)
             else:
                 # Invalid join token
                 response = http.generate_returncode(8)
-        except:
+        except Exception as e:
             # Database error
             response = http.generate_returncode(6)
+            response["dberror"] = str(e);
     else:
         # Invalid session id
         response = http.generate_returncode(1)
