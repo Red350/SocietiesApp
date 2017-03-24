@@ -1,17 +1,17 @@
-INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified)
-	VALUES(1, 'C1', 'hash', 'salt', 'John', 'c12345678@example.com', '1990-01-01', '1234', '1234', '2017-02-27', 'F', 'Y');
-INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified)
-	VALUES(2, 'C2', 'hash', 'salt', 'Daniel', 'c12345679@example.com', '1990-01-01', '1234', '1234', '2017-02-27', 'F', 'Y');
-INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified)
-	VALUES(3, 'C3', 'hash', 'salt', 'Rob', 'c92345679@example.com', '1990-01-01', '1234', '1234', '2017-02-27', 'F', 'Y');
-INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified)
-	VALUES(4, 'C4', 'hash', 'salt', 'Eoghan', 'c4@example.com', '1990-01-01', '1234', '1234', '2017-02-27', 'F', 'Y');
+INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, full_part_time, verified)
+	VALUES(1, 'C1', 'hash', 'salt', 'John', 'c12345678@example.com', '1990-01-01', '1234', '1234', 'F', 'Y');
+INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, full_part_time, verified)
+	VALUES(2, 'C2', 'hash', 'salt', 'Daniel', 'c12345679@example.com', '1990-01-01', '1234', '1234', 'F', 'Y');
+INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, full_part_time, verified)
+	VALUES(3, 'C3', 'hash', 'salt', 'Rob', 'c92345679@example.com', '1990-01-01', '1234', '1234', 'F', 'Y');
+INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, full_part_time, verified)
+	VALUES(4, 'C4', 'hash', 'salt', 'Eoghan', 'c4@example.com', '1990-01-01', '1234', '1234', 'F', 'Y');
 
-INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified)
-	VALUES(5, 'C5', '680c22c62f6e2988a9c00a3f342b0e7e13260094ff4f1fbcb7d71b61f71e8855', '3afcbf5db698460a9955de31933cdffb', 'test', 'test@example.com', '1990-01-01', '1234', '1234', '2017-02-27', 'F', 'Y');
+INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, full_part_time, verified)
+	VALUES(5, 'C5', '680c22c62f6e2988a9c00a3f342b0e7e13260094ff4f1fbcb7d71b61f71e8855', '3afcbf5db698460a9955de31933cdffb', 'test', 'test@example.com', '1990-01-01', '1234', '1234', 'F', 'Y');
 
-INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified)
-	VALUES(6, 'C6', '01619183f6d8027223349084438db860a3a3c219459f3c63d459a7a4ebbb419f', '8887050dd11c4ba3919e7317a7da9399', 'Simon', 'test@test.com', '1990-01-01', '1234', '1234', '2017-02-27', 'F', 'Y');
+INSERT INTO member(member_id, student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, full_part_time, verified)
+	VALUES(6, 'C6', '01619183f6d8027223349084438db860a3a3c219459f3c63d459a7a4ebbb419f', '8887050dd11c4ba3919e7317a7da9399', 'Simon', 'test@test.com', '1990-01-01', '1234', '1234', 'F', 'Y');
 
 -- Create an admin
 INSERT INTO admin(admin_id, email, pass_hash, salt)

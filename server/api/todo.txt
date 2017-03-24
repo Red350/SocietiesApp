@@ -1,9 +1,12 @@
-Validate incoming data (currently relying on the app to provide perfect data each time)
 Turn http and database into objects
-Script to confirm joining a soc when the user scans qr.
-Script for chair to add/remove committee member
-Script to return all the data of a societies members.
-	Should email it as a csv to the societies email address.
+Create a single execute function in database module, where all exceptions can be dealt with
+Add logging
 Modify get_socs to be able to return details of every society. (Maybe get app to send number of societies its requesting, with 0 meaning send all)
 Modify qrgen to delete any old tokens from the database when it's adding the new token
 Send validation email when a user registers.
+Move the qr deletion code to a function in database module
+	currently in both delete_qr and join_soc
+
+Scripts to be added:
+	Script to return all the data of a societies members.
+		Should email it as a csv to the societies email address.

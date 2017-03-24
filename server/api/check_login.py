@@ -12,14 +12,7 @@ if http.check_keys(("member_id", "session_id")):
     session_id = http.post["session_id"].value
     
     if database.check_session(member_id, session_id):
-        sql = "SELECT society_id FROM member_society WHERE(member_id = " + member_id + ");"
-        database.cur.execute(sql)
-        result = database.cur.fetchall()
-        list_of_socs = []
-        for row in result:
-            list_of_socs.append(str(row[0]))
         response = http.generate_returncode(0)
-        response["society_id"] = list_of_socs
     else:
         response = http.generate_returncode(1)
 else:
