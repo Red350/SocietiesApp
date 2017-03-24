@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 
 import database
-import http
+import api
 
-# Send header
-http.send_json_header()
+db = database.Database()
+api = api.Api("json")
 
 # Ensure the correct post keys were sent
-if http.check_keys(("member_id", "session_id")):
-    member_id = http.post["member_id"].value
-    session_id = http.post["session_id"].value
+if api.check_keys(("member_id", "session_id")):
+    member_id = api.request["member_id"].value
+    session_id = api.request["session_id"].value
     
-    if database.check_session(member_id, session_id):
-        response = http.generate_returncode(0)
+    if db.check_session(member_id, session_id):
+        api.set_returncode(0)
     else:
-        response = http.generate_returncode(1)
+        api.set_returncode(1)
 else:
-    response = http.generate_returncode(5)
+    api.set_returncode(5)
 
 # Send response
-http.send_response(response)
+api.send_response()
 
 # Close db connection
-database.close()
+db.close()
 
