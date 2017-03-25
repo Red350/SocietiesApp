@@ -44,15 +44,31 @@ database.close()
 
 output = """<html>
             <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+<style type="text/css">
+    body
+    {
+        margin:40px auto;
+        max-width:650px;
+        line-height:1.6;
+        font-size:18px;
+        color:#444;
+        padding:0
+        10px
+    }
+
+    h1,h2,h3{line-height:1.2}
+
+    </style>
             %s
             <title>Login</title>
             </head>
             <body>
-                <form class="reg"action="login.py" method="post">
+                <p><form class="reg"action="login.py" method="post">
                     <label for="user">User Name</label><input type="text" name="user" value="%s"> <br>
                     <label for="pass">Password</label><input type="password" name="pass"> <br>
                     <label for="Submit">Submit</label><input type="submit" value="Submit"> <br>
-                </form>
+                </form></p>
                 <p>%s</p>
             </body>
             </html>""" % (redirect, user, err)
