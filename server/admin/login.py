@@ -28,12 +28,14 @@ if os.environ['REQUEST_METHOD'] == 'POST':
         if database.cur.rowcount > 0:
             row = database.cur.fetchone()
             if encrypt.generate_hash(passwd, row[1]) == row[0]:
+                sql = "DELETE FROM admin_session WHERE admin_id = %s" % row[2]
+                database.cur.execute(sql)
                 # assign a value
                 sesh = str(uuid.uuid4().hex)
                 sql = "INSERT INTO admin_session(admin_id, session_id)VALUES(%d,'%s')" % (row[2], sesh)
                 database.cur.execute(sql)
                 if(database.cur.rowcount > 0):
-                    print("Set-Cookie: session_id=%s; Max-Age=%d" % (sesh, 1 * 1 * 60 * 60))
+                    print("Set-Cookie: session_id=%s; Max-Age=%d" % (sesh, 1 * 24 * 60 * 60))
                     redirect = """<meta http-equiv="refresh" content="0; url=/admin/home.py">"""
                 else:
                     err += "Database error"
