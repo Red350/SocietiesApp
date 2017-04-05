@@ -1,4 +1,4 @@
-#!C:\Python\python.exe
+#!/usr/bin/env python
 
 import http
 import database
