@@ -8,10 +8,10 @@ import os
 err = ""
 redirect = ""
 sql = ""
-show_result = ""
-member_id = ""
-name = ""
-student_num = ""
+show_table = ""
+select = ""
+tableList = []
+nameList = []
 
 class no_cookie(Exception):
     def __init__(self, value):
@@ -36,54 +36,54 @@ try:
 except no_cookie:
     redirect = """<meta http-equiv="refresh" content="0; url=/admin/login.py">"""
 
+
+sql = "SHOW tables"
+database.cur.execute(sql)
+
+if database.cur.rowcount > 0:
+    query = database.cur.fetchall()
+    for row in query:
+        tableList += row
+
+    for name in tableList:
+        select += "<option>%s</option>" % name
+
+
 if os.environ['REQUEST_METHOD'] == 'POST':
-    if 'logout' in http.post:
-        sql = "DELETE FROM admin_session WHERE session_id = '%s'" % cookie['session_id']
+    if 'table' in http.post:
+        sql = "SHOW columns FROM %s" % http.post['table'].value
         database.cur.execute(sql)
-        print("""Set-Cookie: session_id=%s; Max-Age=-1""" % cookie['session_id'])
-        redirect = """<meta http-equiv="refresh" content="0; url=/admin/login.py">"""
 
-    if 'search' in http.post:
-        sql = "SELECT member_id, student_num, name, email, dob, mobile, emergency_ph, date_joined, full_part_time, verified FROM member"
-
-        if 'member_id' in http.post:
-            member_id = http.post['member_id'].value
-        if 'name' in http.post:
-            name = http.post['name'].value
-        if 'student_num' in http.post:
-            student_num = http.post['student_num'].value
-
-
-
-        if 'member_id' in http.post:
-            sql += " WHERE member_id = %s" % http.post['member_id'].value
-            if'name' in http.post:
-                sql += " AND name LIKE '%%%s%%'" % http.post['name'].value
-                if 'student_num' in http.post:
-                    sql += " AND student_num LIKE '%s%%'" % http.post['student_num'].value
-        elif 'name' in http.post:
-            sql += " WHERE name LIKE '%%%s%%'" % http.post['name'].value
-            if'member_id' in http.post:
-                sql += " AND member_id = %s" % http.post['member_id'].value
-                if 'student_num' in http.post:
-                    sql += " AND student_num LIKE '%s%%'" % http.post['student_num'].value
-        elif 'student_num' in http.post:
-            sql += " WHERE student_num LIKE '%s%%'" % http.post['student_num'].value
-            if'member_id' in http.post:
-                sql += " AND member_id = %s" % http.post['member_id'].value
-                if 'student_num' in http.post:
-                    sql += " AND name LIKE '%%%s%%'" % http.post['name'].value
-        database.cur.execute(sql)
         if database.cur.rowcount > 0:
-            show_result += "<table>"
-            show_result += "<tr><th>member_id</th><th>student_num</th><th>name</th><th>email</th><th>dob</th><th>mobile</th><th>emergency_ph</th><th>date_joined</th><th>full_part_time</th></tr>"
             query = database.cur.fetchall()
             for row in query:
-                show_row = "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8])
-                show_result += show_row
-            show_result += "</table>"
+                string = [row[0]]
+                nameList += string
+
+            show_table += "<table><tr>"
+
+            sql = "SELECT"
+            for name in nameList:
+                sql += " %s," % name
+                show_table += "<th>%s</th>" % name
+
+            sql = sql[:-1]
+            sql += " FROM %s" % http.post['table'].value
+            show_table += "</tr>"
+
+            database.cur.execute(sql)
+
+            if database.cur.rowcount > 0:
+                query = database.cur.fetchall()
+                for row in query:
+                    show_table += "<tr>"
+                    for column in row:
+                        show_table += "<td>%s</td>" % column
+                    show_table += "</tr>"
+            show_table += "</table>"
 
 database.close()
+
 
 print("""Content-Type: text/html\n
 <html>
@@ -131,14 +131,8 @@ print("""Content-Type: text/html\n
                 <p>Hello There</p>
                 <h3>Search</h3>
                 <form class="search" action="home.py" method="post">
-                    <label for="member_id">ID number</label><input type="number" name="member_id" value="%s">
-                    <label for="name">Name</label><input type="text" name="name" value="%s">
-                    <label for="student_num">Student Number</label><input type="text" name="student_num" value="%s">
+                    <select name="table">%s</select>
                     <input type="submit" name="search" value="search"> <br>
                 </form>
                 %s
-                </body>
-                </html>""" % (redirect, member_id, name, student_num, show_result))
-
-
-
+                </body></html>""" % (redirect, select, show_table))
