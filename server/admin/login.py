@@ -6,6 +6,8 @@ import os
 import encrypt
 import uuid
 
+database = database.Database()
+
 err = ""
 user = ""
 passwd = ""
