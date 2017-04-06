@@ -100,6 +100,7 @@ print("""Content-Type: text/html\n
 <html>
     <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    %s
     <title>Home</title>
     <style type="text/css">
     body
@@ -131,7 +132,6 @@ print("""Content-Type: text/html\n
         color: white;
     }
     </style>
-    %s
     </head>
 <body>
                 <p>
