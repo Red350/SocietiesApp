@@ -1,41 +1,41 @@
 #!/usr/bin/env python3
 
 import database
-import http
+import api
 
-# Send header
-http.send_json_header()
+db = database.Database()
+api = api.Api("json")
 
 # Ensure the correct post keys were sent
-if http.check_keys(("chair_id", "session_id", "society_id", "member_id")):
-    chair_id = http.post["chair_id"].value
-    session_id = http.post["session_id"].value
-    society_id = http.post["society_id"].value
-    member_id = http.post["member_id"].value
+if api.check_keys(("chair_id", "session_id", "society_id", "member_id")):
+    chair_id = api.request["chair_id"].value
+    session_id = api.request["session_id"].value
+    society_id = api.request["society_id"].value
+    member_id = api.request["member_id"].value
     
-    if database.check_session(chair_id, session_id):
-        if database.check_chair(chair_id, society_id):
+    if db.check_session(chair_id, session_id):
+        if db.check_chair(chair_id, society_id):
             # Add member as committee member
             sql = "INSERT INTO committee_society(member_id, society_id) VALUES(" + member_id + ", " + society_id + ");"
             try:
-                database.cur.execute(sql)
-                response = http.generate_returncode(0)
+                db.cur.execute(sql)
+                api.set_returncode(0)
             except:
                 # Database error
-                response = http.generate_returncode(6)
+                api.set_returncode(6)
         else:
             # Invalid permissions
-            response = http.generate_returncode(7)
+            api.set_returncode(7)
     else:
         # Invalid session id
-        response = http.generate_returncode(1)
+        api.set_returncode(1)
 else:
     # Invalid post request
-    response = http.generate_returncode(5)
+    api.set_returncode(5)
 
 # Send response
-http.send_response(response)
+api.send_response()
 
 # Close db connection
-database.close()
+db.close()
 
