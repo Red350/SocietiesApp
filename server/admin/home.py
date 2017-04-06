@@ -4,6 +4,7 @@ import http
 import database
 import os
 
+database = database.Database()
 
 err = ""
 redirect = ""
