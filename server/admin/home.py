@@ -34,7 +34,7 @@ try:
     if database.cur.rowcount == 0:
         redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
 except no_cookie:
-    redirect = """<meta http-equiv="refresh" content="0; url=/login.py">"""
+    redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
 
 
 sql = "SHOW tables"
@@ -50,12 +50,19 @@ if database.cur.rowcount > 0:
 
 
 if os.environ['REQUEST_METHOD'] == 'POST':
+
+    if 'logout' in http.post:
+        print("Set-Cookie: session_id=0; Max-Age=0")
+        redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
     if 'table' in http.post:
+
+        #retrieves all columns names from a table
         sql = "SHOW columns FROM %s" % http.post['table'].value
         database.cur.execute(sql)
 
         if database.cur.rowcount > 0:
             query = database.cur.fetchall()
+            #stores all column names
             for row in query:
                 string = [row[0]]
                 nameList += string
@@ -64,15 +71,19 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 
             sql = "SELECT"
             for name in nameList:
+                #adds column name to sql statment
                 sql += " %s," % name
+                #adds column name to table header
                 show_table += "<th>%s</th>" % name
 
+            #removes last comma
             sql = sql[:-1]
             sql += " FROM %s" % http.post['table'].value
             show_table += "</tr>"
 
             database.cur.execute(sql)
 
+            #generates table rows and columns
             if database.cur.rowcount > 0:
                 query = database.cur.fetchall()
                 for row in query:
@@ -124,7 +135,7 @@ print("""Content-Type: text/html\n
     </head>
 <body>
                 <p>
-                <form class="logut"action="home.py" method="post">
+                <form class="logout"action="home.py" method="post">
                     <input type="submit" name="logout" value="logout"> <br>
                 </form>
                 </p>
