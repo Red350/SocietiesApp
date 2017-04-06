@@ -9,6 +9,8 @@ database = database.Database()
 err = ""
 redirect = ""
 sql = ""
+second = 0
+sndkey = ""
 show_table = ""
 select = ""
 tableList = []
@@ -56,7 +58,13 @@ if os.environ['REQUEST_METHOD'] == 'POST':
         print("Set-Cookie: session_id=0; Max-Age=0")
         redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
     if 'table' in http.post:
-
+        #counts primary keys in a table
+        sql = "SHOW index FROM %s WHERE key_name = 'PRIMARY'" % http.post['table'].value
+        database.cur.execute(sql)
+        if database.cur.rowcount > 1:
+           query = database.cur.fetchall()
+           row = query[1]
+           second = 1
         #retrieves all columns names from a table
         sql = "SHOW columns FROM %s" % http.post['table'].value
         database.cur.execute(sql)
@@ -77,10 +85,12 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                 #adds column name to table header
                 show_table += "<th>%s</th>" % name
 
+            show_table += "<th>Options</th>"
+            show_table += "</tr>"
+
             #removes last comma
             sql = sql[:-1]
             sql += " FROM %s" % http.post['table'].value
-            show_table += "</tr>"
 
             database.cur.execute(sql)
 
@@ -91,13 +101,19 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                     show_table += "<tr>"
                     for column in row:
                         show_table += "<td>%s</td>" % column
+                    
+                    if second == 1:
+                        sndkey = row[1]
+                        
+                    show_table += """<td><form method="POST" action="edit.py" id="edit"><button form="edit" name="edit" type="submit" value="%s">Edit</button><input type="hidden" name="key" value="%s"><input type="hidden" name="table" value="%s"></form></td>""" % (row[0], sndkey, http.post['table'].value)
                     show_table += "</tr>"
+                    
             show_table += "</table>"
 
 database.close()
 
 
-print("""Content-Type: text/html\n
+print("""Content-Type: text/html\n\n
 <html>
     <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
