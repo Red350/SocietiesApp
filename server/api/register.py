@@ -2,31 +2,31 @@
 
 import uuid
 import database
-import http
+import api
 import encrypt
 
-# Send header
-http.send_json_header()
+db = database.Database()
+api = api.Api("json")
 
 # Ensure the correct post keys were sent
-if http.check_keys(("email", "password", "student_num", "name", "dob", "mobile", "emergency_ph", "full_part_time")):
-    student_num = http.post["student_num"].value
-    password = http.post["password"].value
-    name = http.post["name"].value
-    email = http.post["email"].value
-    dob = http.post["dob"].value
-    mobile = http.post["mobile"].value
-    emergency_ph = http.post["emergency_ph"].value
-    full_part_time = http.post["full_part_time"].value
+if api.check_keys(("email", "password", "student_num", "name", "dob", "mobile", "emergency_ph", "full_part_time")):
+    student_num = api.request["student_num"].value
+    password = api.request["password"].value
+    name = api.request["name"].value
+    email = api.request["email"].value
+    dob = api.request["dob"].value
+    mobile = api.request["mobile"].value
+    emergency_ph = api.request["emergency_ph"].value
+    full_part_time = api.request["full_part_time"].value
     
     # Generate salt and password hash
     salt = str(uuid.uuid4().hex)
     pass_hash = encrypt.generate_hash(password, salt)
     
     sql = "SELECT email FROM member WHERE(email = '" + email + "');"
-    database.cur.execute(sql)
-    if database.cur.rowcount != 0:
-        response = http.generate_returncode(3)
+    db.cur.execute(sql)
+    if db.cur.rowcount != 0:
+        response = api.set_returncode(3)
     else:
         sql = ("INSERT INTO member(student_num, pass_hash, salt, name, email, dob, mobile, emergency_ph, full_part_time, verified) VALUES("
                + "'" + student_num + "'" + ", "
@@ -40,17 +40,17 @@ if http.check_keys(("email", "password", "student_num", "name", "dob", "mobile",
                + "'" + full_part_time + "'" + ", 'Y');"
                )
         print(sql)
-        database.cur.execute(sql)
+        db.cur.execute(sql)
         # Check that the user was created successfully
-        if database.cur.rowcount != 0:
-            response = http.generate_returncode(0)
+        if db.cur.rowcount != 0:
+            response = api.set_returncode(0)
         else:
-            response = http.generate_returncode(6)
+            response = api.set_returncode(6)
 else:
-    response = http.generate_returncode(5)
+    response = api.set_returncode(5)
 
 # Send response
-http.send_response(response)
+api.send_response()
 
 # Close db connection
-database.close()
+db.close()

@@ -2,21 +2,21 @@
 
 import database
 from qrcode import *
-import http
+import api
 import uuid
 import delete_qr
 
-# Send header
-http.send_json_header()
+db = database.Database()
+api = api.Api("json")
 
-# Ensure the correct post keys were sent
-if http.check_keys(("member_id", "session_id", "society_id")):
-    member_id = http.post["member_id"].value
-    session_id = http.post["session_id"].value
-    society_id = http.post["society_id"].value
+# Ensure the correct request keys were sent
+if api.check_keys(("member_id", "session_id", "society_id")):
+    member_id = api.request["member_id"].value
+    session_id = api.request["session_id"].value
+    society_id = api.request["society_id"].value
     # Ensure user is a committee member for the society
-    if database.check_session(member_id, session_id):
-        if database.check_committee(member_id, society_id):
+    if db.check_session(member_id, session_id):
+        if db.check_committee(member_id, society_id):
             token = str(uuid.uuid4().hex)
             qrdata = "{ \"token\": \"" + token + "\", \"society_id\": \"" + society_id + "\"}"
     
@@ -30,20 +30,20 @@ if http.check_keys(("member_id", "session_id", "society_id")):
     
             # Store the token in the database
             sql = "INSERT INTO join_token VALUES(" + society_id + ", '" + token + "', NULL)"
-            database.cur.execute(sql)
+            db.cur.execute(sql)
     
-            response = http.generate_returncode(0)
-            response["token"] = token
+            response = api.set_returncode(0)
+            api.update_response("token", token)
         else:
-            response = http.generate_returncode(7)
+            response = api.set_returncode(7)
     else:
-        response = http.generate_returncode(1)
+        response = api.set_returncode(1)
 else:
-    response = http.generate_returncode(5)
+    response = api.set_returncode(5)
 
 # Send response
-http.send_response(response)
+api.send_response()
 
 # Close db connection
-database.close()
+db.close()
 
