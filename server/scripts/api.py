@@ -1,11 +1,18 @@
 import cgi
 import cgitb
 import json
+import logging
 
 class Api:
     request = cgi.FieldStorage()
     cgitb.enable()
     response = {}
+
+    # Set up logging and log the request
+    logging.basicConfig(filename='/var/www/html/log/socapi.log',
+                        level=logging.DEBUG,
+                        format='%(asctime)s %(message)s')
+    logging.info("Received: " + str(request))
 
     def __init__(self, header):
         if header == "json":
@@ -31,6 +38,7 @@ class Api:
 
     def send_response(self):
         json_data = json.dumps(self.response, sort_keys=True, indent=4)
+        logging.info("Sent: " + json_data)
         print(json_data)
      
     def check_keys(self, keys):
