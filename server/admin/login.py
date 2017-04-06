@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import http
 import database
@@ -36,7 +36,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                 database.cur.execute(sql)
                 if(database.cur.rowcount > 0):
                     print("Set-Cookie: session_id=%s; Max-Age=%d" % (sesh, 1 * 24 * 60 * 60))
-                    redirect = """<meta http-equiv="refresh" content="0; url=/admin/home.py">"""
+                    redirect = """<meta http-equiv="refresh" content="0; url=home.py">"""
                 else:
                     err += "Database error"
         else:

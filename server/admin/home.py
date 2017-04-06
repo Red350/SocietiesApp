@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import http
 import database
@@ -32,9 +32,9 @@ try:
     sql = "SELECT session_id, admin_id FROM admin_session WHERE session_id = '%s'" % cookie['session_id']
     database.cur.execute(sql)
     if database.cur.rowcount == 0:
-        redirect = """<meta http-equiv="refresh" content="0; url=/admin/login.py">"""
+        redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
 except no_cookie:
-    redirect = """<meta http-equiv="refresh" content="0; url=/admin/login.py">"""
+    redirect = """<meta http-equiv="refresh" content="0; url=/login.py">"""
 
 
 sql = "SHOW tables"
