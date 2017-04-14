@@ -4,7 +4,11 @@ import org.json.JSONObject;
 
 public class PostHandle
 {
-    String type;
+    private String type;
+    private String member_id;
+    private String code;
+    private String message;
+    private String session_id;
 
     PostHandle()
     {
@@ -19,5 +23,5 @@ public class PostHandle
     public void objParse(JSONObject jObject)
     {
 
-    }
+    }//end METHOD objParse
 }

@@ -22,24 +22,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import android.util.Log;
-
-import java.io.BufferedOutputStream;
-import java.io.CharArrayReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity
 {
@@ -199,9 +184,26 @@ public class RegisterActivity extends AppCompatActivity
 
         //System.out.println(name + id + email + password1 + password2 + mobile + DOB + emergancy);
 
+        if (TextUtils.isEmpty(name))
+        {
+            name = "-";
+        }
+        if (TextUtils.isEmpty(id))
+        {
+            id = "-";
+        }
+        if (TextUtils.isEmpty(mobile))
+        {
+            mobile = "-";
+        }
+        if (TextUtils.isEmpty(emergancy))
+        {
+            emergancy = "-";
+        }
+
         if (TextUtils.isEmpty(DOB))
         {
-            DOB = "";
+            DOB = "-";
         }
         else
         {
@@ -344,21 +346,20 @@ public class RegisterActivity extends AppCompatActivity
 
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean>
     {
-        private String name = "";
-        private String id = "";
-        private String email = "";
-        private String password = "";
-        private String dob = "";
-        private String number = "";
-        private String emergancy = "";
-        private String fullTime = "";
-
+        private String name = "-";
+        private String id = "-";
+        private String email = "-";
+        private String password = "-";
+        private String dob = "-";
+        private String number = "-";
+        private String emergancy = "-";
+        private String fullTime = "-";
 
 
         UserRegisterTask(String name, String id, char time,String email, String password,
                          String dob, String number, String emergancy)
         {
-            Log.d("LOOK HERE", name + " " + id + " " + time + " " + email + " " + password + " " +
+            Log.d("Hi", name + " " + id + " " + time + " " + email + " " + password + " " +
                     dob + " " + number + " " + emergancy);
             this.name = name;
             this.id = id;
