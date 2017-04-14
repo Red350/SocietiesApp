@@ -5,14 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -183,7 +178,42 @@ public class RegisterActivity extends AppCompatActivity
         String emergancy= emergancyView.getText().toString();
 
         //System.out.println(name + id + email + password1 + password2 + mobile + DOB + emergancy);
+        boolean cancel = false;
+        View focusView = null;
 
+        //Checks if the user entered a dash
+        if (name.equals("-"))
+        {
+            name = "-";
+            nameView.setError(getString(R.string.invalid_input));
+            cancel = true;
+        }
+        else if (id.equals("-"))
+        {
+            id = "-";
+            idView.setError(getString(R.string.invalid_input));
+            cancel = true;
+        }
+        else if (mobile.equals("-"))
+        {
+            mobile = "-";
+            mobileView.setError(getString(R.string.invalid_input));
+            cancel = true;
+        }
+        else if (emergancy.equals("-"))
+        {
+            emergancy = "-";
+            emergancyView.setError(getString(R.string.invalid_input));
+            cancel = true;
+        }
+        else if (DOB.equals("-"))
+        {
+            DOB = "-";
+            dobView.setError(getString(R.string.invalid_input));
+            cancel = true;
+        }
+
+        //Checks if the input is empty and replaces it
         if (TextUtils.isEmpty(name))
         {
             name = "-";
@@ -210,9 +240,6 @@ public class RegisterActivity extends AppCompatActivity
             DOB = formatDOB(DOB);
         }
 
-        boolean cancel = false;
-        View focusView = null;
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(email))
         {
@@ -220,13 +247,7 @@ public class RegisterActivity extends AppCompatActivity
             focusView = emailView;
             cancel = true;
         }//end if
-        else
-        {
-            cancel = false;
-        }//end else
-
-        // Check for a valid password
-        if (TextUtils.isEmpty(password1))
+        else if (TextUtils.isEmpty(password1))
         {
             password1View.setError(getString(R.string.error_field_required));
             focusView =  password1View;
@@ -250,10 +271,6 @@ public class RegisterActivity extends AppCompatActivity
             focusView = password2View;
             cancel = true;
         }//end if
-        else
-        {
-            cancel = false;
-        }//end else
 
         if (cancel)
         {

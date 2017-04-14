@@ -343,7 +343,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params)
         {
-            PostHandle validator = new PostHandle("Login");
+            PostHandle validator = new PostHandle('L');
             JSONObject jObject = null;
             Http conn = new Http();
 
@@ -384,7 +384,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-            //Allows login
+            //Allows Login
             if (success)
             {
                 finish();
