@@ -31,6 +31,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.JSONStringer;
 
 import java.io.BufferedOutputStream;
@@ -339,9 +341,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service
-
+        protected Boolean doInBackground(Void... params)
+        {
+            PostHandle validator = new PostHandle("Login");
+            JSONObject jObject = null;
             Http conn = new Http();
 
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
@@ -349,10 +352,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             args.add(new NameValuePair("password", mPassword));
 
             String url = "http://www.padraig.red/cgi-bin/api/login.py";
+            String s = "";
 
             try
             {
-                String s = conn.post(url, args);
+                s = conn.post(url, args);
                 Log.d("Look:", s);
             }
             catch(Exception e)
@@ -360,15 +364,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 e.printStackTrace();
             }
 
-            /*
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
+            try
+            {
+                jObject = new JSONObject(s);
+                String code = jObject.getString("return_code");
+                Log.d("Find:", code);
+                validator.objParse(jObject);
             }
-            */
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
 
             return true;
         }
@@ -378,12 +384,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            //Allows login
+            if (success)
+            {
                 finish();
                 // if login is successful transition to main activity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
-            } else {
+            }
+            else
+            {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
