@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +18,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -31,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity
     private EditText dobView;
     private EditText mobileView;
     private EditText emergancyView;
+    private TextView errorField;
 
     private DatePicker datePicker;
     private Calendar calendar;
@@ -43,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity
     private int year, month, day;
 
     private RegisterActivity.UserRegisterTask mAuthTask = null;
+    private String message = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -78,6 +86,7 @@ public class RegisterActivity extends AppCompatActivity
 
         registerFormView = findViewById(R.id.register_form);
         progressView = findViewById(R.id.register_progress);
+        errorField = (TextView)findViewById(R.id.regErrorTextView);
     }
 
     @SuppressWarnings("deprecation")
@@ -247,6 +256,12 @@ public class RegisterActivity extends AppCompatActivity
             focusView = emailView;
             cancel = true;
         }//end if
+        else if (email.indexOf('a') < 0)
+        {
+            emailView.setError(getString(R.string.error_invalid_email));
+            focusView = emailView;
+            cancel = true;
+        }
         else if (TextUtils.isEmpty(password1))
         {
             password1View.setError(getString(R.string.error_field_required));
@@ -389,8 +404,10 @@ public class RegisterActivity extends AppCompatActivity
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-
+        protected Boolean doInBackground(Void... params)
+        {
+            PostHandle validator = new PostHandle('R');
+            JSONObject jObject = null;
             Http conn = new Http();
 
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
@@ -410,13 +427,33 @@ public class RegisterActivity extends AppCompatActivity
             {
                 String s = conn.post(url, args);
                 Log.d("Look Here", s);
+                try
+                {
+                    jObject = new JSONObject(s);
+                    String code = jObject.getString("return_code");
+                    Log.d("Find:", code);
+                    message = validator.objParse(jObject);
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                    message = "Failed establish connection";
+                }
             }
             catch(Exception e)
             {
                 e.printStackTrace();
+                message = "Failed establish connection";
             }
 
-            return true;
+            if (message.equals("Success"))
+            {
+                return true;
+            }//end if
+            else
+            {
+                return false;
+            }
         }
         @Override
         protected void onPostExecute(final Boolean success)
@@ -430,6 +467,12 @@ public class RegisterActivity extends AppCompatActivity
                 // if login is successful transition to main activity
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
+            }
+            else
+            {
+                errorField.setTextColor(Color.parseColor("#CC0000"));
+                errorField.setText(message);
+                errorField.requestFocus();
             }
         }
 

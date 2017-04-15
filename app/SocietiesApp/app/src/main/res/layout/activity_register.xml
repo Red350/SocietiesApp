@@ -191,7 +191,8 @@
                 <TextView
                     android:id="@+id/regErrorTextView"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp" />
+                    android:layout_height="20dp"
+                    android:textSize="15sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -200,6 +201,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="attemptRegister"
+                android:background="@color/colorPrimary"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
                 android:text="Register" />
 
         </LinearLayout>

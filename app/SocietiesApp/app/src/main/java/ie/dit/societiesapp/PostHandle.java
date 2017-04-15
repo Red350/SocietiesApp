@@ -21,7 +21,7 @@ public class PostHandle
         this.type = type;
     }//end constuctor
 
-    public void objParse(JSONObject jObject) throws JSONException
+    public String objParse(JSONObject jObject) throws JSONException
     {
         code =  jObject.getInt("return_code");
 
@@ -42,6 +42,8 @@ public class PostHandle
         {
             message = jObject.getString("return_msg");
         }//end else
+
+        return message;
     }//end METHOD objParse
 
     public String getMessage()

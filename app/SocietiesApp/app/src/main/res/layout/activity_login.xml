@@ -83,27 +83,30 @@
                 <TextView
                     android:id="@+id/loginErrorTextView"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp" />
+                    android:layout_height="20dp"
+                    android:textSize="15sp"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@color/colorPrimary"
                 android:text="Login"
-                android:textStyle="bold" />
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/registerSwitchButton"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@color/colorPrimary"
                 android:text="Register"
-                android:textStyle="bold" />
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
 
         </LinearLayout>
     </ScrollView>

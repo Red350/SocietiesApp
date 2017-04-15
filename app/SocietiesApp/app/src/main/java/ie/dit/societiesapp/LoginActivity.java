@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,15 +34,6 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
-
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +66,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private TextView errorField;
+    private String message = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +77,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
+        errorField = (TextView)findViewById(R.id.loginErrorTextView);
+        errorField.setText("");
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -358,25 +354,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             {
                 s = conn.post(url, args);
                 Log.d("Look:", s);
+                try
+                {
+                    jObject = new JSONObject(s);
+                    String code = jObject.getString("return_code");
+                    Log.d("Find:", code);
+                    message = validator.objParse(jObject);
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                    message = "Failed establish connection";
+                }
             }
             catch(Exception e)
             {
                 e.printStackTrace();
+                message = "Failed establish connection";
             }
 
-            try
+            if (message.equals("Success"))
             {
-                jObject = new JSONObject(s);
-                String code = jObject.getString("return_code");
-                Log.d("Find:", code);
-                validator.objParse(jObject);
-            }
-            catch (JSONException e)
+                return true;
+            }//end if
+            else
             {
-                e.printStackTrace();
+                return false;
             }
-
-            return true;
         }
 
         @Override
@@ -394,8 +398,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
             else
             {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                errorField.setTextColor(Color.parseColor("#CC0000"));
+                errorField.setText(message);
+                errorField.requestFocus();
+                //mPasswordView.setError(getString(R.string.error_incorrect_password));
+                //mPasswordView.requestFocus();
             }
         }
 
