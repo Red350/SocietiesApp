@@ -3,8 +3,8 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/nav_qr"
+            android:icon="@drawable/ic_menu_qr"
             android:title="QR Scan" />
         <!--<item
             android:id="@+id/nav_gallery"
