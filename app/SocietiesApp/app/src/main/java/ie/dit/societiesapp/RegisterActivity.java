@@ -24,6 +24,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -256,7 +257,7 @@ public class RegisterActivity extends AppCompatActivity
             focusView = emailView;
             cancel = true;
         }//end if
-        else if (email.indexOf('a') < 0)
+        else if (!email.contains("@"))
         {
             emailView.setError(getString(R.string.error_invalid_email));
             focusView = emailView;
@@ -409,6 +410,8 @@ public class RegisterActivity extends AppCompatActivity
             PostHandle validator = new PostHandle('R');
             JSONObject jObject = null;
             Http conn = new Http();
+            String connString = "";
+            String code = "";
 
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
             args.add(new NameValuePair("student_num", id));
@@ -422,17 +425,18 @@ public class RegisterActivity extends AppCompatActivity
             args.add(new NameValuePair("full_part_time", fullTime));
 
             String url = "http://www.padraig.red/cgi-bin/api/register.py";
+            boolean check = false;
 
             try
             {
-                String s = conn.post(url, args);
-                Log.d("Look Here", s);
+                connString = conn.post(url, args);
                 try
                 {
-                    jObject = new JSONObject(s);
-                    String code = jObject.getString("return_code");
+                    jObject = new JSONObject(connString);
+                    code = jObject.getString("return_code");
                     Log.d("Find:", code);
-                    message = validator.objParse(jObject);
+                    validator.objParse(jObject);
+                    message = validator.getMessage();
                 }
                 catch (JSONException e)
                 {
@@ -440,13 +444,12 @@ public class RegisterActivity extends AppCompatActivity
                     message = "Failed establish connection";
                 }
             }
-            catch(Exception e)
+            catch (IOException e)
             {
                 e.printStackTrace();
-                message = "Failed establish connection";
             }
 
-            if (message.equals("Success"))
+            if (message.contains("Success"))
             {
                 return true;
             }//end if

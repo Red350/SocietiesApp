@@ -21,7 +21,7 @@ public class PostHandle
         this.type = type;
     }//end constuctor
 
-    public String objParse(JSONObject jObject) throws JSONException
+    public void objParse(JSONObject jObject) throws JSONException
     {
         code =  jObject.getInt("return_code");
 
@@ -33,7 +33,7 @@ public class PostHandle
                 session_id = jObject.getString("session_id");
                 member_id = jObject.getString("member_id");
             }//end if
-            else
+            else if (type == 'R')
             {
                 message = jObject.getString("return_msg");
             }//end else
@@ -42,8 +42,6 @@ public class PostHandle
         {
             message = jObject.getString("return_msg");
         }//end else
-
-        return message;
     }//end METHOD objParse
 
     public String getMessage()

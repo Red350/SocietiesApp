@@ -359,7 +359,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     jObject = new JSONObject(s);
                     String code = jObject.getString("return_code");
                     Log.d("Find:", code);
-                    message = validator.objParse(jObject);
+                    validator.objParse(jObject);
+                    message = validator.getMessage();
                 }
                 catch (JSONException e)
                 {
@@ -373,7 +374,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 message = "Failed establish connection";
             }
 
-            if (message.equals("Success"))
+            if (message.contains("Success"))
             {
                 return true;
             }//end if
