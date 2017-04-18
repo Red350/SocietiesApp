@@ -39,7 +39,6 @@ if api.check_keys(("email", "password", "student_num", "name", "dob", "mobile", 
                + "'" + emergency_ph + "'" + ", "
                + "'" + full_part_time + "'" + ", 'Y');"
                )
-        print(sql)
         db.cur.execute(sql)
         # Check that the user was created successfully
         if db.cur.rowcount != 0:
