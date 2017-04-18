@@ -407,11 +407,8 @@ public class RegisterActivity extends AppCompatActivity
         @Override
         protected Boolean doInBackground(Void... params)
         {
-            PostHandle validator = new PostHandle('R');
-            JSONObject jObject = null;
             Http conn = new Http();
-            String connString = "";
-            String code = "";
+            JSONResponse response;
 
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
             args.add(new NameValuePair("student_num", id));
@@ -425,38 +422,25 @@ public class RegisterActivity extends AppCompatActivity
             args.add(new NameValuePair("full_part_time", fullTime));
 
             String url = "http://www.padraig.red/cgi-bin/api/register.py";
-            boolean check = false;
 
             try
             {
-                connString = conn.post(url, args);
-                try
-                {
-                    jObject = new JSONObject(connString);
-                    code = jObject.getString("return_code");
-                    Log.d("Find:", code);
-                    validator.objParse(jObject);
-                    message = validator.getMessage();
-                }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                    message = "Failed establish connection";
+                String s = conn.post(url, args);
+                response = new JSONResponse(s, getApplicationContext());
+                if(response.isValid()) {
+                    return true;
+                } else {
+                    message = response.getMessage();
                 }
             }
             catch (IOException e)
             {
                 e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
-            if (message.contains("Success"))
-            {
-                return true;
-            }//end if
-            else
-            {
-                return false;
-            }
+            return false;
         }
         @Override
         protected void onPostExecute(final Boolean success)
@@ -467,7 +451,7 @@ public class RegisterActivity extends AppCompatActivity
             if (success)
             {
                 finish();
-                // if login is successful transition to main activity
+                // if register is successful, return to the login activity
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
             }

@@ -54,7 +54,7 @@ public class JSONResponse {
 
 
     public String getMessage() {
-        return "Error code " + return_code + ": " + return_msg;
+        return return_msg;
     }
 
 

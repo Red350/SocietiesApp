@@ -349,7 +349,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             String url = "http://www.padraig.red/cgi-bin/api/login.py";
 
-            // Send long request to the server and parse the JSON response
+            // Send login request to the server and parse the JSON response
             try
             {
                 String s = conn.post(url, args);
@@ -360,7 +360,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return true;
                 } else {
                     message = response.getMessage();
-                    return false;
                 }
 
             }
@@ -368,10 +367,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             {
                 e.printStackTrace();
                 message = "JSON error";
-                return false;
             }
 
-
+            return false;
         }
 
         @Override
