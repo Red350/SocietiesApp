@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -339,49 +340,38 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params)
         {
-            PostHandle validator = new PostHandle('L');
-            JSONObject jObject = null;
             Http conn = new Http();
+            JSONResponse response;
 
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
             args.add(new NameValuePair("email", mEmail));
             args.add(new NameValuePair("password", mPassword));
 
             String url = "http://www.padraig.red/cgi-bin/api/login.py";
-            String s = "";
 
+            // Send long request to the server and parse the JSON response
             try
             {
-                s = conn.post(url, args);
-                Log.d("Look:", s);
-                try
-                {
-                    jObject = new JSONObject(s);
-                    String code = jObject.getString("return_code");
-                    Log.d("Find:", code);
-                    validator.objParse(jObject);
-                    message = validator.getMessage();
+                String s = conn.post(url, args);
+                response = new JSONResponse(s, getApplicationContext());
+
+                if(response.isValid()) {
+                    response.storeLogin();
+                    return true;
+                } else {
+                    message = response.getMessage();
+                    return false;
                 }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                    message = "Failed establish connection";
-                }
+
             }
             catch(Exception e)
             {
                 e.printStackTrace();
-                message = "Failed establish connection";
-            }
-
-            if (message.contains("Success"))
-            {
-                return true;
-            }//end if
-            else
-            {
+                message = "JSON error";
                 return false;
             }
+
+
         }
 
         @Override

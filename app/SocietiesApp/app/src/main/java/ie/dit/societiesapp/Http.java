@@ -1,5 +1,7 @@
 package ie.dit.societiesapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.IOException;
@@ -21,34 +23,14 @@ public class Http
 		client = new OkHttpClient();
 	}
 	
-	String post(String url, ArrayList<NameValuePair> params) throws IOException {
-
-		String check = "";
-
+	public String post(String url, ArrayList<NameValuePair> params) throws IOException {
 		FormBody.Builder formBody = new FormBody.Builder();
+
+		// Add in the member_id and session_id if they exist
+
 		for(NameValuePair pair : params)
 		{
 			formBody.add(pair.getName(), pair.getValue());
-			/*
-			if (pair.getName().equals(""))
-			{
-				check += "EMP";
-			}
-			else
-			{
-				check += pair.getName();
-			}
-			check += " ";
-			if (pair.getValue().equals(""))
-			{
-				check += "EMP";
-			}
-			else
-			{
-				check += pair.getValue();
-			}
-			check += "\n";
-			*/
 		}
 
 		RequestBody requestBody = formBody.build();
@@ -60,6 +42,15 @@ public class Http
 		
 		Response response = client.newCall(request).execute();
 		return response.body().string();
+	}
+
+	// This adds the member_id and session_id fields to the request before it's sent
+	public String post(String url, ArrayList<NameValuePair> params, Context context) throws IOException {
+		SharedPreferences userData = context.getSharedPreferences("userData", 0);
+		params.add(new NameValuePair("session_id", userData.getString("session_id", "")));
+		params.add(new NameValuePair("member_id", userData.getString("member_id", "")));
+
+		return (post(url, params));
 	}
 }
 
