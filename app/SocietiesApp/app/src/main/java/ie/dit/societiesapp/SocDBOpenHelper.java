@@ -29,6 +29,35 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
 
+    /* Methods for querying */
+
+    // Get details of a single society by id
+    public Cursor getSociety(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM society WHERE(society_id = " + id + ");", null);
+        return res;
+    }
+
+    /* Check if user is a member, committee member, or chair of a society */
+
+    public boolean checkMember(int id) { return checkField(id, "is_member"); }
+    public boolean checkCommittee(int id) { return checkField(id, "is_committee"); }
+    public boolean checkChair(int id) { return checkField(id, "is_chair" ); }
+
+    // Called by the other check methods
+    private boolean checkField(int id, String field) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM society WHERE(society_id = " + id + " AND " + field + " = 1);", null);
+        return res.getCount() == 1;
+    }
+
+    // Get the list of societies that user is a committee member of
+    //public Cursor getCommittee
+
+
+    /* Methods for inserting and updating */
+
+
     public boolean addSociety(int society_id, String name, String email, String description) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -46,12 +75,6 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         } else {
             return true;
         }
-    }
-
-    public Cursor getSociety(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM society WHERE(society_id = " + id + ");", null);
-        return res;
     }
 
     // Clear the user from being a member of any society

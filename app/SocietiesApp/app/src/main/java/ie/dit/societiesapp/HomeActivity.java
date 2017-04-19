@@ -41,6 +41,44 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        SocDBOpenHelper db = new SocDBOpenHelper(getApplicationContext());
+
+        if(db.checkMember(1)) {
+            Log.d("TESTING", "member of compsoc");
+        } else {
+            Log.d("TESTING", "not member of compsoc :(");
+        }
+
+        if(db.checkMember(2)) {
+            Log.d("TESTING", "member of 2");
+        } else {
+            Log.d("TESTING", "not member of 2 :(");
+        }
+
+        if(db.checkChair(1)) {
+            Log.d("TESTING", "Chair of 1");
+        } else {
+            Log.d("TESTING", "not chair of 1 :(");
+        }
+
+        if(db.checkChair(2)) {
+            Log.d("TESTING", "Chair of 2");
+        } else {
+            Log.d("TESTING", "not chair of 2 :(");
+        }
+
+        if(db.checkCommittee(3)) {
+            Log.d("TESTING", "committee of 3");
+        } else {
+            Log.d("TESTING", "not com of 3 :(");
+        }
+
+        if(db.checkChair(4)) {
+            Log.d("TESTING", "Com of 4");
+        } else {
+            Log.d("TESTING", "not com of 4:(");
+        }
     }
 
     @Override
