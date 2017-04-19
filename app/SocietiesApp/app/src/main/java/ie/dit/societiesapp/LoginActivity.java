@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -33,8 +32,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -348,25 +345,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 String s = conn.post(url, args);
                 response = new JSONResponse(s, getApplicationContext());
 
+                // Check to see if login succeeded
                 if(response.isValid()) {
                     // Don't log in if the user's details failed to store
                     if(!response.storeLogin()) {
                         message = "Failed to store login details";
                         return false;
                     }
-                    // Update the user's local society db
-                    DBUpdater db = new DBUpdater(getApplicationContext());
-                    try {
-                        Log.d("SOCDEBUG", "Attempting to update local database");
-                        if(db.updateAll()) {
-                            Log.d("SOCDEBUG", "Successfully updated local database after login");
-                        } else {
-                            Log.d("SOCDEBUG", "Failed to update local database after login");
-                        }
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                    }
-
                     return true;
                 } else {
                     message = response.getMessage();
@@ -389,7 +374,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             //Allows Login
             if (success)
             {
-
+                // Start updating the user's society details in the background
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Update the user's local society db
+                        SocDBUpdater db = new SocDBUpdater(getApplicationContext());
+                        try {
+                            Log.d("SOCDEBUG", "Attempting to update local database");
+                            if(db.updateAll()) {
+                                Log.d("SOCDEBUG", "Successfully updated local database after login");
+                            } else {
+                                Log.d("SOCDEBUG", "Failed to update local database after login");
+                            }
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 finish();
                 // if login is successful transition to main activity
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);

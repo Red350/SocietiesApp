@@ -12,6 +12,8 @@
     <string name="register_script">"register.py"</string>
     <string name="get_socs_script">"get_socs.py"</string>
     <string name="get_user_socs_script">"get_user_socs.py"</string>
+    <string name="get_user_committee_script">"get_user_committee.py"</string>
+    <string name="get_user_chair_script">"get_user_chair.py"</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
