@@ -88,7 +88,6 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         return setField(id, val, "is_committee");
     }
 
-
     // Set this user's chair status for a society
     public boolean setChair(int id, int val) {
         return setField(id, val, "is_chair");

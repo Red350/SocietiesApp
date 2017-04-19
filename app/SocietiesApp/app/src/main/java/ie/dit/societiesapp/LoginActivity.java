@@ -340,7 +340,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             args.add(new NameValuePair("email", mEmail));
             args.add(new NameValuePair("password", mPassword));
 
-            String url = "http://www.padraig.red/cgi-bin/api/login.py";
+            String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.login_script);
 
             // Send login request to the server and parse the JSON response
             try

@@ -1,5 +1,17 @@
 <resources>
+
     <string name="app_name">DIT Societies</string>
+
+    <!-- URL strings for accessing api -->
+    <string name="base_url">"http://www.padraig.red/"</string>
+    <string name="script_bin">"cgi-bin/api/"</string>
+    <string name="img_directory">"img/"</string>
+
+    <!-- Script names for api -->
+    <string name="login_script">"login.py"</string>
+    <string name="register_script">"register.py"</string>
+    <string name="get_socs_script">"get_socs.py"</string>
+    <string name="get_user_socs_script">"get_user_socs.py"</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

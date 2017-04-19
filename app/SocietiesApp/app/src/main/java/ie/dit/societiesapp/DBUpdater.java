@@ -1,7 +1,6 @@
 package ie.dit.societiesapp;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -14,13 +13,16 @@ import java.util.ArrayList;
 public class DBUpdater {
     private SocDBOpenHelper db;
     private Context context;
-    private static final String baseURL = "http://www.padraig.red/cgi-bin/api/";
-    private static final String getSocs = "get_socs.py";
-    private static final String getUserSocs = "get_user_socs.py";
+    private static String URL;
+    private static String getSocs;
+    private static String getUserSocs;
 
     public DBUpdater(Context context) {
         db = new SocDBOpenHelper(context);
         this.context = context;
+        URL = context.getString(R.string.base_url) + context.getString(R.string.script_bin);
+        getSocs = context.getString(R.string.get_socs_script);
+        getUserSocs = context.getString(R.string.get_user_socs_script);
     }
 
     public boolean updateAll() throws IOException, JSONException {
@@ -34,7 +36,7 @@ public class DBUpdater {
     // Requests all society data from server and stores in local db
     public boolean updateSocieties() throws IOException, JSONException {
         Http conn = new Http();
-        String url = baseURL + getSocs;
+        String url = URL + getSocs;
         ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
         String s = conn.post(url, args, context);
         JSONResponse response = new JSONResponse(s, context);
@@ -62,7 +64,7 @@ public class DBUpdater {
     // Updates which societies the user is a member of
     public boolean updateMember() throws IOException, JSONException {
         Http conn = new Http();
-        String url = baseURL + getUserSocs;
+        String url = URL + getUserSocs;
         ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
         String s = conn.post(url, args, context);
         JSONResponse response = new JSONResponse(s, context);
