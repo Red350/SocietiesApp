@@ -20,7 +20,9 @@ import android.widget.Toast;
 import layout.QRScanFragment;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, QRScanFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        QRScanFragment.OnFragmentInteractionListener,
+        SocietiesListFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,44 +48,6 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        SocDBOpenHelper db = new SocDBOpenHelper(getApplicationContext());
-
-        if(db.checkMember(1)) {
-            Log.d("TESTING", "member of compsoc");
-        } else {
-            Log.d("TESTING", "not member of compsoc :(");
-        }
-
-        if(db.checkMember(2)) {
-            Log.d("TESTING", "member of 2");
-        } else {
-            Log.d("TESTING", "not member of 2 :(");
-        }
-
-        if(db.checkChair(1)) {
-            Log.d("TESTING", "Chair of 1");
-        } else {
-            Log.d("TESTING", "not chair of 1 :(");
-        }
-
-        if(db.checkChair(2)) {
-            Log.d("TESTING", "Chair of 2");
-        } else {
-            Log.d("TESTING", "not chair of 2 :(");
-        }
-
-        if(db.checkCommittee(3)) {
-            Log.d("TESTING", "committee of 3");
-        } else {
-            Log.d("TESTING", "not com of 3 :(");
-        }
-
-        if(db.checkChair(4)) {
-            Log.d("TESTING", "Com of 4");
-        } else {
-            Log.d("TESTING", "not com of 4:(");
-        }
     }
 
     @Override
@@ -123,35 +87,42 @@ public class HomeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        switch(id) {
+            case R.id.nav_qr:
+            {
+                Log.d("find", "grsderfsgfav");
+                Toast.makeText(this, "QR", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Hey", Toast.LENGTH_SHORT);
+                // Handle the QR action
 
-        if (id == R.id.nav_qr)
-        {
-            Log.d("find", "grsderfsgfav");
-            Toast.makeText(this, "QR", Toast.LENGTH_SHORT).show();
-            //Toast.makeText(this, "Hey", Toast.LENGTH_SHORT);
-            // Handle the QR action
+                //Creates fragment
+                QRScanFragment qrScanFragment = QRScanFragment.newInstance();
+                FragmentManager manager = getSupportFragmentManager();
+                manager.beginTransaction().replace(
+                        R.id.relative_layout_for_fragment,
+                        qrScanFragment,
+                        qrScanFragment.getTag()
+                ).commit();
+                break;
+            }
 
-            //Creates fragment
-            QRScanFragment qrScanFragment = QRScanFragment.newInstance();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(
-                    R.id.relative_layout_for_fragment,
-                    qrScanFragment,
-                    qrScanFragment.getTag()
-                    ).commit();
-
-        }
-        else if (id == R.id.nav_share)
-        {
-            Toast.makeText(this, "Hey", Toast.LENGTH_SHORT).show();
-        }
-        else if (id == R.id.nav_send)
-        {
-
+            case R.id.nav_soclist:
+            {
+                SocietiesListFragment societiesListFragment = SocietiesListFragment.newInstance("blah1", "blah2");
+                FragmentManager manager = getSupportFragmentManager();
+                manager.beginTransaction().replace(
+                        R.id.relative_layout_for_fragment,
+                        societiesListFragment,
+                        societiesListFragment.getTag()
+                ).commit();
+                Log.d("FRAGDEBUG", "Aftercommit");
+                break;
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 

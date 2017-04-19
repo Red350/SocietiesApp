@@ -68,7 +68,7 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         cv.put("is_member", 0);
         cv.put("is_committee", 0);
         cv.put("is_chair", 0);
-        long result = db.insert("society", null, cv);
+        long result = db.replace("society", null, cv);
 
         if(result == -1) {
             return false;
