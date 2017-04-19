@@ -2,6 +2,7 @@ package layout;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import ie.dit.societiesapp.R;
 
@@ -71,8 +73,14 @@ public class QRScanFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         */
-
         IntentIntegrator.forSupportFragment(this).initiateScan();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        String barcode = result.getContents();
+        Log.d("qr", barcode);
     }
 
     @Override
