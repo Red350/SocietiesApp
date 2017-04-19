@@ -50,6 +50,7 @@ public class QRScanFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static QRScanFragment newInstance()
     {
+        //Log.d("dind", "Hello");
         QRScanFragment fragment = new QRScanFragment();
         Bundle args = new Bundle();
         //args.putString(ARG_PARAM1, param1);
@@ -61,8 +62,8 @@ public class QRScanFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        final Fragment activity = this;
         super.onCreate(savedInstanceState);
+        Log.d("dind", "Hello");
         /*
         if (getArguments() != null)
         {
@@ -71,7 +72,6 @@ public class QRScanFragment extends Fragment {
         }
         */
 
-        Log.d("Find", "Hello");
         IntentIntegrator.forSupportFragment(this).initiateScan();
     }
 

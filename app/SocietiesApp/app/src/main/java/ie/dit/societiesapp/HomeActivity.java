@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import layout.QRScanFragment;
 
@@ -87,23 +88,27 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_qr)
         {
-            // Handle the camera action
+            Log.d("find", "grsderfsgfav");
+            Toast.makeText(this, "QR", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Hey", Toast.LENGTH_SHORT);
+            // Handle the QR action
+
+            //Creates fragment
             QRScanFragment qrScanFragment = QRScanFragment.newInstance();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(
                     R.id.relative_layout_for_fragment,
                     qrScanFragment,
                     qrScanFragment.getTag()
-                    );
-        } /*else if (id == R.id.nav_gallery) {
+                    ).commit();
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        }*/ else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        }
+        else if (id == R.id.nav_share)
+        {
+            Toast.makeText(this, "Hey", Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.nav_send)
+        {
 
         }
 
