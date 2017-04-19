@@ -366,7 +366,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 } else {
                     message = response.getMessage();
                 }
-
             }
             catch(Exception e)
             {
