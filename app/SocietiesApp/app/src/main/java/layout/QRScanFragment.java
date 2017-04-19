@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,13 @@ import android.view.ViewGroup;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import ie.dit.societiesapp.Http;
+import ie.dit.societiesapp.NameValuePair;
 import ie.dit.societiesapp.R;
 
 /**
@@ -76,11 +84,30 @@ public class QRScanFragment extends Fragment {
         IntentIntegrator.forSupportFragment(this).initiateScan();
     }
 
+    /*
+        Method that gains the result of the QR code and parses it.
+     */
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        JSONObject json;
+        Http conn = new Http();
+        ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        String barcode = result.getContents();
-        Log.d("qr", barcode);
+        try
+        {
+            json = new JSONObject(result.getContents());
+            if (json.has("session_id") && json.has("token"))
+            {
+                args.add(new NameValuePair("token", json.getString("token")));
+                args.add(new NameValuePair("session_id", json.getString("session_id")));
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        Log.d("qr", result.getContents());
     }
 
     @Override
