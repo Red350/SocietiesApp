@@ -10,3 +10,4 @@ Move the qr deletion code to a function in database module
 Scripts to be added:
 	Script to return all the data of a societies members.
 		Should email it as a csv to the societies email address.
+	Script to allow a chair to see all of the committee members for their society
