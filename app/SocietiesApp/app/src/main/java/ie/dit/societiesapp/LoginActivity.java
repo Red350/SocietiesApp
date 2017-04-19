@@ -117,6 +117,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
+//        SocDBOpenHelper db = new SocDBOpenHelper(getApplicationContext());
+//
+//        db.addSociety(1, "Compsoc", "compsoc@compsoc.ie", "blah");
+//
+//        Cursor cursor = db.getSociety(1);
+//        cursor.moveToFirst();
+//        String s = cursor.getString(cursor.getColumnIndex("email"));
+//
+//        Log.d("DBTEST", s);
     }
 
     private void populateAutoComplete() {
@@ -189,20 +200,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
         }
 
         // make sure password field isn't empty
         if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
-            cancel = true;
-        } else if(!isPasswordValid(password)) {
-            // make sure correct number of characters is entered
-            mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -223,15 +225,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
-    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -356,7 +349,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 response = new JSONResponse(s, getApplicationContext());
 
                 if(response.isValid()) {
-                    response.storeLogin();
+                    // Don't log in if the user's details failed to store
+                    if(!response.storeLogin()) {
+                        message = "Failed to store login details";
+                        return false;
+                    }
+                    // Update the user's local society db
+                    DBUpdater db = new DBUpdater(getApplicationContext());
+                    try {
+                        db.updateSocieties();
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
+
                     return true;
                 } else {
                     message = response.getMessage();
@@ -380,6 +385,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             //Allows Login
             if (success)
             {
+
                 finish();
                 // if login is successful transition to main activity
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);

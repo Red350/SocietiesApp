@@ -26,11 +26,10 @@ public class Http
 	public String post(String url, ArrayList<NameValuePair> params) throws IOException {
 		FormBody.Builder formBody = new FormBody.Builder();
 
-		// Add in the member_id and session_id if they exist
-
-		for(NameValuePair pair : params)
-		{
-			formBody.add(pair.getName(), pair.getValue());
+		if(params != null) {
+			for (NameValuePair pair : params) {
+				formBody.add(pair.getName(), pair.getValue());
+			}
 		}
 
 		RequestBody requestBody = formBody.build();
@@ -39,16 +38,20 @@ public class Http
 		        .url(url)
 		        .post(requestBody)
 		        .build();
-		
 		Response response = client.newCall(request).execute();
 		return response.body().string();
 	}
 
 	// This adds the member_id and session_id fields to the request before it's sent
 	public String post(String url, ArrayList<NameValuePair> params, Context context) throws IOException {
+		Log.d("DBTEST", "Starting post request");
 		SharedPreferences userData = context.getSharedPreferences("userData", 0);
-		params.add(new NameValuePair("session_id", userData.getString("session_id", "")));
-		params.add(new NameValuePair("member_id", userData.getString("member_id", "")));
+		String session_id = userData.getString("session_id", "-1");
+		String member_id = userData.getString("member_id", "-1");
+		params.add(new NameValuePair("session_id", session_id));
+		params.add(new NameValuePair("member_id", member_id));
+
+		Log.d("DBTEST", member_id + ": " + session_id);
 
 		return (post(url, params));
 	}

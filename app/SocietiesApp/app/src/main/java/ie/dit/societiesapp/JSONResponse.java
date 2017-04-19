@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,7 +39,7 @@ public class JSONResponse {
 
     // Stores the session and member ids in shared preferences
     public boolean storeLogin() throws JSONException {
-        if(json.has("session_id") && json.has("")) {
+        if(json.has("session_id") && json.has("member_id")) {
             SharedPreferences.Editor userDataEditor = userData.edit();
             String session_id = json.getString("session_id");
             String member_id = json.getString("member_id");
@@ -55,6 +56,12 @@ public class JSONResponse {
 
     public String getMessage() {
         return return_msg;
+    }
+
+    public JSONArray getSocieties() throws JSONException {
+        JSONArray result = json.getJSONArray("society_details");
+
+        return result;
     }
 
 

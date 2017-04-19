@@ -6,10 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Red on 18/04/2017.
- */
-
 public class SocDBOpenHelper extends SQLiteOpenHelper {
 
     SocDBOpenHelper(Context context) {
@@ -39,6 +35,9 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         cv.put("name", name);
         cv.put("email", email);
         cv.put("description", description);
+        cv.put("is_member", 0);
+        cv.put("is_committee", 0);
+        cv.put("is_chair", 0);
         long result = db.insert("society", null, cv);
 
         if(result == -1) {
