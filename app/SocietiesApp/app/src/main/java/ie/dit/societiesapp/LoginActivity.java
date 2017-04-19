@@ -357,7 +357,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     // Update the user's local society db
                     DBUpdater db = new DBUpdater(getApplicationContext());
                     try {
-                        db.updateSocieties();
+                        Log.d("SOCDEBUG", "Attempting to update local database");
+                        if(db.updateAll()) {
+                            Log.d("SOCDEBUG", "Successfully updated local database after login");
+                        } else {
+                            Log.d("SOCDEBUG", "Failed to update local database after login");
+                        }
                     } catch(Exception e) {
                         e.printStackTrace();
                     }

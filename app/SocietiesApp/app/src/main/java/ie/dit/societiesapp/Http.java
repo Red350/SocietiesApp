@@ -51,7 +51,7 @@ public class Http
 		params.add(new NameValuePair("session_id", session_id));
 		params.add(new NameValuePair("member_id", member_id));
 
-		Log.d("DBTEST", member_id + ": " + session_id);
+		Log.d("HTTPDEBUG", member_id + ": " + session_id);
 
 		return (post(url, params));
 	}

@@ -53,18 +53,34 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         return res;
     }
 
+    // Clear the user from being a member of any society
+    public boolean clearMember() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("is_member", 0);
+        long res = db.update("society", cv, null, null);
+
+        return res != -1;
+    }
+
     // Set this user's member status for a society
     public boolean setMember(int id, int val) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("is_member", val);
-        long res = db.update("society", cv, "id = " + id, null);
+        long res = db.update("society", cv, "society_id = " + id, null);
 
-        if(res == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return res != -1;
+    }
+
+    // Clear the user from being a member of any society
+    public boolean clearCommittee() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("is_committee", 0);
+        long res = db.update("society", cv, null, null);
+
+        return res != -1;
     }
 
     // Set this user's committee status for a society
@@ -72,13 +88,19 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("is_committee", val);
-        long res = db.update("society", cv, "id = " + id, null);
+        long res = db.update("society", cv, "society_id = " + id, null);
 
-        if(res == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return res != -1;
+    }
+
+    // Clear the user from being a member of any society
+    public boolean clearChair() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("is_chair", 0);
+        long res = db.update("society", cv, null, null);
+
+        return res != -1;
     }
 
     // Set this user's chair status for a society
@@ -86,12 +108,8 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("is_chair", val);
-        long res = db.update("society", cv, "id = " + id, null);
+        long res = db.update("society", cv, "society_id = " + id, null);
 
-        if(res == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return res != -1;
     }
 }

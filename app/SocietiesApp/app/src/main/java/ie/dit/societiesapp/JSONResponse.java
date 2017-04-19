@@ -32,6 +32,10 @@ public class JSONResponse {
         }
     }
 
+    public JSONArray getArrayByKey(String key) throws JSONException {
+        return json.getJSONArray(key);
+    }
+
     // Returns true if the request was valid
     public boolean isValid() {
         return return_code == 0;
