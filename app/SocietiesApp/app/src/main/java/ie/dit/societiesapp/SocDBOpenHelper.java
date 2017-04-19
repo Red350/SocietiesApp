@@ -28,6 +28,7 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
+
     public boolean addSociety(int society_id, String name, String email, String description) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -55,9 +56,23 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
 
     // Clear the user from being a member of any society
     public boolean clearMember() {
+        return clearField("is_member");
+    }
+
+    // Clear the user from being a member of any society
+    public boolean clearCommittee() {
+        return clearField("is_committee");
+    }
+
+    // Clear the user from being a member of any society
+    public boolean clearChair() {
+        return clearField("is_chair");
+    }
+
+    private boolean clearField(String field) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("is_member", 0);
+        cv.put(field, 0);
         long res = db.update("society", cv, null, null);
 
         return res != -1;
@@ -65,49 +80,24 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
 
     // Set this user's member status for a society
     public boolean setMember(int id, int val) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("is_member", val);
-        long res = db.update("society", cv, "society_id = " + id, null);
-
-        return res != -1;
-    }
-
-    // Clear the user from being a member of any society
-    public boolean clearCommittee() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("is_committee", 0);
-        long res = db.update("society", cv, null, null);
-
-        return res != -1;
+        return setField(id, val, "is_member");
     }
 
     // Set this user's committee status for a society
     public boolean setCommittee(int id, int val) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("is_committee", val);
-        long res = db.update("society", cv, "society_id = " + id, null);
-
-        return res != -1;
+        return setField(id, val, "is_committee");
     }
 
-    // Clear the user from being a member of any society
-    public boolean clearChair() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("is_chair", 0);
-        long res = db.update("society", cv, null, null);
-
-        return res != -1;
-    }
 
     // Set this user's chair status for a society
     public boolean setChair(int id, int val) {
+        return setField(id, val, "is_chair");
+    }
+
+    private boolean setField(int id, int val, String field) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("is_chair", val);
+        cv.put(field, val);
         long res = db.update("society", cv, "society_id = " + id, null);
 
         return res != -1;
