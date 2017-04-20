@@ -5,25 +5,31 @@
     android:orientation="vertical"
     tools:context="ie.dit.societiesapp.SocietiesListFragment">
 
-    <AutoCompleteTextView
+    <EditText
         android:id="@+id/soc_search_field"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:ems="10" />
+        android:hint="Society Name"
+        android:imeOptions="actionUnspecified"
+        android:inputType="text"
+        android:maxLines="1" />
 
     <Button
         android:id="@+id/soc_search_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         android:background="@color/colorPrimary"
-        android:text="Open Society Page"
+        android:text="Search"
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
 
-
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawSelectorOnTop="false"></ListView>
 
 </LinearLayout>

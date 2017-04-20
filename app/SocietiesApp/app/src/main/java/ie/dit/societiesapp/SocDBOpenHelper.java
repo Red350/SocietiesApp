@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class SocDBOpenHelper extends SQLiteOpenHelper {
 
     SocDBOpenHelper(Context context) {
@@ -36,6 +38,26 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT * FROM society WHERE(society_id = " + id + ");", null);
         return res;
+    }
+
+    public ArrayList<String> getSocietyNames() {
+        ArrayList<String> socs = new ArrayList<String>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT name FROM society;", null);
+        res.moveToFirst();
+        for(int i = 0; i < res.getCount(); i++) {
+            socs.add(res.getString(0));
+            res.moveToNext();
+        }
+
+        return socs;
+    }
+
+    public int getSocietyIdByName(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT society_id FROM society WHERE name = '" + name + "';", null);
+        res.moveToFirst();
+        return res.getInt(0);
     }
 
     /* Check if user is a member, committee member, or chair of a society */
