@@ -30,7 +30,8 @@ class Api:
             5: "Incorrectly formatted request",
             6: "Database error",
             7: "Invalid permissions for this action",
-            8: "Invalid join token"
+            8: "Invalid join token",
+            9: "Already a member"
         }[code]
 
     def update_response(self, key, value):

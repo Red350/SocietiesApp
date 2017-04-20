@@ -4,7 +4,7 @@ import database
 from qrcode import *
 import api
 import uuid
-import delete_qr
+import delete_qr    # Deletes old QR codes
 
 db = database.Database()
 api = api.Api("json")
