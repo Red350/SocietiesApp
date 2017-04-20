@@ -77,32 +77,39 @@ public class QRScanFragment extends Fragment
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
         Log.d("QR", result.getContents());
-        statusField = (TextView)getView().findViewById(R.id.qrValidView);
-        statusField.setText("");
+        //statusField = (TextView)getView().findViewById(R.id.qrValidView);
+        //statusField.setText("");
         //Places result into a JSON object to be parsed
         try
         {
             json = new JSONObject(result.getContents());
             if (json.has("society_id") && json.has("token"))
             {
-                Log.d("Has", result.getContents());
+                Log.d("Hasb", result.getContents());
                 args.add(new NameValuePair("token", json.getString("token")));
+                Log.d("ta", result.getContents());
                 args.add(new NameValuePair("society_id", json.getString("society_id")));
-                args.add(new NameValuePair("session_id", json.getString("session_id")));
-                String url = getString(R.string.base_url) + getString(R.string.script_bin) + json.getString("token");
+                String url = getString(R.string.base_url) + getString(R.string.script_bin) +
+                        getString(R.string.join_soc_script);
+
+                Log.d("hello", url);
                 String s = conn.post(url ,args , getActivity().getApplicationContext());
                 response = new JSONResponse(s, getActivity().getApplicationContext());
                 // Check to see if login succeeded
+                /*
                 if(response.isValid())
                 {
+                    Log.d("success", url);
                     statusField.setTextColor(Color.parseColor("#0096D7"));
                     statusField.setText(getString(R.string.reg_success));
                 }
                 else
                 {
+                    Log.d("unsuccess", url);
                     statusField.setTextColor(Color.parseColor("#CC0000"));
                     statusField.setText(getString(R.string.reg_unsuccess));
                 }
+                */
             }
         }
         catch (JSONException e)

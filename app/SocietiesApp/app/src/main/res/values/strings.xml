@@ -6,6 +6,7 @@
     <string name="base_url">"http://www.padraig.red/"</string>
     <string name="script_bin">"cgi-bin/api/"</string>
     <string name="img_directory">"img/"</string>
+    <string name="qr_extension">".png"</string>
 
     <!-- Script names for api -->
     <string name="login_script">"login.py"</string>
@@ -15,6 +16,7 @@
     <string name="get_user_committee_script">"get_user_committee.py"</string>
     <string name="get_user_chair_script">"get_user_chair.py"</string>
     <string name="gen_qr_script">"qrgen.py"</string>
+    <string name="join_soc_script">"join_soc.py"</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
