@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ie.dit.societiesapp.R;
+import ie.dit.societiesapp.SocDBOpenHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +26,8 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
     private static final String id_param = "id";
 
     private int id;
+
+    private TextView societyInfo;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,8 +69,12 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         // Create a listener for the search button
         View v = inflater.inflate(R.layout.fragment_society, container, false);
+
         Button button = (Button) v.findViewById(R.id.qr_gen_button);
         button.setOnClickListener(this);
+
+        //SocDBOpenHelper conn = new SocDBOpenHelper();
+
         return v;
     }
 
