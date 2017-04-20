@@ -17,12 +17,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import layout.QRGenFragment;
 import layout.QRScanFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         QRScanFragment.OnFragmentInteractionListener,
-        SocietiesListFragment.OnFragmentInteractionListener{
+        SocietiesListFragment.OnFragmentInteractionListener,
+        QRGenFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
