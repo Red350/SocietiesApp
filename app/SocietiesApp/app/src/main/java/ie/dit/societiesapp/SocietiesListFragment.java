@@ -63,8 +63,8 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
         Button button = (Button) v.findViewById(R.id.soc_search_button);
         button.setOnClickListener(this);
 
-        // Auto complete text view and adapter for society names
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.select_dialog_item, societies);
+        // Auto complete text view and adapter for society names R.id.testytest
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, societies);
         AutoCompleteTextView acTextView = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
         acTextView.setThreshold(1);
         acTextView.setAdapter(adapter);

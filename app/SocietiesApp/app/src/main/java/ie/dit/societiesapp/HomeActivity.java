@@ -1,5 +1,6 @@
 package ie.dit.societiesapp;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -120,6 +121,14 @@ public class HomeActivity extends AppCompatActivity
                 Log.d("FRAGDEBUG", "Aftercommit");
                 break;
             }
+
+//            case R.id.logout:
+//            {
+//                SharedPreferences.Editor userDataEditor = getSharedPreferences("userData", 0);
+//
+//                userData.Editor.remove("session_id");
+//
+//            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
