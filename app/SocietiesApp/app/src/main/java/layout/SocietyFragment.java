@@ -52,9 +52,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
         {
-            //TODO: LOOK AT ME
-            //id = getArguments().getInt(id_param);
-            id = 1;
+            id = getArguments().getInt(id_param);
         }
     }
 
@@ -103,7 +101,14 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.qr_gen_button:
-                break;
+            {
+                QRGenFragment qrGenFragment= new QRGenFragment().newInstance(id);
+                this.getFragmentManager().beginTransaction().replace(
+                        R.id.relative_layout_for_fragment,
+                        qrGenFragment,
+                        qrGenFragment.getTag())
+                        .commit();
+            }
         }
     }
 }
