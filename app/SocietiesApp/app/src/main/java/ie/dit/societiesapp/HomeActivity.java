@@ -20,7 +20,9 @@ import android.widget.Toast;
 import layout.QRScanFragment;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, QRScanFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        QRScanFragment.OnFragmentInteractionListener,
+        SocietiesListFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,35 +87,42 @@ public class HomeActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        switch(id) {
+            case R.id.nav_qr:
+            {
+                Log.d("find", "grsderfsgfav");
+                Toast.makeText(this, "QR", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Hey", Toast.LENGTH_SHORT);
+                // Handle the QR action
 
-        if (id == R.id.nav_qr)
-        {
-            Log.d("find", "grsderfsgfav");
-            Toast.makeText(this, "QR", Toast.LENGTH_SHORT).show();
-            //Toast.makeText(this, "Hey", Toast.LENGTH_SHORT);
-            // Handle the QR action
+                //Creates fragment
+                QRScanFragment qrScanFragment = QRScanFragment.newInstance();
+                FragmentManager manager = getSupportFragmentManager();
+                manager.beginTransaction().replace(
+                        R.id.relative_layout_for_fragment,
+                        qrScanFragment,
+                        qrScanFragment.getTag()
+                ).commit();
+                break;
+            }
 
-            //Creates fragment
-            QRScanFragment qrScanFragment = QRScanFragment.newInstance();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(
-                    R.id.relative_layout_for_fragment,
-                    qrScanFragment,
-                    qrScanFragment.getTag()
-                    ).commit();
-
-        }
-        else if (id == R.id.nav_share)
-        {
-            Toast.makeText(this, "Hey", Toast.LENGTH_SHORT).show();
-        }
-        else if (id == R.id.nav_send)
-        {
-
+            case R.id.nav_soclist:
+            {
+                SocietiesListFragment societiesListFragment = SocietiesListFragment.newInstance("blah1", "blah2");
+                FragmentManager manager = getSupportFragmentManager();
+                manager.beginTransaction().replace(
+                        R.id.relative_layout_for_fragment,
+                        societiesListFragment,
+                        societiesListFragment.getTag()
+                ).commit();
+                Log.d("FRAGDEBUG", "Aftercommit");
+                break;
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
