@@ -346,9 +346,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 response = new JSONResponse(s, getApplicationContext());
 
                 // Check to see if login succeeded
-                if(response.isValid()) {
+                if(response.isValid())
+                {
                     // Don't log in if the user's details failed to store
-                    if(!response.storeLogin()) {
+                    if(!response.storeLogin())
+                    {
                         message = "Failed to store login details";
                         return false;
                     }

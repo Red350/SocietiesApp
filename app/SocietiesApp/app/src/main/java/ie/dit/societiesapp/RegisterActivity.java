@@ -101,9 +101,9 @@ public class RegisterActivity extends AppCompatActivity
     @Override
     protected Dialog onCreateDialog(int id) {
         // TODO Auto-generated method stub
-        if (id == 999) {
-            return new DatePickerDialog(this,
-                    myDateListener, year, month, day);
+        if (id == 999)
+        {
+            return new DatePickerDialog(this, myDateListener, year, month, day);
         }
         return null;
     }
@@ -427,9 +427,12 @@ public class RegisterActivity extends AppCompatActivity
             {
                 String s = conn.post(url, args);
                 response = new JSONResponse(s, getApplicationContext());
-                if(response.isValid()) {
+                if(response.isValid())
+                {
                     return true;
-                } else {
+                }
+                else
+                {
                     message = response.getMessage();
                 }
             }

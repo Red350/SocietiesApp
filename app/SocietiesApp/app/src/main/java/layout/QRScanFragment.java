@@ -3,6 +3,7 @@ package layout;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -19,9 +21,11 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import ie.dit.societiesapp.Http;
+import ie.dit.societiesapp.JSONResponse;
 import ie.dit.societiesapp.NameValuePair;
 import ie.dit.societiesapp.R;
 
@@ -33,38 +37,21 @@ import ie.dit.societiesapp.R;
  * Use the {@link QRScanFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QRScanFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class QRScanFragment extends Fragment
+{
 
     private OnFragmentInteractionListener mListener;
-
-    public QRScanFragment() {
+    private TextView statusField;
+    public QRScanFragment()
+    {
         // Required empty public constructor
     }
 
-    /*
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment QRScanFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    //Creates an instance
     public static QRScanFragment newInstance()
     {
-        //Log.d("dind", "Hello");
         QRScanFragment fragment = new QRScanFragment();
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,14 +60,7 @@ public class QRScanFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.d("dind", "Hello");
-        /*
-        if (getArguments() != null)
-        {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        */
+        //Lauches scanner
         IntentIntegrator.forSupportFragment(this).initiateScan();
     }
 
@@ -90,24 +70,51 @@ public class QRScanFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        JSONResponse response;
         JSONObject json;
         Http conn = new Http();
         ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        Log.d("QR", result.getContents());
+        statusField = (TextView)getView().findViewById(R.id.qrValidView);
+        statusField.setText("");
+        //Places result into a JSON object to be parsed
         try
         {
             json = new JSONObject(result.getContents());
-            if (json.has("session_id") && json.has("token"))
+            if (json.has("society_id") && json.has("token"))
             {
+                Log.d("Has", result.getContents());
                 args.add(new NameValuePair("token", json.getString("token")));
+                args.add(new NameValuePair("society_id", json.getString("society_id")));
                 args.add(new NameValuePair("session_id", json.getString("session_id")));
+                String url = getString(R.string.base_url) + getString(R.string.script_bin) + json.getString("token");
+                String s = conn.post(url ,args , getActivity().getApplicationContext());
+                response = new JSONResponse(s, getActivity().getApplicationContext());
+                // Check to see if login succeeded
+                if(response.isValid())
+                {
+                    statusField.setTextColor(Color.parseColor("#0096D7"));
+                    statusField.setText(getString(R.string.reg_success));
+                }
+                else
+                {
+                    statusField.setTextColor(Color.parseColor("#CC0000"));
+                    statusField.setText(getString(R.string.reg_unsuccess));
+                }
             }
         }
         catch (JSONException e)
         {
             e.printStackTrace();
         }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         Log.d("qr", result.getContents());
+
     }
 
     @Override
