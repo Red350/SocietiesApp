@@ -58,7 +58,8 @@ public class JSONResponse {
     }
 
 
-    public String getMessage() {
+    public String getMessage()
+    {
         return return_msg;
     }
 

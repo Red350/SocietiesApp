@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -85,6 +86,12 @@ public class QRScanFragment extends Fragment
                 JoinSocTask joinSocTask = new JoinSocTask(json.getString("token"), json.getString("society_id"));
                 joinSocTask.execute((Void) null);
             }
+            else
+            {
+                statusField = (TextView)  getView().findViewById(R.id.qrValidView);
+                statusField.setTextColor(Color.parseColor("#CC0000"));
+                statusField.setText("Invalid QR");
+            }//end else
         }
         catch (JSONException e)
         {
@@ -189,11 +196,14 @@ public class QRScanFragment extends Fragment
             if (success)
             {
                 Log.d("QRDEBUG", "Society Successfully joined");
-                // Do some other stuff here, like go to home activity
+                statusField.setTextColor(Color.parseColor("#0061AA"));
+                statusField.setText("Joined");
             }
             else
             {
                 // Show an error message to the user I suppose
+                statusField.setTextColor(Color.parseColor("#CC0000"));
+                statusField.setText("Failed to join");
             }
         }
     }
