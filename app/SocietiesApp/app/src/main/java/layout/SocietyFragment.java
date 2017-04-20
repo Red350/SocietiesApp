@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import ie.dit.societiesapp.R;
 
@@ -18,7 +19,7 @@ import ie.dit.societiesapp.R;
  * Use the {@link SocietyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SocietyFragment extends Fragment {
+public class SocietyFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -63,9 +64,14 @@ public class SocietyFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_society, container, false);
+        // Create a listener for the search button
+        View v = inflater.inflate(R.layout.fragment_society, container, false);
+        Button button = (Button) v.findViewById(R.id.qr_gen_button);
+        button.setOnClickListener(this);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -95,5 +101,12 @@ public class SocietyFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.qr_gen_button:
+                break;
+        }
     }
 }
