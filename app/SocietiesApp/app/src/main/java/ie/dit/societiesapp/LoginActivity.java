@@ -114,17 +114,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-
-//        SocDBOpenHelper db = new SocDBOpenHelper(getApplicationContext());
-//
-//        db.addSociety(1, "Compsoc", "compsoc@compsoc.ie", "blah");
-//
-//        Cursor cursor = db.getSociety(1);
-//        cursor.moveToFirst();
-//        String s = cursor.getString(cursor.getColumnIndex("email"));
-//
-//        Log.d("DBTEST", s);
     }
 
     private void populateAutoComplete() {
@@ -346,9 +335,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 response = new JSONResponse(s, getApplicationContext());
 
                 // Check to see if login succeeded
-                if(response.isValid()) {
+                if(response.isValid())
+                {
                     // Don't log in if the user's details failed to store
-                    if(!response.storeLogin()) {
+                    if(!response.storeLogin())
+                    {
                         message = "Failed to store login details";
                         return false;
                     }
