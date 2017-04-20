@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -70,58 +72,25 @@ public class QRScanFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        JSONResponse response;
         JSONObject json;
-        Http conn = new Http();
-        ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
         Log.d("QR", result.getContents());
-        //statusField = (TextView)getView().findViewById(R.id.qrValidView);
-        //statusField.setText("");
         //Places result into a JSON object to be parsed
         try
         {
             json = new JSONObject(result.getContents());
             if (json.has("society_id") && json.has("token"))
             {
-                Log.d("Hasb", result.getContents());
-                args.add(new NameValuePair("token", json.getString("token")));
-                Log.d("ta", result.getContents());
-                args.add(new NameValuePair("society_id", json.getString("society_id")));
-                String url = getString(R.string.base_url) + getString(R.string.script_bin) +
-                        getString(R.string.join_soc_script);
-
-                Log.d("hello", url);
-                String s = conn.post(url ,args , getActivity().getApplicationContext());
-                response = new JSONResponse(s, getActivity().getApplicationContext());
-                // Check to see if login succeeded
-                /*
-                if(response.isValid())
-                {
-                    Log.d("success", url);
-                    statusField.setTextColor(Color.parseColor("#0096D7"));
-                    statusField.setText(getString(R.string.reg_success));
-                }
-                else
-                {
-                    Log.d("unsuccess", url);
-                    statusField.setTextColor(Color.parseColor("#CC0000"));
-                    statusField.setText(getString(R.string.reg_unsuccess));
-                }
-                */
+                JoinSocTask joinSocTask = new JoinSocTask(json.getString("token"), json.getString("society_id"));
+                joinSocTask.execute((Void) null);
             }
         }
         catch (JSONException e)
         {
             e.printStackTrace();
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
         Log.d("qr", result.getContents());
-
     }
 
     @Override
@@ -167,5 +136,65 @@ public class QRScanFragment extends Fragment
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public class JoinSocTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final String token;
+        private final String society_id;
+
+        JoinSocTask(String token, String society_id) {
+            this.token = token;
+            this.society_id = society_id;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            Http conn = new Http();
+            JSONResponse response;
+
+            ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
+            args.add(new NameValuePair("token", token));
+            args.add(new NameValuePair("society_id", society_id));
+
+            String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.join_soc_script);
+
+            // Send login request to the server and parse the JSON response
+            try
+            {
+                String s = conn.post(url, args, getActivity().getApplicationContext());
+                response = new JSONResponse(s, getActivity().getApplicationContext());
+
+                // Check to see if login succeeded
+                if(response.isValid())
+                {
+                    return true;
+                } else {
+                    Log.d("QRDEBUG", "Failed to join soc: " + response.getMessage());
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            //Allows Login
+            if (success)
+            {
+                Log.d("QRDEBUG", "Society Successfully joined");
+                // Do some other stuff here, like go to home activity
+            }
+            else
+            {
+                // Show an error message to the user I suppose
+            }
+        }
     }
 }
