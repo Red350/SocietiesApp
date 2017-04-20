@@ -15,6 +15,8 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
+import layout.QRGenFragment;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -116,12 +118,12 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
         int id = db.getSocietyIdByName(s);
         Log.d("LISTDEBUG", Integer.toString(id));
 
-//        QRGenFragment qrGenFragment= new QRGenFragment().newInstance(id);
-//        this.getFragmentManager().beginTransaction().replace(
-//                R.id.relative_layout_for_fragment,
-//                qrGenFragment,
-//                qrGenFragment.getTag())
-//                .commit();
+        QRGenFragment qrGenFragment= new QRGenFragment().newInstance(id);
+        this.getFragmentManager().beginTransaction().replace(
+                R.id.relative_layout_for_fragment,
+                qrGenFragment,
+                qrGenFragment.getTag())
+                .commit();
 
     }
 

@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity
 
             case R.id.nav_soclist:
             {
-                SocietiesListFragment societiesListFragment = SocietiesListFragment.newInstance("blah1", "blah2");
+                SocietiesListFragment societiesListFragment = SocietiesListFragment.newInstance();
                 FragmentManager manager = getSupportFragmentManager();
                 manager.beginTransaction().replace(
                         R.id.relative_layout_for_fragment,
