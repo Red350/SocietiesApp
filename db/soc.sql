@@ -28,7 +28,7 @@ CREATE TABLE member(
 
 CREATE TABLE society(
 	society_id INTEGER(6) PRIMARY KEY AUTO_INCREMENT,
-	name VARCHAR(50),
+	name VARCHAR(50) UNIQUE,
 	email VARCHAR(50),
 	description VARCHAR(400),
 	chair_id INTEGER(6),
