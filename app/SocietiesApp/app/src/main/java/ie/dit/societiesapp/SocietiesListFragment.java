@@ -128,7 +128,6 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
 
     }
 
-
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.soc_search_button:

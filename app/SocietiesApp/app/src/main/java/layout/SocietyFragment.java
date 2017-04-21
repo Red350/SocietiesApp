@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import ie.dit.societiesapp.ChairToolsFragment;
 import ie.dit.societiesapp.R;
 import ie.dit.societiesapp.SocDBOpenHelper;
 
@@ -70,8 +71,11 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         // Create a listener for the search button
         View v = inflater.inflate(R.layout.fragment_society, container, false);
 
-        Button button = (Button) v.findViewById(R.id.qr_gen_button);
-        button.setOnClickListener(this);
+        Button qrGenButton = (Button) v.findViewById(R.id.qr_gen_button);
+        qrGenButton.setOnClickListener(this);
+
+        Button chairToolsButton = (Button) v.findViewById(R.id.chair_tools_button);
+        chairToolsButton.setOnClickListener(this);
 
         //SocDBOpenHelper conn = new SocDBOpenHelper();
         Log.d("BLAHDEBUG", "View Created");
@@ -120,6 +124,17 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
                         qrGenFragment,
                         qrGenFragment.getTag())
                         .commit();
+                break;
+            }
+            case R.id.chair_tools_button:
+            {
+                ChairToolsFragment chairToolsFragment = new ChairToolsFragment().newInstance(id);
+                this.getFragmentManager().beginTransaction().replace(
+                        R.id.relative_layout_for_fragment,
+                        chairToolsFragment,
+                        chairToolsFragment.getTag())
+                        .commit();
+                break;
             }
         }
     }

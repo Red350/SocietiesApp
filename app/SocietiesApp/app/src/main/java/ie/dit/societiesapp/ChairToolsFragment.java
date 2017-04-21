@@ -1,7 +1,9 @@
 package ie.dit.societiesapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -27,17 +29,18 @@ import layout.QRGenFragment;
         */
 public class ChairToolsFragment extends Fragment implements View.OnClickListener {
 
-    private ArrayList<String> societies = new ArrayList<String>();
-
     private OnFragmentInteractionListener mListener;
+
+    private int society_id;
 
     public ChairToolsFragment() {
         // Required empty public constructor
     }
 
-    public static ChairToolsFragment newInstance() {
+    public static ChairToolsFragment newInstance(int society_id) {
         ChairToolsFragment fragment = new ChairToolsFragment();
         Bundle args = new Bundle();
+        args.putInt("society_id", society_id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,10 +48,10 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Get a list of the society names from the local db
-        SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
-        societies = db.getSocietyNames();
+        if (getArguments() != null)
+        {
+            society_id = getArguments().getInt("society_id");
+        }
     }
 
     @Override
@@ -56,17 +59,19 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // Create a listener for the search button
-        View v = inflater.inflate(R.layout.fragment_societies_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_chairtools, container, false);
 
-        // Set up the society page view button
-        Button button = (Button) v.findViewById(R.id.soc_search_button);
-        button.setOnClickListener(this);
+        Button addButton = (Button) v.findViewById(R.id.chair_add_button);
+        addButton.setOnClickListener(this);
+
+        Button deleteButton = (Button) v.findViewById(R.id.chair_delete_button);
+        deleteButton.setOnClickListener(this);
 
         // Auto complete text view and adapter for society names R.id.testytest
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, societies);
-        AutoCompleteTextView acTextView = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
-        acTextView.setThreshold(1);
-        acTextView.setAdapter(adapter);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, societies);
+//        AutoCompleteTextView acTextView = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
+//        acTextView.setThreshold(1);
+//        acTextView.setAdapter(adapter);
 
         return v;
     }
@@ -110,28 +115,148 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         void onFragmentInteraction(Uri uri);
     }
 
-    public void loadSocFragment() {
-        AutoCompleteTextView searchView = (AutoCompleteTextView) getView().findViewById(R.id.soc_search_field);
-        String s = searchView.getText().toString();
-        SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
-        int id = db.getSocietyIdByName(s);
-        Log.d("LISTDEBUG", Integer.toString(id));
+    private void addCommittee() {
+        AutoCompleteTextView addTextView = (AutoCompleteTextView) getView().findViewById(R.id.chair_add_field);
+        int memberId;
+        try {
+            memberId = Integer.parseInt(addTextView.getText().toString());
+            addCommitteeTask addTask = new addCommitteeTask(memberId);
+            addTask.execute();
+        }
+        catch(NumberFormatException e) {
+            e.printStackTrace();
+            Log.d("CHAIRTOOLSDEBUG", "Add committee: not a number");
+        }
 
-        QRGenFragment qrGenFragment= new QRGenFragment().newInstance(id);
-        this.getFragmentManager().beginTransaction().replace(
-                R.id.relative_layout_for_fragment,
-                qrGenFragment,
-                qrGenFragment.getTag())
-                .commit();
+    }
 
+    private void deleteCommittee() {
+        AutoCompleteTextView addTextView = (AutoCompleteTextView) getView().findViewById(R.id.chair_delete_field);
+        int memberId;
+        try {
+            memberId = Integer.parseInt(addTextView.getText().toString());
+            deleteCommitteeTask deleteTask = new deleteCommitteeTask(memberId);
+            deleteTask.execute();
+        }
+        catch(NumberFormatException e) {
+            e.printStackTrace();
+            Log.d("CHAIRTOOLSDEBUG", "Add committee: not a number");
+        }
     }
 
 
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.soc_search_button:
-                loadSocFragment();
+            case R.id.chair_add_button:
+                addCommittee();
                 break;
+            case R.id.chair_delete_button:
+                deleteCommittee();
+                break;
+        }
+    }
+
+    public class addCommitteeTask extends AsyncTask<Void, Void, Boolean> {
+
+        private int committee_id;
+
+        private addCommitteeTask(int committee_id) {
+            this.committee_id = committee_id;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            Http conn = new Http();
+            JSONResponse response;
+
+            ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
+            args.add(new NameValuePair("committee_id", Integer.toString(committee_id)));
+            args.add(new NameValuePair("society_id", Integer.toString(society_id)));
+
+            String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.add_committee_script);
+
+            try
+            {
+                String s = conn.post(url, args, getActivity().getApplicationContext());
+                response = new JSONResponse(s, getActivity().getApplicationContext());
+
+                // Check if committee member was added successfully
+                if(response.isValid())
+                {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success)
+            {
+                Log.d("CHAIRTOOLSDEBUG", "Added successfully");
+            } else {
+                Log.d("CHAIRTOOLSDEBUG", "Failed to add");
+            }
+        }
+    }
+
+    public class deleteCommitteeTask extends AsyncTask<Void, Void, Boolean> {
+
+        private int committee_id;
+
+        private deleteCommitteeTask(int committee_id) {
+            this.committee_id = committee_id;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            Http conn = new Http();
+            JSONResponse response;
+
+            ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
+            args.add(new NameValuePair("committee_id", Integer.toString(committee_id)));
+            args.add(new NameValuePair("society_id", Integer.toString(society_id)));
+
+            String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.delete_committee_script);
+
+            try
+            {
+                String s = conn.post(url, args, getActivity().getApplicationContext());
+                response = new JSONResponse(s, getActivity().getApplicationContext());
+
+                // Check if committee member was deleted successfully
+                if(response.isValid())
+                {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success)
+            {
+                Log.d("CHAIRDEBUG", "Deleted successfully");
+            } else {
+                Log.d("CHAIRDEBUG", "Failed to delete");
+            }
         }
     }
 }
