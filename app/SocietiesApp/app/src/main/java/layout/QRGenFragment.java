@@ -1,12 +1,17 @@
 package layout;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import ie.dit.societiesapp.R;
 
@@ -25,6 +30,8 @@ public class QRGenFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private int id;
+    private View sceneView;
+    private View progressView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -32,7 +39,6 @@ public class QRGenFragment extends Fragment {
         // Required empty public constructor
     }
 
-    
     public static QRGenFragment newInstance(int param1) {
         QRGenFragment fragment = new QRGenFragment();
         Bundle args = new Bundle();
@@ -41,12 +47,50 @@ public class QRGenFragment extends Fragment {
         return fragment;
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            sceneView.setVisibility(show ? View.GONE : View.VISIBLE);
+            sceneView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    sceneView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            sceneView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
         {
             id = getArguments().getInt(id_param);
+            //sceneView = getView().findViewById(R.id.gen_layout);
+            //progressView = getView().findViewById(R.id.gen_progress);
+            //showProgress(false);
+            //WebView browser = (WebView) getView().findViewById(R.id.webview);
+            //browser.loadUrl("file:///android_asset/dinner_menu.png");
         }
     }
 

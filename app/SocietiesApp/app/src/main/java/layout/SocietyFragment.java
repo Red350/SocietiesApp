@@ -69,7 +69,6 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         // Create a listener for the search button
         View v = inflater.inflate(R.layout.fragment_society, container, false);
-
         Button button = (Button) v.findViewById(R.id.qr_gen_button);
         button.setOnClickListener(this);
 
