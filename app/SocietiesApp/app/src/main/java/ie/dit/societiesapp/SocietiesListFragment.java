@@ -127,7 +127,6 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
                 .commit();
     }
 
-
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.soc_search_button:

@@ -18,6 +18,8 @@
     <string name="gen_qr_script">"qrgen.py"</string>
     <string name="join_soc_script">"join_soc.py"</string>
     <string name="check_login_script">"check_login.py"</string>
+    <string name="add_committee_script">"add_committee.py"</string>
+    <string name="delete_committee_script">"remove_committee.py"</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

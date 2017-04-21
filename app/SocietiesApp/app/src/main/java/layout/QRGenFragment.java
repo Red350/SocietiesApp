@@ -5,14 +5,21 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
+import java.util.ArrayList;
+
+import ie.dit.societiesapp.Http;
+import ie.dit.societiesapp.JSONResponse;
+import ie.dit.societiesapp.NameValuePair;
 import ie.dit.societiesapp.R;
 
 /**
@@ -28,9 +35,11 @@ public class QRGenFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String id_param = "param1";
 
-    private int id;
+    private int society_id;
     private View sceneView;
     private View progressView;
+    private WebView browser;
+    private String returnedToken;
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,8 +93,9 @@ public class QRGenFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
         {
-            id = getArguments().getInt(id_param);
-            //browser.loadUrl("file:///android_asset/dinner_menu.png");
+            society_id = getArguments().getInt(id_param);
+            GenerateToken token = new GenerateToken(society_id);
+            token.execute();
         }
     }
 
@@ -97,7 +107,7 @@ public class QRGenFragment extends Fragment {
         sceneView = v.findViewById(R.id.gen_layout);
         progressView = v.findViewById(R.id.gen_progress);
         //showProgress(false);
-        WebView browser = (WebView) v.findViewById(R.id.webview);
+        browser = (WebView) v.findViewById(R.id.webview);
         // Inflate the layout for this fragment
         return v;
     }
@@ -129,5 +139,66 @@ public class QRGenFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public class GenerateToken extends AsyncTask<Void, Void, Boolean> {
+
+        private int society_id;
+
+        private GenerateToken(int society_id)
+        {
+            this.society_id = society_id;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            Http conn = new Http();
+            JSONResponse response;
+
+            ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
+            args.add(new NameValuePair("society_id", Integer.toString(society_id)));
+
+            String url = getString(R.string.base_url) + getString(R.string.img_directory);
+
+            try
+            {
+                String s = conn.post(url, args, getActivity().getApplicationContext());
+                response = new JSONResponse(s, getActivity().getApplicationContext());
+
+                // Check if committee member was added successfully
+                if(response.isValid())
+                {
+                    returnedToken = response.getString("token");
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success)
+        {
+            if (success)
+            {
+                String url = getString(R.string.base_url) + getString(R.string.img_directory)
+                        + returnedToken + getString(R.string.qr_extension);
+                Log.d("url", url);
+                //browser.loadUrl("file:///android_asset/dinner_menu.png");
+            }
+            else
+            {
+                Log.d("fail", "fail");
+            }
+        }
     }
 }
