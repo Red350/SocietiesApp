@@ -200,7 +200,7 @@ public class QRGenFragment extends Fragment {
                 String url = getString(R.string.base_url) + getString(R.string.img_directory)
                         + returnedToken + getString(R.string.qr_extension);
                 Log.d("url", url);
-                browser.loadUrl("file:///android_asset/dinner_menu.png");
+                browser.loadUrl(url);
             }
             else
             {
