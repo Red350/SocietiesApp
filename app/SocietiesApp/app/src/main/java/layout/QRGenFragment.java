@@ -160,7 +160,7 @@ public class QRGenFragment extends Fragment {
         protected Boolean doInBackground(Void... params)
         {
             Http conn = new Http();
-            JSONResponse response;
+            JSONResponse response = null;
 
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
             args.add(new NameValuePair("society_id", Integer.toString(society_id)));
@@ -204,6 +204,7 @@ public class QRGenFragment extends Fragment {
             }
             else
             {
+
                 Log.d("fail", "fail");
             }
         }

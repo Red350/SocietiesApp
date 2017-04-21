@@ -13,12 +13,15 @@ public class JSONResponse {
     public static final String PREFS_NAME = "userData";
     private JSONObject json;
     private SharedPreferences userData;
+    private String rawResponse;
 
     private int return_code;
     private String return_msg;
 
     public JSONResponse(String s, Context context) throws JSONException {
-        json = new JSONObject(s);
+        rawResponse = s;
+        Log.d("JSONDEBUG", "Received: " + rawResponse);
+        json = new JSONObject(rawResponse);
         userData =  context.getSharedPreferences(PREFS_NAME, 0);
 
         this.return_code = json.getInt("return_code");
@@ -54,7 +57,7 @@ public class JSONResponse {
             userDataEditor.putString("session_id", session_id);
             userDataEditor.putString("member_id", member_id);
             userDataEditor.commit();
-            Log.d("JSONDEBUG", member_id + " " + session_id);
+            Log.d("JSONDEBUG", "Storing: " + member_id + " " + session_id);
             return true;
         } else {
             return false;
@@ -73,6 +76,6 @@ public class JSONResponse {
         return result;
     }
 
-
+    public String getRawResponse() { return rawResponse; }
 
 }

@@ -20,4 +20,8 @@ public class NameValuePair
 	{
 		return value;
 	}
+
+	public String toString() {
+		return getName() + ": " + getValue();
+	}
 }
