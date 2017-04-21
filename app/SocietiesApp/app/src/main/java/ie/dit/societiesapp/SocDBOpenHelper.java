@@ -53,11 +53,16 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         return socs;
     }
 
+    // Returns -1 if society name is not in database
     public int getSocietyIdByName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT society_id FROM society WHERE name = '" + name + "';", null);
-        res.moveToFirst();
-        return res.getInt(0);
+        if(res.getCount() != 0) {
+            res.moveToFirst();
+            return res.getInt(0);
+        } else {
+            return -1;
+        }
     }
 
     /* Check if user is a member, committee member, or chair of a society */

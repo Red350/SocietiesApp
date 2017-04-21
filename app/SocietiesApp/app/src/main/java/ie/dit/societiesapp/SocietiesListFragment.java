@@ -117,14 +117,16 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
         String s = searchView.getText().toString();
         SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
         int id = db.getSocietyIdByName(s);
-        Log.d("LISTDEBUG", Integer.toString(id));
 
-        SocietyFragment societyFragment = SocietyFragment.newInstance(id);
-        this.getFragmentManager().beginTransaction().replace(
-                R.id.relative_layout_for_fragment,
-                societyFragment,
-                societyFragment.getTag())
-                .commit();
+        if(id != -1) {
+            SocietyFragment societyFragment = SocietyFragment.newInstance(id);
+            this.getFragmentManager().beginTransaction().replace(
+                    R.id.relative_layout_for_fragment,
+                    societyFragment,
+                    societyFragment.getTag())
+                    .commit();
+        }
+
     }
 
     public void onClick(View v) {

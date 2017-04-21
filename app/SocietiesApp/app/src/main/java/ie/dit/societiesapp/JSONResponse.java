@@ -21,7 +21,6 @@ public class JSONResponse {
         json = new JSONObject(s);
         userData =  context.getSharedPreferences(PREFS_NAME, 0);
 
-
         this.return_code = json.getInt("return_code");
         this.return_msg = json.getString("return_msg");
 

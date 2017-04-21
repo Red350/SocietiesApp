@@ -15,11 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
+
+import ie.dit.societiesapp.KeyboardHider;
 import java.util.ArrayList;
 
 import ie.dit.societiesapp.Http;
 import ie.dit.societiesapp.JSONResponse;
 import ie.dit.societiesapp.NameValuePair;
+
 import ie.dit.societiesapp.R;
 
 /**
@@ -97,6 +100,9 @@ public class QRGenFragment extends Fragment {
             GenerateToken token = new GenerateToken(society_id);
             token.execute();
         }
+
+        // Hide the keyboard when this fragment loads
+        KeyboardHider.hideKeyboard(getActivity());
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ie.dit.societiesapp.ChairToolsFragment;
+import ie.dit.societiesapp.KeyboardHider;
 import ie.dit.societiesapp.R;
 import ie.dit.societiesapp.SocDBOpenHelper;
 
@@ -62,7 +63,9 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         {
             id = getArguments().getInt(id_param);
         }
-        Log.d("BLAHDEBUG", "Created");
+
+        // Hide the keyboard when this fragment loads
+        KeyboardHider.hideKeyboard(getActivity());
     }
 
     @Override
@@ -80,7 +83,6 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         chairToolsButton.setOnClickListener(this);
 
         //SocDBOpenHelper conn = new SocDBOpenHelper();
-        Log.d("BLAHDEBUG", "View Created");
         return v;
     }
 
@@ -107,7 +109,6 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
     {
         super.onDetach();
         mListener = null;
-        Log.d("BLAHDEBUG", "Detached");
     }
 
     public interface OnFragmentInteractionListener {
@@ -116,7 +117,6 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
     }
 
     public void onClick(View v) {
-        Log.d("BLAHDEBUG", "Click happened");
         switch(v.getId()) {
             case R.id.qr_gen_button:
             {
