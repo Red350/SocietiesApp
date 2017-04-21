@@ -58,6 +58,9 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         {
             society_id = getArguments().getInt("society_id");
         }
+
+        // Hide the keyboard when this fragment loads
+        KeyboardHider.hideKeyboard(getActivity());
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ie.dit.societiesapp.KeyboardHider;
 import ie.dit.societiesapp.R;
 
 /**
@@ -48,6 +49,9 @@ public class QRGenFragment extends Fragment {
         {
             id = getArguments().getInt(id_param);
         }
+
+        // Hide the keyboard when this fragment loads
+        KeyboardHider.hideKeyboard(getActivity());
     }
 
     @Override

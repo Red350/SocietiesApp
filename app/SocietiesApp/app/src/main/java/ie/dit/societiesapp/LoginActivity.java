@@ -32,20 +32,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -252,10 +249,15 @@ public class LoginActivity extends AppCompatActivity {
                     message = response.getMessage();
                 }
             }
-            catch(Exception e)
+            catch(JSONException e)
             {
                 e.printStackTrace();
                 message = "JSON error";
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+                message = "Unable to contact server";
             }
 
             return false;
