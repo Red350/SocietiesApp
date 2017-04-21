@@ -69,16 +69,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("LOGINDEBUG", "Activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Check if already logged in
-        CheckAlreadyLoggedInTask checkAlreadyLoggedInTask = new CheckAlreadyLoggedInTask();
-        checkAlreadyLoggedInTask.execute();
-
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
 
         errorField = (TextView)findViewById(R.id.loginErrorTextView);
         errorField.setText("");
@@ -120,50 +116,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -410,49 +362,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    public class CheckAlreadyLoggedInTask extends AsyncTask<Void, Void, Boolean> {
 
-        @Override
-        protected Boolean doInBackground(Void... params)
-        {
-            Http conn = new Http();
-            JSONResponse response;
-
-            ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
-
-            String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.check_login_script);
-
-            try
-            {
-                String s = conn.post(url, args, getApplicationContext());
-                response = new JSONResponse(s, getApplicationContext());
-
-                // Check to see if login succeeded
-                if(response.isValid())
-                {
-                   return true;
-                } else {
-                    return false;
-                }
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            if (success)
-            {
-                finish();
-                // If already logged in, transition to home activity
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(intent);
-            }
-        }
-    }
 }
 

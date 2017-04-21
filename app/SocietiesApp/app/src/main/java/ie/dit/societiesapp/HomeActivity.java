@@ -1,5 +1,6 @@
 package ie.dit.societiesapp;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,12 +21,14 @@ import android.widget.Toast;
 
 import layout.QRGenFragment;
 import layout.QRScanFragment;
+import layout.SocietyFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         QRScanFragment.OnFragmentInteractionListener,
         SocietiesListFragment.OnFragmentInteractionListener,
-        QRGenFragment.OnFragmentInteractionListener{
+        QRGenFragment.OnFragmentInteractionListener,
+        SocietyFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,13 +125,18 @@ public class HomeActivity extends AppCompatActivity
                 break;
             }
 
-//            case R.id.logout:
-//            {
-//                SharedPreferences.Editor userDataEditor = getSharedPreferences("userData", 0);
-//
-//                userData.Editor.remove("session_id");
-//
-//            }
+            case R.id.logout:
+            {
+                SharedPreferences userData = getSharedPreferences("userData", 0);
+                SharedPreferences.Editor editor = userData.edit();
+
+                editor.remove("session_id");
+                editor.remove("member_id");
+                editor.commit();
+
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         {
             id = getArguments().getInt(id_param);
         }
+        Log.d("BLAHDEBUG", "Created");
     }
 
     @Override
@@ -73,7 +75,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         button.setOnClickListener(this);
 
         //SocDBOpenHelper conn = new SocDBOpenHelper();
-
+        Log.d("BLAHDEBUG", "View Created");
         return v;
     }
 
@@ -100,6 +102,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
     {
         super.onDetach();
         mListener = null;
+        Log.d("BLAHDEBUG", "Detached");
     }
 
     public interface OnFragmentInteractionListener {
@@ -108,6 +111,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
     }
 
     public void onClick(View v) {
+        Log.d("BLAHDEBUG", "Click happened");
         switch(v.getId()) {
             case R.id.qr_gen_button:
             {

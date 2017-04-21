@@ -30,6 +30,18 @@
                 android:text="Generate QR"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/chair_tools_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorPrimary"
+                android:text="Chair Tools"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
         </LinearLayout>
     </ScrollView>
 
