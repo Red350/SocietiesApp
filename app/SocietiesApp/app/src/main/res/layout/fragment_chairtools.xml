@@ -24,6 +24,13 @@
         android:text="Add Committee"
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
+    <ProgressBar
+        android:id="@+id/chair_add_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
 
     <AutoCompleteTextView
         android:id="@+id/chair_delete_field"
@@ -44,5 +51,12 @@
         android:text="Delete Committee"
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
+    <ProgressBar
+        android:id="@+id/chair_delete_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
 
 </LinearLayout>

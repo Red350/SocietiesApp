@@ -33,6 +33,12 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
     private int society_id;
 
+    private Button addButton;
+    private Button deleteButton;
+
+    private View addProgress;
+    private View deleteProgress;
+
     public ChairToolsFragment() {
         // Required empty public constructor
     }
@@ -61,11 +67,14 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         // Create a listener for the search button
         View v = inflater.inflate(R.layout.fragment_chairtools, container, false);
 
-        Button addButton = (Button) v.findViewById(R.id.chair_add_button);
+        addButton = (Button) v.findViewById(R.id.chair_add_button);
         addButton.setOnClickListener(this);
 
-        Button deleteButton = (Button) v.findViewById(R.id.chair_delete_button);
+        deleteButton = (Button) v.findViewById(R.id.chair_delete_button);
         deleteButton.setOnClickListener(this);
+
+        addProgress = v.findViewById(R.id.chair_add_progress);
+        deleteProgress = v.findViewById(R.id.chair_delete_progress);
 
         // Auto complete text view and adapter for society names R.id.testytest
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, societies);
@@ -120,6 +129,8 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         int memberId;
         try {
             memberId = Integer.parseInt(addTextView.getText().toString());
+            addButton.setVisibility(View.GONE);
+            addProgress.setVisibility(View.VISIBLE);
             addCommitteeTask addTask = new addCommitteeTask(memberId);
             addTask.execute();
         }
@@ -135,6 +146,8 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         int memberId;
         try {
             memberId = Integer.parseInt(addTextView.getText().toString());
+            deleteButton.setVisibility(View.GONE);
+            deleteProgress.setVisibility(View.VISIBLE);
             deleteCommitteeTask deleteTask = new deleteCommitteeTask(memberId);
             deleteTask.execute();
         }
@@ -199,6 +212,8 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            addProgress.setVisibility(View.GONE);
+            addButton.setVisibility(View.VISIBLE);
             if (success)
             {
                 Log.d("CHAIRTOOLSDEBUG", "Added successfully");
@@ -251,6 +266,8 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            deleteProgress.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.VISIBLE);
             if (success)
             {
                 Log.d("CHAIRDEBUG", "Deleted successfully");
