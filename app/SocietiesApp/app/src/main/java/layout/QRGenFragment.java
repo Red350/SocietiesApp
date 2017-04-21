@@ -159,7 +159,7 @@ public class QRGenFragment extends Fragment {
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
             args.add(new NameValuePair("society_id", Integer.toString(society_id)));
 
-            String url = getString(R.string.base_url) + getString(R.string.img_directory);
+            String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.gen_qr_script);
 
             try
             {
@@ -170,6 +170,7 @@ public class QRGenFragment extends Fragment {
                 if(response.isValid())
                 {
                     returnedToken = response.getString("token");
+                    Log.d("token", returnedToken);
                     return true;
                 }
                 else
@@ -193,8 +194,7 @@ public class QRGenFragment extends Fragment {
                 String url = getString(R.string.base_url) + getString(R.string.img_directory)
                         + returnedToken + getString(R.string.qr_extension);
                 Log.d("url", url);
-                //browser.loadUrl("file:///android_asset/dinner_menu.png");
-                //Line
+                browser.loadUrl("file:///android_asset/dinner_menu.png");
             }
             else
             {
