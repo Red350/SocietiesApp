@@ -15,6 +15,8 @@ public class StartupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup);
 
+
+
         // Check if already logged in
         CheckAlreadyLoggedInTask checkAlreadyLoggedInTask = new CheckAlreadyLoggedInTask();
         checkAlreadyLoggedInTask.execute();

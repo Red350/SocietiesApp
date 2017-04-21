@@ -21,12 +21,14 @@ import android.widget.Toast;
 
 import layout.QRGenFragment;
 import layout.QRScanFragment;
+import layout.SocietyFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         QRScanFragment.OnFragmentInteractionListener,
         SocietiesListFragment.OnFragmentInteractionListener,
-        QRGenFragment.OnFragmentInteractionListener{
+        QRGenFragment.OnFragmentInteractionListener,
+        SocietyFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

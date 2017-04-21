@@ -11,34 +11,32 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 
 import java.util.ArrayList;
 
 import layout.QRGenFragment;
-import layout.SocietyFragment;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SocietiesListFragment.OnFragmentInteractionListener} interface
+ * {@link ChairToolsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SocietiesListFragment#newInstance} factory method to
+ * Use the {@link ChairToolsFragment#newInstance} factory method to
         * create an instance of this fragment.
         */
-public class SocietiesListFragment extends Fragment implements View.OnClickListener {
+public class ChairToolsFragment extends Fragment implements View.OnClickListener {
 
     private ArrayList<String> societies = new ArrayList<String>();
 
     private OnFragmentInteractionListener mListener;
 
-    public SocietiesListFragment() {
+    public ChairToolsFragment() {
         // Required empty public constructor
     }
 
-    public static SocietiesListFragment newInstance() {
-        SocietiesListFragment fragment = new SocietiesListFragment();
+    public static ChairToolsFragment newInstance() {
+        ChairToolsFragment fragment = new ChairToolsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -119,11 +117,11 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
         int id = db.getSocietyIdByName(s);
         Log.d("LISTDEBUG", Integer.toString(id));
 
-        SocietyFragment societyFragment = SocietyFragment.newInstance(id);
+        QRGenFragment qrGenFragment= new QRGenFragment().newInstance(id);
         this.getFragmentManager().beginTransaction().replace(
                 R.id.relative_layout_for_fragment,
-                societyFragment,
-                societyFragment.getTag())
+                qrGenFragment,
+                qrGenFragment.getTag())
                 .commit();
 
     }
