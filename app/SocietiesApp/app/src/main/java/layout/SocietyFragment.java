@@ -46,7 +46,8 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
      * @return A new instance of fragment SocietyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SocietyFragment newInstance(int param1) {
+    public static SocietyFragment newInstance(int param1)
+    {
         SocietyFragment fragment = new SocietyFragment();
         Bundle args = new Bundle();
         args.putInt(id_param, param1);
@@ -55,7 +56,8 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
         {
