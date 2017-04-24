@@ -17,29 +17,7 @@ varLength = []
 
 print("Content-Type: text/html\r\n\r\n");
 
-class no_cookie(Exception):
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-     return repr(self.value)
-
-def get_cookie():
-    if 'HTTP_COOKIE' in os.environ:
-        key, value = os.environ['HTTP_COOKIE'].split('=')
-        cookie = {key: value}
-    else:
-        raise no_cookie("User not logged in")
-    return cookie
-
-try:
-    cookie = get_cookie()
-    sql = "SELECT session_id, admin_id FROM admin_session WHERE session_id = '%s'" % cookie['session_id']
-    database.cur.execute(sql)
-    if database.cur.rowcount == 0:
-        redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
-
-except no_cookie:
-    redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
+redirect = database.check_cookie(os.environ)
 
 if os.environ['REQUEST_METHOD'] == 'POST':
     if 'table' in http.post:
@@ -50,6 +28,10 @@ if os.environ['REQUEST_METHOD'] == 'POST':
             query = database.cur.fetchall()
             for row in query:
                 name = [row[0]]
+                if name[0].find('pass') >= 0:
+                    continue
+                if name[0].find('salt') >= 0:
+                    continue
                 nameList += name
                 vartype = row[1]
                 varLength += re.findall(r'\d+', vartype)
@@ -98,6 +80,10 @@ if 'insert_table' in http.post:
     
     sql = "UPDATE %s SET" % http.post['insert_table'].value 
     for row in query:
+        if row[0].find('pass') >= 0:
+            continue
+        if row[0].find('salt') >= 0:
+            continue
         if row[3] != 'PRI':
             if row[1].find('char') >= 0:
                 sql += " %s = '%s'," % (row[0], http.post[row[0]].value)
