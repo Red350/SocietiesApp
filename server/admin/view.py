@@ -14,7 +14,7 @@ show_table = ""
 
 print("Content-Type: text/html\n")
 
-redirect = database.check_cookie()
+redirect = database.check_cookie(os.environ)
 
 print("\n\n")
     
@@ -42,15 +42,33 @@ if os.environ['REQUEST_METHOD'] == 'POST':
             show_table += "<tr><th>date_joined</th><td>%s</td></tr>" % query[7]
             show_table += "<tr><th>full_part_time</th><td>%s</td></tr>" % query[8]
             show_table += "<tr><th>verified</th><td>%s</td></tr>" % query[9]
-            show_table += "<tr><th>Societies</th><td><textarea readonly>"
+            show_table += "<tr><th>Society Member</th><td>"
             sql = "SELECT society.name FROM society INNER JOIN member_society USING (society_id) INNER JOIN member USING (member_id) WHERE member_id = %s" % http.post['member_id'].value
             database.cur.execute(sql)
-            if database.cur.execute(sql) > 0:
+            if database.cur.rowcount > 0:
                 societies = database.cur.fetchall()
                 for soc in societies:
-                    show_table += "%s\n" % soc
+                    show_table += "%s<br>" % soc
 
-            show_table += "</textarea></td></tr>"
+            show_table += "</td></tr>"
+            show_table += "<th>Society Committee Member</th><td>"
+            sql = "SELECT society.name FROM society INNER JOIN committee_society USING (society_id) INNER JOIN member USING (member_id) WHERE member_id = %s" % http.post['member_id'].value
+            database.cur.execute(sql)
+            if database.cur.rowcount > 0:
+                societies = database.cur.fetchall()
+                for soc in societies:
+                    show_table += "%s<br>" % soc
+            show_table += "</td></tr>"
+
+            show_table += "<th>Society Chairman</th><td>"
+            sql = "SELECT society.name FROM society INNER JOIN member ON member_id = chair_id WHERE member_id = %s" % http.post['member_id'].value
+            database.cur.execute(sql)
+            if database.cur.rowcount > 0:
+                societies = database.cur.fetchall()
+                for soc in societies:
+                    show_table += "%s<br>" % soc
+            show_table += "</td></tr>"
+
             show_table += "</table>"
         
 
@@ -85,11 +103,14 @@ print("""
 
     tr:nth-child(even){background-color: #f2f2f2}
 
+    tr:nth-child(even) th {background-color: #4564a8}
+
     th
     {
-        background-color: #4564a8;
+        background-color: #5274bf;
         color: white;
     }
+    
     div.table
     {
         width: 50%%;
