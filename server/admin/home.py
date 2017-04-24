@@ -13,31 +13,11 @@ second = 0
 sndkey = ""
 show_table = ""
 select = ""
+addLink = ""
 tableList = []
 nameList = []
 
-class no_cookie(Exception):
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-     return repr(self.value)
-
-def get_cookie():
-    if 'HTTP_COOKIE' in os.environ:
-        key, value = os.environ['HTTP_COOKIE'].split('=')
-        cookie = {key: value}
-    else:
-        raise no_cookie("User not logged in")
-    return cookie
-
-try:
-    cookie = get_cookie()
-    sql = "SELECT session_id, admin_id FROM admin_session WHERE session_id = '%s'" % cookie['session_id']
-    database.cur.execute(sql)
-    if database.cur.rowcount == 0:
-        redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
-except no_cookie:
-    redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
+redirect = database.check_cookie(os.environ)
 
 
 sql = "SHOW tables"
@@ -49,7 +29,11 @@ if database.cur.rowcount > 0:
         tableList += row
 
     for name in tableList:
-        select += "<option>%s</option>" % name
+        selected = ""
+        if 'table' in http.post:
+            if http.post['table'].value == name:
+                selected = """ selected="selected" """
+        select += "<option %s>%s</option>" % (selected, name)
 
 
 if os.environ['REQUEST_METHOD'] == 'POST':
@@ -73,8 +57,13 @@ if os.environ['REQUEST_METHOD'] == 'POST':
             query = database.cur.fetchall()
             #stores all column names
             for row in query:
-                string = [row[0]]
-                nameList += string
+                if row[0].find('pass_hash') >= 0:
+                    pass
+                elif row[0].find('salt') >= 0:
+                    pass
+                else:
+                    string = [row[0]]
+                    nameList += string
 
             show_table += "<table><tr>"
 
@@ -105,8 +94,11 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                     if second == 1:
                         sndkey = row[1]
                         
-                    show_table += """<td><form method="POST" action="edit.py" id="edit"><button form="edit" name="edit" type="submit" value="%s">Edit</button><input type="hidden" name="key" value="%s"><input type="hidden" name="table" value="%s"></form></td>""" % (row[0], sndkey, http.post['table'].value)
-                    show_table += "</tr>"
+                        
+                    show_table += """<td><form method="POST" action="edit.py" id="edit"><button form="edit" name="edit" type="submit" value="%s">Edit</button><input type="hidden" name="key" value="%s"><input type="hidden" name="table" value="%s"></form>""" % (row[0], sndkey, http.post['table'].value)
+                    if http.post['table'].value == 'member':
+                        show_table += """<form method="POST" action="view.py" id="view"><button form="view" name="member_id" type="submit" value="%s">View</button></form>""" % row[0]
+                    show_table += "</td></tr>"
                     
             show_table += "</table>"
 
@@ -160,7 +152,8 @@ print("""Content-Type: text/html\n\n
                 <h3>Search</h3>
                 <form class="search" action="home.py" method="post">
                     <select name="table">%s</select>
-                    <input type="submit" name="search" value="search"> <br>
+                    <input type="submit" name="search" value="search"> 
                 </form>
+                %s <br>
                 %s
-                </body></html>""" % (redirect, select, show_table))
+                </body></html>""" % (redirect, select, addLink, show_table))

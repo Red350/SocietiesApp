@@ -17,29 +17,7 @@ varLength = []
 
 print("Content-Type: text/html\r\n\r\n");
 
-class no_cookie(Exception):
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-     return repr(self.value)
-
-def get_cookie():
-    if 'HTTP_COOKIE' in os.environ:
-        key, value = os.environ['HTTP_COOKIE'].split('=')
-        cookie = {key: value}
-    else:
-        raise no_cookie("User not logged in")
-    return cookie
-
-try:
-    cookie = get_cookie()
-    sql = "SELECT session_id, admin_id FROM admin_session WHERE session_id = '%s'" % cookie['session_id']
-    database.cur.execute(sql)
-    if database.cur.rowcount == 0:
-        redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
-
-except no_cookie:
-    redirect = """<meta http-equiv="refresh" content="0; url=login.py">"""
+redirect = database.check_cookie(os.environ)
 
 if os.environ['REQUEST_METHOD'] == 'POST':
     if 'table' in http.post:
@@ -50,6 +28,10 @@ if os.environ['REQUEST_METHOD'] == 'POST':
             query = database.cur.fetchall()
             for row in query:
                 name = [row[0]]
+                if name[0].find('pass') >= 0:
+                    continue
+                if name[0].find('salt') >= 0:
+                    continue
                 nameList += name
                 vartype = row[1]
                 varLength += re.findall(r'\d+', vartype)
@@ -83,13 +65,23 @@ if os.environ['REQUEST_METHOD'] == 'POST':
             database.cur.execute(sql)
             query = database.cur.fetchone();
 
+            show_form += "<table>"
+            show_form += "<tr>"
+            for name in nameList:
+                show_form += "<th>%s</th>" % name
+            show_form += "</tr><tr>"
+
+
             for i in range(len(varList)):
-                show_form += """<input name="%s" type="%s" maxlength="%s" value="%s">""" % (nameList[i], varList[i], varLength[i], query[i])
+                show_form += """<td><input name="%s" type="%s" maxlength="%s" value="%s"></td>""" % (nameList[i], varList[i], varLength[i], query[i])
+
 
         
-            show_form += """<input type="hidden" name="insert_table" value="%s">""" % http.post['table'].value
-            show_form += """<input type="submit" name="makeedit" value="submit">"""
+            show_form += """</td><input type="hidden" name="insert_table" value="%s"></td>""" % http.post['table'].value
+            show_form += """<td><input type="submit" name="makeedit" value="submit"></td>"""
             show_form += """</form>"""
+
+            show_form += "</table>"
 
 if 'insert_table' in http.post:
     sql = "SHOW COLUMNS FROM %s" % http.post['insert_table'].value
@@ -98,6 +90,10 @@ if 'insert_table' in http.post:
     
     sql = "UPDATE %s SET" % http.post['insert_table'].value 
     for row in query:
+        if row[0].find('pass') >= 0:
+            continue
+        if row[0].find('salt') >= 0:
+            continue
         if row[3] != 'PRI':
             if row[1].find('char') >= 0:
                 sql += " %s = '%s'," % (row[0], http.post[row[0]].value)
@@ -111,7 +107,7 @@ if 'insert_table' in http.post:
     sql += " WHERE %s=%s" % (query[0][0], http.post[query[0][0]].value)
     if query[1][3] == 'PRI':
         sql += " AND %s=%s" % (query[1][0], http.post[query[1][0]].value)
-    print(sql)
+    print("Successfully added<br>")
     database.cur.execute(sql)   
 
 database.close()
