@@ -1,9 +1,12 @@
 package ie.dit.societiesapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +30,15 @@ import layout.SocietyFragment;
  * Use the {@link SocietiesListFragment#newInstance} factory method to
         * create an instance of this fragment.
         */
-public class SocietiesListFragment extends Fragment implements View.OnClickListener {
+public class SocietiesListFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private ArrayList<String> societies = new ArrayList<String>();
 
     private OnFragmentInteractionListener mListener;
+
+    private SwipeRefreshLayout swipeLayout;
+    private AutoCompleteTextView acTextView;
+    private Button button;
 
     public SocietiesListFragment() {
         // Required empty public constructor
@@ -57,16 +64,23 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        // Create a listener for the search button
         View v = inflater.inflate(R.layout.fragment_societies_list, container, false);
 
+        // Set up swipe to refresh
+        swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.societies_swipe);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
         // Set up the society page view button
-        Button button = (Button) v.findViewById(R.id.soc_search_button);
+        button = (Button) v.findViewById(R.id.soc_search_button);
         button.setOnClickListener(this);
 
         // Auto complete text view and adapter for society names R.id.testytest
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, societies);
-        AutoCompleteTextView acTextView = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
+        acTextView = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
         acTextView.setThreshold(1);
         acTextView.setAdapter(adapter);
 
@@ -135,8 +149,50 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.soc_search_button:
+                Log.d("SOCDEBUG", "Button clicked");
                 loadSocFragment();
                 break;
+        }
+    }
+
+    public void onRefresh() {
+        UpdateSocietiesTask updateTask = new UpdateSocietiesTask();
+        updateTask.execute();
+    }
+
+    public class UpdateSocietiesTask extends AsyncTask<Void, Void, Boolean> {
+
+        public UpdateSocietiesTask() {
+            acTextView.setFocusable(false);
+            button.setEnabled(false);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+
+            SocDBUpdater db = new SocDBUpdater(getActivity().getApplicationContext());
+            try {
+                Log.d("SOCDEBUG", "Attempting to update local database");
+                if(db.updateAll()) {
+                    Log.d("SOCDEBUG", "Successfully updated local database after login");
+                    return true;
+                } else {
+                    Log.d("SOCDEBUG", "Failed to update local database after login");
+                    return false;
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            swipeLayout.setRefreshing(false);
+            acTextView.setFocusableInTouchMode(true);
+            acTextView.setFocusable(true);
+            button.setEnabled(true);
         }
     }
 }
