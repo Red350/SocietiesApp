@@ -16,11 +16,11 @@ The following is a submission for the third Object Oriented Programming assignme
 
 # Implementation
 
-##Front-End
+## Front-End
 
-##Back-End
+## Back-End
 
-##Admin Tools
+## Admin Tools
  
 # Key Notes  
 
