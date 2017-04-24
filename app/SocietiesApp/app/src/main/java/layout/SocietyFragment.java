@@ -28,7 +28,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
 
     private int society_id;
 
-    private TextView societyEmailView, societyDescriptionView, societyMessageView;
+    private TextView societyEmailView, societyDescriptionView, societyStatusView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,7 +84,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
 
         societyEmailView = (TextView) v.findViewById(R.id.society_email);
         societyDescriptionView = (TextView) v.findViewById(R.id.society_description);
-        societyMessageView = (TextView) v.findViewById(R.id.society_message);
+        societyStatusView = (TextView) v.findViewById(R.id.society_message);
 
         societyEmailView.setTextIsSelectable(true);
         
@@ -95,16 +95,24 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         int name_column = cursor.getColumnIndex("name");
         int email_column = cursor.getColumnIndex("email");
         int desc_column = cursor.getColumnIndex("description");
+        int member_column = cursor.getColumnIndex("is_member");
         int com_column = cursor.getColumnIndex("is_committee");
         int chair_column = cursor.getColumnIndex("is_chair");
 
         String societyEmail = cursor.getString(email_column);
         String societyDescription = cursor.getString(desc_column);
-        String message = cursor.getString(name_column);
+        String status;
 
         societyEmailView.setText(societyEmail);
         societyDescriptionView.setText(societyDescription);
-        societyMessageView.setText(message);
+
+        // Set the user's status
+        if(cursor.getInt(member_column) == 1) {
+            status = "You are a member";
+        } else {
+            status = "Not a member";
+        }
+        societyStatusView.setText(status);
 
         getActivity().setTitle(cursor.getString(name_column));
 
