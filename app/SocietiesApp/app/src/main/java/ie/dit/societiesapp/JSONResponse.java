@@ -43,6 +43,11 @@ public class JSONResponse {
         return json.getString(key);
     }
 
+    public int getInt(String key) throws JSONException
+    {
+        return json.getInt(key);
+    }
+
     // Returns true if the request was valid
     public boolean isValid() {
         return return_code == 0;
