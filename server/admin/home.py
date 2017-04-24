@@ -94,7 +94,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                     if second == 1:
                         sndkey = row[1]
                         
-                        M
+                        
                     show_table += """<td><form method="POST" action="edit.py" id="edit"><button form="edit" name="edit" type="submit" value="%s">Edit</button><input type="hidden" name="key" value="%s"><input type="hidden" name="table" value="%s"></form>""" % (row[0], sndkey, http.post['table'].value)
                     if http.post['table'].value == 'member':
                         show_table += """<form method="POST" action="view.py" id="view"><button form="view" name="member_id" type="submit" value="%s">View</button></form>""" % row[0]
