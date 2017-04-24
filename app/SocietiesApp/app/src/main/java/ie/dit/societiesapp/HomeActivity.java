@@ -37,16 +37,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-*/
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -57,13 +48,31 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    public void onResume() {
+        super.onResume();
+        // Load the search view by default
+        SocietiesListFragment societiesListFragment = SocietiesListFragment.newInstance();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(
+                R.id.relative_layout_for_fragment,
+                societiesListFragment,
+                societiesListFragment.getTag()
+        ).commit();
+        Log.d("FRAGDEBUG", "Aftercommit");
+        Log.d("LIFECYCLEDEBUG", "onResume");
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getFragmentManager().getBackStackEntryCount() > 0) {
+                getFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -128,6 +137,7 @@ public class HomeActivity extends AppCompatActivity
 
             case R.id.logout:
             {
+                // Delete locally stored session data
                 SharedPreferences userData = getSharedPreferences("userData", 0);
                 SharedPreferences.Editor editor = userData.edit();
 
@@ -152,4 +162,5 @@ public class HomeActivity extends AppCompatActivity
     {
 
     }
+
 }
