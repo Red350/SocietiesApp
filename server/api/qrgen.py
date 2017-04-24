@@ -4,7 +4,7 @@ import database
 from qrcode import *
 import api
 import uuid
-import delete_qr
+import delete_qr    # Deletes old QR codes
 
 db = database.Database()
 api = api.Api("json")
@@ -21,9 +21,9 @@ if api.check_keys(("member_id", "session_id", "society_id")):
             qrdata = "{ \"token\": \"" + token + "\", \"society_id\": \"" + society_id + "\"}"
     
             # Generate qr code
-            qr = QRCode(version=20, error_correction=ERROR_CORRECT_L)
+            qr = QRCode(version=None, box_size=10, error_correction=ERROR_CORRECT_L)
             qr.add_data(qrdata)
-            qr.make()
+            qr.make(fit=True)
     
             im = qr.make_image()
             im.save("/var/www/html/img/" + token + ".png")

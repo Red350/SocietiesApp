@@ -9,7 +9,7 @@ db = database.Database()
 # Delete old tokens and qr images from the server
 # Command for testing:
 # SELECT token, UNIX_TIMESTAMP(CURRENT_TIMESTAMP) - UNIX_TIMESTAMP(creation_time) FROM join_token WHERE(UNIX_TIMESTAMP(CURRENT_TIMESTAMP) - UNIX_TIMESTAMP(creation_time) > 300);
-del_condition = "UNIX_TIMESTAMP(CURRENT_TIMESTAMP) - UNIX_TIMESTAMP(creation_time) > 1"
+del_condition = "UNIX_TIMESTAMP(CURRENT_TIMESTAMP) - UNIX_TIMESTAMP(creation_time) > 300"
 sql = "SELECT token, creation_time FROM join_token WHERE(" + del_condition + ");"
 db.cur.execute(sql)
 result = db.cur.fetchall()

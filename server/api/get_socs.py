@@ -7,16 +7,21 @@ db = database.Database()
 api = api.Api("json")
 
 # Ensure the correct post keys were sent
-if api.check_keys(("member_id", "session_id", "society_id")):
+if api.check_keys(("member_id", "session_id")):
     member_id = api.request["member_id"].value
     session_id = api.request["session_id"].value
     
     if db.check_session(member_id, session_id):
-        # Split the society_id string and store in list
-        soc_ids = [id.strip() for id in api.request['society_id'].value.split(',')] 
+        # If no society is requested, send all society details
+        if 'society_id' in api.request:
+            # Split the society_id string and store in list
+            soc_ids = [id.strip() for id in api.request['society_id'].value.split(',')] 
     
-        # Get the data for each society
-        sql = "SELECT society_id, name, email, description FROM society WHERE(society_id IN(" + ','.join(soc_ids) + "));"
+            # Get the data for each society
+            sql = "SELECT society_id, name, email, description FROM society WHERE(society_id IN(" + ','.join(soc_ids) + "));"
+        else:
+            sql = "SELECT society_id, name, email, description FROM society";
+
         try:
             db.cur.execute(sql)
             result = db.cur.fetchall()
