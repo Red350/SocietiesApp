@@ -126,6 +126,7 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
                     R.id.relative_layout_for_fragment,
                     societyFragment,
                     societyFragment.getTag())
+                    .addToBackStack(societyFragment.getTag())
                     .commit();
         }
 

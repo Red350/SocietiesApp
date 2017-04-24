@@ -155,6 +155,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
                         R.id.relative_layout_for_fragment,
                         qrGenFragment,
                         qrGenFragment.getTag())
+                        .addToBackStack(qrGenFragment.getTag())
                         .commit();
                 break;
             }
@@ -165,6 +166,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
                         R.id.relative_layout_for_fragment,
                         chairToolsFragment,
                         chairToolsFragment.getTag())
+                        .addToBackStack(chairToolsFragment.getTag())
                         .commit();
                 break;
             }

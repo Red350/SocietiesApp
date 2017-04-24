@@ -75,12 +75,14 @@ public class QRScanFragment extends Fragment
     {
         JSONObject json;
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        String qrData = result.getContents();
 
-        Log.d("QR", result.getContents());
+
         //Places result into a JSON object to be parsed
         try
         {
-            json = new JSONObject(result.getContents());
+            Log.d("QR", qrData);
+            json = new JSONObject(qrData);
             if (json.has("society_id") && json.has("token"))
             {
                 JoinSocTask joinSocTask = new JoinSocTask(json.getString("token"), json.getString("society_id"));
@@ -96,8 +98,12 @@ public class QRScanFragment extends Fragment
         catch (JSONException e)
         {
             e.printStackTrace();
+            Log.d("QRDEBUG", "JSON parse error");
         }
-        Log.d("qr", result.getContents());
+        catch (NullPointerException e) {
+            e.printStackTrace();
+            Log.d("QRDEBUG", "User pressed back");
+        }
     }
 
     @Override
