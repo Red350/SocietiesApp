@@ -146,7 +146,11 @@ public class HomeActivity extends AppCompatActivity
                 editor.remove("member_id");
                 editor.commit();
 
+                // Go to login activity and clear the back stack
                 Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             }
         }
