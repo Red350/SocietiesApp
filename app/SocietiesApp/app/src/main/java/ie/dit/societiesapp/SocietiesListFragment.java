@@ -70,6 +70,8 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
         acTextView.setThreshold(1);
         acTextView.setAdapter(adapter);
 
+        getActivity().setTitle("Search");
+
         return v;
     }
 
