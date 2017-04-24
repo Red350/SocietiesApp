@@ -65,13 +65,23 @@ if os.environ['REQUEST_METHOD'] == 'POST':
             database.cur.execute(sql)
             query = database.cur.fetchone();
 
+            show_form += "<table>"
+            show_form += "<tr>"
+            for name in nameList:
+                show_form += "<th>%s</th>" % name
+            show_form += "</tr><tr>"
+
+
             for i in range(len(varList)):
-                show_form += """<input name="%s" type="%s" maxlength="%s" value="%s">""" % (nameList[i], varList[i], varLength[i], query[i])
+                show_form += """<td><input name="%s" type="%s" maxlength="%s" value="%s"></td>""" % (nameList[i], varList[i], varLength[i], query[i])
+
 
         
-            show_form += """<input type="hidden" name="insert_table" value="%s">""" % http.post['table'].value
-            show_form += """<input type="submit" name="makeedit" value="submit">"""
+            show_form += """</td><input type="hidden" name="insert_table" value="%s"></td>""" % http.post['table'].value
+            show_form += """<td><input type="submit" name="makeedit" value="submit"></td>"""
             show_form += """</form>"""
+
+            show_form += "</table>"
 
 if 'insert_table' in http.post:
     sql = "SHOW COLUMNS FROM %s" % http.post['insert_table'].value
@@ -97,7 +107,7 @@ if 'insert_table' in http.post:
     sql += " WHERE %s=%s" % (query[0][0], http.post[query[0][0]].value)
     if query[1][3] == 'PRI':
         sql += " AND %s=%s" % (query[1][0], http.post[query[1][0]].value)
-    print(sql)
+    print("Successfully added<br>")
     database.cur.execute(sql)   
 
 database.close()
