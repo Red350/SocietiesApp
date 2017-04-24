@@ -87,7 +87,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         societyMessageView = (TextView) v.findViewById(R.id.society_message);
 
         societyEmailView.setTextIsSelectable(true);
-        
+
         Cursor cursor = db.getSociety(society_id);
         cursor.moveToFirst();
 
