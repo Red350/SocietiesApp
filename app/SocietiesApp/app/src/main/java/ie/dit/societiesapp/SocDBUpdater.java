@@ -33,12 +33,50 @@ public class SocDBUpdater {
     }
 
 
-    public boolean updateAll() throws IOException, JSONException {
-        if(updateSocieties() && updateMember() && updateCommittee() && updateChair()) {
-            return true;
-        } else {
-            return false;
-        }
+    // Updates all society details, which resets the user status for each society in the process.
+    // Then creates three threads to update the 3 possible statuses for a user within a society.
+    public void updateAllSocietyData() throws IOException, JSONException {
+        // Update societies before updating statuses
+        updateSocieties();
+
+        // Update member status
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    updateMember();
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        // Update committee status
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    updateCommittee();
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        // Update chair status
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    updateChair();
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     // Requests all society data from server and stores in local db

@@ -1,7 +1,6 @@
 package ie.dit.societiesapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,11 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 
 import java.util.ArrayList;
 
-import layout.QRGenFragment;
 import layout.SocietyFragment;
 
 
@@ -174,13 +171,8 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
             SocDBUpdater db = new SocDBUpdater(getActivity().getApplicationContext());
             try {
                 Log.d("SOCDEBUG", "Attempting to update local database");
-                if(db.updateAll()) {
-                    Log.d("SOCDEBUG", "Successfully updated local database after login");
-                    return true;
-                } else {
-                    Log.d("SOCDEBUG", "Failed to update local database after login");
-                    return false;
-                }
+                db.updateAllSocietyData();
+                return true;
             } catch(Exception e) {
                 e.printStackTrace();
             }
