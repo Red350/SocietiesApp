@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
 
     private int society_id;
 
-    private TextView societyInfo;
+    private TextView societyNameView, societyEmailView, societyDescriptionView, societyMessageView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -83,7 +82,11 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         Button chairToolsButton = (Button) v.findViewById(R.id.chair_tools_button);
         chairToolsButton.setOnClickListener(this);
 
-        societyInfo = (TextView) v.findViewById(R.id.society_info);
+        //societyInfo = (TextView) v.findViewById(R.id.society_info);
+        societyNameView = (TextView) v.findViewById(R.id.society_name);
+        societyEmailView = (TextView) v.findViewById(R.id.society_email);
+        societyDescriptionView = (TextView) v.findViewById(R.id.society_description);
+        societyMessageView = (TextView) v.findViewById(R.id.society_message);
 
         Cursor cursor = db.getSociety(society_id);
         cursor.moveToFirst();
@@ -95,14 +98,17 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         int com_column = cursor.getColumnIndex("is_committee");
         int chair_column = cursor.getColumnIndex("is_chair");
 
-        /*
-        String societyDetails = "Society ID: " + cursor.getString(id_column) + "\n" +
-                                "Society Name: " + cursor.getString(name_column) + "\n" +
-                                "Society Email: " + cursor.getString(email_column) + "\n" +
-                                "Society Description: " + cursor.getString(desc_column);
+        String societyName = "Society Name: " + cursor.getString(name_column);
+        String societyEmail = "Society Email: " + cursor.getString(email_column);
+        String societyDescription = "Society Description: " + cursor.getString(desc_column);
+        String message = "You are a member of " + cursor.getString(name_column);
 
-        societyInfo.setText(societyDetails);
-        */
+        societyNameView.setText(societyName);
+        societyEmailView.setText(societyEmail);
+        societyDescriptionView.setText(societyDescription);
+        societyMessageView.setText(message);
+
+        getActivity().setTitle(cursor.getString(name_column));
 
         if(cursor.getInt(com_column) != 1) qrGenButton.setVisibility(View.GONE);
         if(cursor.getInt(chair_column) != 1) chairToolsButton.setVisibility(View.GONE);
