@@ -48,6 +48,20 @@ class Database:
         else:
             return False
 
+    def check_cookie(self, environ):
+        if 'HTTP_COOKIE' in environ:
+            key, value = environ['HTTP_COOKIE'].split('=')
+            cookie = {key: value}
+        else:
+            return """<meta http-equiv="refresh" content="0; url=login.py">"""
+        
+        sql = "SELECT session_id, admin_id FROM admin_session WHERE session_id = '%s'" % cookie['session_id']
+        self.cur.execute(sql)
+        if self.cur.rowcount == 0:
+            return """<meta http-equiv="refresh" content="0; url=login.py">"""
+        else:
+            return ""
+
     def log(self, query, exception):
         pass
         #todo: log exception
