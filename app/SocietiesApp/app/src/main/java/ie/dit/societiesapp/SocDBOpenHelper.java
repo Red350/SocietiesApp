@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class SocDBOpenHelper extends SQLiteOpenHelper {
 
-    SocDBOpenHelper(Context context) {
+    public SocDBOpenHelper(Context context) {
         super(context, "soc", null, 2);
     }
 

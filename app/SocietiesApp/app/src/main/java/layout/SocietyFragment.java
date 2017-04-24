@@ -1,6 +1,7 @@
 package layout;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,9 +27,7 @@ import ie.dit.societiesapp.SocDBOpenHelper;
  */
 public class SocietyFragment extends Fragment implements View.OnClickListener {
 
-    private static final String id_param = "id";
-
-    private int id;
+    private int society_id;
 
     private TextView societyInfo;
 
@@ -42,15 +41,15 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     *
      * @return A new instance of fragment SocietyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SocietyFragment newInstance(int param1)
+    public static SocietyFragment newInstance(int society_id)
     {
         SocietyFragment fragment = new SocietyFragment();
         Bundle args = new Bundle();
-        args.putInt(id_param, param1);
+        args.putInt("society_id", society_id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,7 +60,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
         {
-            id = getArguments().getInt(id_param);
+            society_id = getArguments().getInt("society_id");
         }
 
         // Hide the keyboard when this fragment loads
@@ -74,6 +73,8 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
     {
         // Inflate the layout for this fragment
         // Create a listener for the search button
+        SocDBOpenHelper db = new SocDBOpenHelper(getContext());
+
         View v = inflater.inflate(R.layout.fragment_society, container, false);
 
         Button qrGenButton = (Button) v.findViewById(R.id.qr_gen_button);
@@ -82,7 +83,28 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         Button chairToolsButton = (Button) v.findViewById(R.id.chair_tools_button);
         chairToolsButton.setOnClickListener(this);
 
-        //SocDBOpenHelper conn = new SocDBOpenHelper();
+        societyInfo = (TextView) v.findViewById(R.id.society_info);
+
+        Cursor cursor = db.getSociety(society_id);
+        cursor.moveToFirst();
+
+        int id_column = cursor.getColumnIndex("society_id");
+        int name_column = cursor.getColumnIndex("name");
+        int email_column = cursor.getColumnIndex("email");
+        int desc_column = cursor.getColumnIndex("description");
+        int com_column = cursor.getColumnIndex("is_committe");
+        int chair_column = cursor.getColumnIndex("is_chair");
+
+        String societyDetails = "Society ID: " + cursor.getString(id_column) + "\n" +
+                                "Society Name: " + cursor.getString(name_column) + "\n" +
+                                "Society Email: " + cursor.getString(email_column) + "\n" +
+                                "Society Description: " + cursor.getString(desc_column);
+
+        societyInfo.setText(societyDetails);
+
+        if(chair_column != 1) chairToolsButton.setVisibility(View.GONE);
+        if(com_column != 1) qrGenButton.setVisibility(View.GONE);
+
         return v;
     }
 
@@ -120,7 +142,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         switch(v.getId()) {
             case R.id.qr_gen_button:
             {
-                QRGenFragment qrGenFragment= new QRGenFragment().newInstance(id);
+                QRGenFragment qrGenFragment= new QRGenFragment().newInstance(society_id);
                 this.getFragmentManager().beginTransaction().replace(
                         R.id.relative_layout_for_fragment,
                         qrGenFragment,
@@ -130,7 +152,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
             }
             case R.id.chair_tools_button:
             {
-                ChairToolsFragment chairToolsFragment = new ChairToolsFragment().newInstance(id);
+                ChairToolsFragment chairToolsFragment = new ChairToolsFragment().newInstance(society_id);
                 this.getFragmentManager().beginTransaction().replace(
                         R.id.relative_layout_for_fragment,
                         chairToolsFragment,
