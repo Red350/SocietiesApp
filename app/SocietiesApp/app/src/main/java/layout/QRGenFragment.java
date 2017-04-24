@@ -201,6 +201,8 @@ public class QRGenFragment extends Fragment {
                         + returnedToken + getString(R.string.qr_extension);
                 Log.d("url", url);
                 browser.loadUrl(url);
+                browser.getSettings().setLoadWithOverviewMode(true);
+                browser.getSettings().setUseWideViewPort(true);
             }
             else
             {
