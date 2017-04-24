@@ -92,18 +92,20 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         int name_column = cursor.getColumnIndex("name");
         int email_column = cursor.getColumnIndex("email");
         int desc_column = cursor.getColumnIndex("description");
-        int com_column = cursor.getColumnIndex("is_committe");
+        int com_column = cursor.getColumnIndex("is_committee");
         int chair_column = cursor.getColumnIndex("is_chair");
 
+        /*
         String societyDetails = "Society ID: " + cursor.getString(id_column) + "\n" +
                                 "Society Name: " + cursor.getString(name_column) + "\n" +
                                 "Society Email: " + cursor.getString(email_column) + "\n" +
                                 "Society Description: " + cursor.getString(desc_column);
 
         societyInfo.setText(societyDetails);
+        */
 
-        if(chair_column != 1) chairToolsButton.setVisibility(View.GONE);
-        if(com_column != 1) qrGenButton.setVisibility(View.GONE);
+        if(cursor.getInt(com_column) != 1) qrGenButton.setVisibility(View.GONE);
+        if(cursor.getInt(chair_column) != 1) chairToolsButton.setVisibility(View.GONE);
 
         return v;
     }
