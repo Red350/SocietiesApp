@@ -23,12 +23,12 @@ import layout.SocietyFragment;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SocietiesListFragment.OnFragmentInteractionListener} interface
+ * {@link UserDetailsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SocietiesListFragment#newInstance} factory method to
+ * Use the {@link UserDetailsFragment#newInstance} factory method to
         * create an instance of this fragment.
         */
-public class SocietiesListFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class UserDetailsFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private ArrayList<String> currentSelected;
     private ArrayList<String> allSocieties = new ArrayList<String>();
@@ -41,16 +41,15 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
     private SwipeRefreshLayout swipeLayout;
     private AutoCompleteTextView searchBox;
     private Button loadSocietyButton;
-    private RadioGroup radioGroup;
 
     ArrayAdapter<String> searchAdapter;
 
-    public SocietiesListFragment() {
+    public UserDetailsFragment() {
         // Required empty public constructor
     }
 
-    public static SocietiesListFragment newInstance() {
-        SocietiesListFragment fragment = new SocietiesListFragment();
+    public static UserDetailsFragment newInstance() {
+        UserDetailsFragment fragment = new UserDetailsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -86,9 +85,9 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_societies_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_user_details, container, false);
 
-        getActivity().setTitle("Search");
+        getActivity().setTitle("User Details");
 
         // Set up swipe to refresh
         swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.societies_swipe);
@@ -107,38 +106,6 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
         searchBox = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
         searchBox.setThreshold(1);
         searchBox.setAdapter(searchAdapter);
-
-        // Set up the radio buttons
-        radioGroup = (RadioGroup) v.findViewById(R.id.radio_search);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            // Sets the adapter list based on the radio button that's pressed
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch(checkedId) {
-                    case R.id.radio_search_all:
-                        currentSelected = allSocieties;
-                        updateSearchList();
-                        break;
-
-                    case R.id.radio_search_member:
-                        currentSelected = memberSocieties;
-                        updateSearchList();
-                        break;
-
-
-                    case R.id.radio_search_committee:
-                        currentSelected = committeeSocieties;
-                        updateSearchList();
-                        break;
-
-                    case R.id.radio_search_chair:
-                        currentSelected = chairSocieties;
-                        updateSearchList();
-                        break;
-                }
-            }
-        });
 
         return v;
     }

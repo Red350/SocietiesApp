@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
 
     private int society_id;
 
-    private TextView societyNameView, societyEmailView, societyDescriptionView, societyMessageView;
+    private TextView societyEmailView, societyDescriptionView, societyStatusView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -82,11 +83,11 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         Button chairToolsButton = (Button) v.findViewById(R.id.chair_tools_button);
         chairToolsButton.setOnClickListener(this);
 
-        //societyInfo = (TextView) v.findViewById(R.id.society_info);
-        societyNameView = (TextView) v.findViewById(R.id.society_name);
         societyEmailView = (TextView) v.findViewById(R.id.society_email);
         societyDescriptionView = (TextView) v.findViewById(R.id.society_description);
-        societyMessageView = (TextView) v.findViewById(R.id.society_message);
+        societyStatusView = (TextView) v.findViewById(R.id.society_message);
+
+        societyEmailView.setTextIsSelectable(true);
 
         Cursor cursor = db.getSociety(society_id);
         cursor.moveToFirst();
@@ -95,18 +96,24 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         int name_column = cursor.getColumnIndex("name");
         int email_column = cursor.getColumnIndex("email");
         int desc_column = cursor.getColumnIndex("description");
+        int member_column = cursor.getColumnIndex("is_member");
         int com_column = cursor.getColumnIndex("is_committee");
         int chair_column = cursor.getColumnIndex("is_chair");
 
-        String societyName = "Society Name: " + cursor.getString(name_column);
-        String societyEmail = "Society Email: " + cursor.getString(email_column);
-        String societyDescription = "Society Description: " + cursor.getString(desc_column);
-        String message = "You are a member of " + cursor.getString(name_column);
+        String societyEmail = cursor.getString(email_column);
+        String societyDescription = cursor.getString(desc_column);
+        String status;
 
-        societyNameView.setText(societyName);
         societyEmailView.setText(societyEmail);
         societyDescriptionView.setText(societyDescription);
-        societyMessageView.setText(message);
+
+        // Set the user's status
+        if(cursor.getInt(member_column) == 1) {
+            status = "You are a member";
+        } else {
+            status = "Not a member";
+        }
+        societyStatusView.setText(status);
 
         getActivity().setTitle(cursor.getString(name_column));
 
@@ -116,7 +123,6 @@ public class SocietyFragment extends Fragment implements View.OnClickListener {
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

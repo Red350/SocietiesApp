@@ -5,13 +5,17 @@
     android:orientation="vertical"
     tools:context="ie.dit.societiesapp.SocietiesListFragment">
 
-    <AutoCompleteTextView
-        android:id="@+id/chair_add_field"
-        android:layout_marginTop="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:ems="10" />
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <AutoCompleteTextView
+            android:id="@+id/chair_add_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:hint="Member ID"
+            android:ems="10" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/chair_add_button"
@@ -32,13 +36,18 @@
         android:layout_gravity="center_horizontal"
         android:visibility="gone"/>
 
-    <AutoCompleteTextView
-        android:id="@+id/chair_delete_field"
-        android:layout_marginTop="100dp"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:ems="10" />
+        android:layout_marginTop="20dp">
+        <AutoCompleteTextView
+            android:id="@+id/chair_delete_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:hint="Member ID"
+            android:ems="10" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/chair_delete_button"

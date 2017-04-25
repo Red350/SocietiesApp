@@ -25,6 +25,15 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
                 + "is_committee INTEGER,"
                 + "is_chair INTEGER);"
         );
+        db.execSQL("CREATE TABLE user_details("
+                + "member_id INTEGER PRIMARY KEY,"
+                + "name TEXT,"
+                + "email TEXT,"
+                + "dob TEXT,"
+                + "mobile TEXT,"
+                + "emergency_ph TEXT,"
+                + "full_part_time TEXT);"
+        );
     }
 
     @Override
@@ -96,6 +105,26 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         cv.put("is_committee", 0);
         cv.put("is_chair", 0);
         long result = db.replace("society", null, cv);
+
+        if(result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean updateUserDetails(int member_id, String name, String email, String dob,
+                                     String mobile, String emergency_ph, String full_part_time) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("member_id", member_id);
+        cv.put("name", name);
+        cv.put("email", email);
+        cv.put("dob", dob);
+        cv.put("mobile", mobile);
+        cv.put("emergency_ph", emergency_ph);
+        cv.put("full_part_time", full_part_time);
+        long result = db.replace("user_details", null, cv);
 
         if(result == -1) {
             return false;
