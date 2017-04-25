@@ -29,7 +29,8 @@ public class HomeActivity extends AppCompatActivity
         SocietiesListFragment.OnFragmentInteractionListener,
         QRGenFragment.OnFragmentInteractionListener,
         SocietyFragment.OnFragmentInteractionListener,
-        ChairToolsFragment.OnFragmentInteractionListener{
+        ChairToolsFragment.OnFragmentInteractionListener,
+        UserDetailsFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +108,7 @@ public class HomeActivity extends AppCompatActivity
         switch(id) {
             case R.id.nav_qr:
             {
-                Log.d("find", "grsderfsgfav");
                 Toast.makeText(this, "QR", Toast.LENGTH_SHORT).show();
-                //Toast.makeText(this, "Hey", Toast.LENGTH_SHORT);
                 // Handle the QR action
 
                 //Creates fragment
@@ -132,7 +131,19 @@ public class HomeActivity extends AppCompatActivity
                         societiesListFragment,
                         societiesListFragment.getTag()
                 ).commit();
-                Log.d("FRAGDEBUG", "Aftercommit");
+                break;
+            }
+
+            case R.id.nav_user_details:
+            {
+                UserDetailsFragment userDetailsFragment = UserDetailsFragment.newInstance();
+                FragmentManager manager = getSupportFragmentManager();
+                manager.beginTransaction().replace(
+                        R.id.relative_layout_for_fragment,
+                        userDetailsFragment,
+                        userDetailsFragment.getTag()
+                ).addToBackStack(userDetailsFragment.getTag())
+                        .commit();
                 break;
             }
 
