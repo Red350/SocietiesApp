@@ -54,13 +54,14 @@ public class JSONResponse {
     }
 
     // Stores the session and member ids in shared preferences
-    public boolean storeLogin() throws JSONException {
+    public boolean storeLogin(String email) throws JSONException {
         if(json.has("session_id") && json.has("member_id")) {
             SharedPreferences.Editor userDataEditor = userData.edit();
             String session_id = json.getString("session_id");
             String member_id = json.getString("member_id");
             userDataEditor.putString("session_id", session_id);
             userDataEditor.putString("member_id", member_id);
+            userDataEditor.putString("email", email);
             userDataEditor.commit();
             Log.d("JSONDEBUG", "Storing: " + member_id + " " + session_id);
             return true;

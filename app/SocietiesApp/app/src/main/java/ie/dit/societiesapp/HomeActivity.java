@@ -50,6 +50,17 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        /* Set the user's email in the navbar */
+        View header = navigationView.getHeaderView(0);
+        TextView navEmail = (TextView) header.findViewById(R.id.userNameView);
+
+        // Get the user's email from shared preferences
+        SharedPreferences userData = getSharedPreferences("userData", 0);
+        String userEmail = userData.getString("email", "-1");
+
+        // Set the username view in the nav bar to the user's email
+        navEmail.setText(userEmail);
     }
 
     public void onResume()
