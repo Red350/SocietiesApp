@@ -130,12 +130,12 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
     private void addCommittee() {
         AutoCompleteTextView addTextView = (AutoCompleteTextView) getView().findViewById(R.id.chair_add_field);
-        int memberId;
+        String committee_email;
         try {
-            memberId = Integer.parseInt(addTextView.getText().toString());
+            committee_email = addTextView.getText().toString();
             addButton.setVisibility(View.GONE);
             addProgress.setVisibility(View.VISIBLE);
-            addCommitteeTask addTask = new addCommitteeTask(memberId);
+            addCommitteeTask addTask = new addCommitteeTask(committee_email);
             addTask.execute();
         }
         catch(NumberFormatException e) {
@@ -147,12 +147,12 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
     private void deleteCommittee() {
         AutoCompleteTextView addTextView = (AutoCompleteTextView) getView().findViewById(R.id.chair_delete_field);
-        int memberId;
+        String committee_email;
         try {
-            memberId = Integer.parseInt(addTextView.getText().toString());
+            committee_email = addTextView.getText().toString();
             deleteButton.setVisibility(View.GONE);
             deleteProgress.setVisibility(View.VISIBLE);
-            deleteCommitteeTask deleteTask = new deleteCommitteeTask(memberId);
+            deleteCommitteeTask deleteTask = new deleteCommitteeTask(committee_email);
             deleteTask.execute();
         }
         catch(NumberFormatException e) {
@@ -175,10 +175,10 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
     public class addCommitteeTask extends AsyncTask<Void, Void, Boolean> {
 
-        private int committee_id;
+        private String committee_email;
 
-        private addCommitteeTask(int committee_id) {
-            this.committee_id = committee_id;
+        private addCommitteeTask(String committee_email) {
+            this.committee_email = committee_email;
         }
 
         @Override
@@ -194,7 +194,7 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
             JSONResponse response;
 
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
-            args.add(new NameValuePair("committee_id", Integer.toString(committee_id)));
+            args.add(new NameValuePair("committee_email", committee_email));
             args.add(new NameValuePair("society_id", Integer.toString(society_id)));
 
             String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.add_committee_script);
@@ -242,10 +242,10 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
     public class deleteCommitteeTask extends AsyncTask<Void, Void, Boolean> {
 
-        private int committee_id;
+        private String committee_email;
 
-        private deleteCommitteeTask(int committee_id) {
-            this.committee_id = committee_id;
+        private deleteCommitteeTask(String committee_email) {
+            this.committee_email = committee_email;
         }
 
         @Override
@@ -261,7 +261,7 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
             JSONResponse response;
 
             ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
-            args.add(new NameValuePair("committee_id", Integer.toString(committee_id)));
+            args.add(new NameValuePair("committee_email", committee_email));
             args.add(new NameValuePair("society_id", Integer.toString(society_id)));
 
             String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.delete_committee_script);
