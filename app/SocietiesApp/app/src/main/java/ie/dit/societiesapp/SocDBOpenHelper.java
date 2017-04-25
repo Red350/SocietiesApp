@@ -48,7 +48,7 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("SELECT * FROM society WHERE(society_id = " + id + ");", null);
         return res;
     }
-
+    
     public ArrayList<String> getSocietyNames() {
         ArrayList<String> socs = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
