@@ -279,7 +279,9 @@ public class LoginActivity extends AppCompatActivity {
                             new Thread(new Runnable() {
                                 public void run() {
                                     try {
+                                        Log.d("SOCDEBUG", "Before update");
                                         db.updateUserDetails();
+                                        Log.d("SOCDEBUG", "After update");
                                     } catch(JSONException e) {
                                         e.printStackTrace();
                                     } catch(IOException e) {

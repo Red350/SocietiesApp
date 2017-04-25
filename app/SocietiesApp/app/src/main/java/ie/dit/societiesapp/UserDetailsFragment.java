@@ -1,6 +1,8 @@
 package ie.dit.societiesapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -39,10 +44,10 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
     private OnFragmentInteractionListener mListener;
 
     private SwipeRefreshLayout swipeLayout;
-    private AutoCompleteTextView searchBox;
-    private Button loadSocietyButton;
 
-    ArrayAdapter<String> searchAdapter;
+    private TextView IDView;
+    private EditText editNameView, editMobileView, editPhoneView;
+    private RadioButton editFulltimeView;
 
     public UserDetailsFragment() {
         // Required empty public constructor
@@ -97,29 +102,45 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        // Set up the society page view loadSocietyButton
-        loadSocietyButton = (Button) v.findViewById(R.id.soc_search_button);
-        loadSocietyButton.setOnClickListener(this);
-
-        // Auto complete text view and searchAdapter for society names
-        searchAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, currentSelected);
-        searchBox = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
-        searchBox.setThreshold(1);
-        searchBox.setAdapter(searchAdapter);
+        IDView = (TextView) v.findViewById(R.id.textViewID);
+        editNameView = (EditText) v.findViewById(R.id.editNameView);
+        editMobileView = (EditText) v.findViewById(R.id.editMobileView);
+        editPhoneView = (EditText) v.findViewById(R.id.editPhoneView);
+        editFulltimeView = (RadioButton) v.findViewById(R.id.fullTimePartRadio);
 
         return v;
     }
 
-    // Updates the search list based on whatever currentSelected points to.
-    // Also clears the search box.
-    private void updateSearchList() {
-        searchAdapter.clear();
-        searchAdapter.addAll(currentSelected);
-        searchAdapter.notifyDataSetChanged();
+    public void onResume()
+    {
+        super.onResume();
 
-        // Clear the text view and remove focus
-        searchBox.setText("");
-        searchBox.clearFocus();
+        // get user data
+        SharedPreferences userData = getContext().getSharedPreferences("userData", 0);
+
+        // get user id
+        int userID = Integer.parseInt(userData.getString("member_id", "-1"));
+
+        // open database
+        SocDBOpenHelper db = new SocDBOpenHelper(getContext());
+
+        Cursor cursor = db.getUserDetails(userID);
+        cursor.moveToFirst();
+
+        int name_column = cursor.getColumnIndex("name");
+        int mobile_column = cursor.getColumnIndex("mobile");
+        int phone_column = cursor.getColumnIndex("emergency_ph");
+        int full_time_column = cursor.getColumnIndex("full_part_time");
+
+        String userName = cursor.getString(name_column);
+        String userMobile = cursor.getString(mobile_column);
+        String userPhone = cursor.getString(phone_column);
+        String fullPartTime = cursor.getString(full_time_column);
+
+        IDView.setText(Integer.toString(userID));
+        editNameView.setText(userName);
+        editMobileView.setText(userMobile);
+        editPhoneView.setText(userPhone);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -198,8 +219,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
     public class UpdateSocietiesTask extends AsyncTask<Void, Void, Boolean> {
 
         public UpdateSocietiesTask() {
-            searchBox.setFocusable(false);
-            loadSocietyButton.setEnabled(false);
+
         }
 
         @Override
@@ -220,9 +240,6 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         @Override
         protected void onPostExecute(final Boolean success) {
             swipeLayout.setRefreshing(false);
-            searchBox.setFocusableInTouchMode(true);
-            searchBox.setFocusable(true);
-            loadSocietyButton.setEnabled(true);
         }
     }
 }
