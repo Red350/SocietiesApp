@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 
@@ -29,13 +30,20 @@ import layout.SocietyFragment;
         */
 public class SocietiesListFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private ArrayList<String> societies = new ArrayList<String>();
+    private ArrayList<String> currentSelected;
+    private ArrayList<String> allSocieties = new ArrayList<String>();
+    private ArrayList<String> memberSocieties = new ArrayList<String>();
+    private ArrayList<String> committeeSocieties = new ArrayList<String>();
+    private ArrayList<String> chairSocieties = new ArrayList<String>();
 
     private OnFragmentInteractionListener mListener;
 
     private SwipeRefreshLayout swipeLayout;
-    private AutoCompleteTextView acTextView;
-    private Button button;
+    private AutoCompleteTextView searchBox;
+    private Button loadSocietyButton;
+    private RadioGroup radioGroup;
+
+    ArrayAdapter<String> searchAdapter;
 
     public SocietiesListFragment() {
         // Required empty public constructor
@@ -54,7 +62,24 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
 
         // Get a list of the society names from the local db
         SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
-        societies = db.getSocietyNames();
+        allSocieties = db.getSocietyNames();
+
+        // Create the array lists for each society subgroup
+        for(String soc : allSocieties) {
+            int society_id = db.getSocietyIdByName(soc);
+            if(db.checkMember(society_id)) {
+                memberSocieties.add(soc);
+            }
+            if(db.checkCommittee(society_id)) {
+                committeeSocieties.add(soc);
+            }
+            if(db.checkChair(society_id)) {
+                chairSocieties.add(soc);
+            }
+        }
+
+        // Default selected group is all
+        currentSelected = allSocieties;
     }
 
     @Override
@@ -62,6 +87,8 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_societies_list, container, false);
+
+        getActivity().setTitle("Search");
 
         // Set up swipe to refresh
         swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.societies_swipe);
@@ -71,19 +98,61 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        // Set up the society page view button
-        button = (Button) v.findViewById(R.id.soc_search_button);
-        button.setOnClickListener(this);
+        // Set up the society page view loadSocietyButton
+        loadSocietyButton = (Button) v.findViewById(R.id.soc_search_button);
+        loadSocietyButton.setOnClickListener(this);
 
-        // Auto complete text view and adapter for society names R.id.testytest
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, societies);
-        acTextView = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
-        acTextView.setThreshold(1);
-        acTextView.setAdapter(adapter);
+        // Auto complete text view and searchAdapter for society names
+        searchAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, currentSelected);
+        searchBox = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
+        searchBox.setThreshold(1);
+        searchBox.setAdapter(searchAdapter);
 
-        getActivity().setTitle("Search");
+        // Set up the radio buttons
+        radioGroup = (RadioGroup) v.findViewById(R.id.radio_search);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            // Sets the adapter list based on the radio button that's pressed
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch(checkedId) {
+                    case R.id.radio_search_all:
+                        currentSelected = allSocieties;
+                        updateSearchList();
+                        break;
+
+                    case R.id.radio_search_member:
+                        currentSelected = memberSocieties;
+                        updateSearchList();
+                        break;
+
+
+                    case R.id.radio_search_committee:
+                        currentSelected = committeeSocieties;
+                        updateSearchList();
+                        break;
+
+                    case R.id.radio_search_chair:
+                        currentSelected = chairSocieties;
+                        updateSearchList();
+                        break;
+                }
+            }
+        });
 
         return v;
+    }
+
+    // Updates the search list based on whatever currentSelected points to.
+    // Also clears the search box.
+    private void updateSearchList() {
+        searchAdapter.clear();
+        searchAdapter.addAll(currentSelected);
+        searchAdapter.notifyDataSetChanged();
+
+        // Clear the text view and remove focus
+        searchBox.setText("");
+        searchBox.clearFocus();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -149,6 +218,8 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
                 Log.d("SOCDEBUG", "Button clicked");
                 loadSocFragment();
                 break;
+            case R.id.radio_search:
+                Log.d("RADIODEBUG", "Radio clicked");
         }
     }
 
@@ -160,8 +231,8 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
     public class UpdateSocietiesTask extends AsyncTask<Void, Void, Boolean> {
 
         public UpdateSocietiesTask() {
-            acTextView.setFocusable(false);
-            button.setEnabled(false);
+            searchBox.setFocusable(false);
+            loadSocietyButton.setEnabled(false);
         }
 
         @Override
@@ -182,9 +253,9 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
         @Override
         protected void onPostExecute(final Boolean success) {
             swipeLayout.setRefreshing(false);
-            acTextView.setFocusableInTouchMode(true);
-            acTextView.setFocusable(true);
-            button.setEnabled(true);
+            searchBox.setFocusableInTouchMode(true);
+            searchBox.setFocusable(true);
+            loadSocietyButton.setEnabled(true);
         }
     }
 }
