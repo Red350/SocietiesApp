@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -202,14 +203,16 @@ public class QRScanFragment extends Fragment
             if (success)
             {
                 Log.d("QRDEBUG", "Society Successfully joined");
-                statusField.setTextColor(Color.parseColor("#0061AA"));
-                statusField.setText("Joined");
+                //statusField.setTextColor(Color.parseColor("#0061AA"));
+                //statusField.setText("Joined");
+                Toast.makeText(getActivity(), "Joined", Toast.LENGTH_LONG).show();
             }
             else
             {
                 // Show an error message to the user I suppose
-                statusField.setTextColor(Color.parseColor("#CC0000"));
-                statusField.setText("Failed to join");
+                //statusField.setTextColor(Color.parseColor("#CC0000"));
+                //statusField.setText("Failed to join");
+                Toast.makeText(getActivity(), "Failed to Join", Toast.LENGTH_LONG).show();
             }
         }
     }
