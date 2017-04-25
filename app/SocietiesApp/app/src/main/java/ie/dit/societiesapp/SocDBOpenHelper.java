@@ -74,6 +74,12 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         }
     }
 
+    public Cursor getUserDetails(int member_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM user_details WHERE(member_id = " + member_id + ");", null);
+        return res;
+    }
+
     /* Check if user is a member, committee member, or chair of a society */
 
     public boolean checkMember(int id) { return checkField(id, "is_member"); }
