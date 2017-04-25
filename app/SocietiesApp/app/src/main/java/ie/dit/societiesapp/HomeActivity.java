@@ -30,7 +30,8 @@ public class HomeActivity extends AppCompatActivity
         QRGenFragment.OnFragmentInteractionListener,
         SocietyFragment.OnFragmentInteractionListener,
         ChairToolsFragment.OnFragmentInteractionListener,
-        UserDetailsFragment.OnFragmentInteractionListener{
+        UserDetailsFragment.OnFragmentInteractionListener
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
