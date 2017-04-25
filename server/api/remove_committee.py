@@ -32,6 +32,8 @@ if api.check_keys(("member_id", "session_id", "society_id", "committee_email")):
                 except:
                     # Database error
                     response = api.set_returncode(6)
+            else:
+                api.set_returncode(6)
         else:
             # Invalid permissions
             response = api.set_returncode(7)
