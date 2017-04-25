@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/nav_items">
+
+        <item
+            android:id="@+id/nav_soclist"
+            android:icon="@drawable/ic_search_black"
+            android:title="Search" />
+        <item
+            android:id="@+id/nav_qr"
+            android:icon="@drawable/ic_menu_qr"
+            android:title="QR Scan" />
+        <item
+            android:id="@+id/nav_user_details"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Update User Details" />
+        <!--<item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Slideshow" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools" />
+           -->
+
+    </group>
+
+    <group android:id="@+id/logout_item">
+        <item
+            android:id="@+id/logout"
+            android:icon="@android:drawable/ic_lock_power_off"
+            android:title="Logout" />
+    </group>
+
+
+</menu>
