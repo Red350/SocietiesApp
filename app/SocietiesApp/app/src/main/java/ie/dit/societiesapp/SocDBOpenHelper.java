@@ -25,14 +25,14 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
                 + "is_committee INTEGER,"
                 + "is_chair INTEGER);"
         );
-        db.execSQL("CREATE TABLE user_details"
+        db.execSQL("CREATE TABLE user_details("
                 + "member_id INTEGER PRIMARY KEY,"
                 + "name TEXT,"
-                + "email TEXT"
-                + "dob TEXT"
-                + "mobile TEXT"
-                + "emergency_ph TEXT"
-                + "full_part_time TEXT"
+                + "email TEXT,"
+                + "dob TEXT,"
+                + "mobile TEXT,"
+                + "emergency_ph TEXT,"
+                + "full_part_time TEXT);"
         );
     }
 
