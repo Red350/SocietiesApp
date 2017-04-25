@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity
         password2View = (EditText) findViewById(R.id.password2RegText);
         mobileView = (EditText) findViewById(R.id.mobileRegText);
         dobView = (EditText) findViewById(R.id.dobRegText);
-        emergancyView = (EditText) findViewById(R.id.emergancyRegText);
+        emergancyView = (EditText) findViewById(R.id.emergencyRegText);
 
         calendar = Calendar.getInstance();
 
@@ -464,6 +461,8 @@ public class RegisterActivity extends AppCompatActivity
 
             if (success)
             {
+                Toast.makeText(RegisterActivity.this, "Registered Successfully",
+                        Toast.LENGTH_LONG).show();
                 finish();
                 // if register is successful, return to the login activity
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -471,6 +470,8 @@ public class RegisterActivity extends AppCompatActivity
             }
             else
             {
+                Toast.makeText(RegisterActivity.this, "Failed to Register",
+                        Toast.LENGTH_LONG).show();
                 errorField.setTextColor(Color.parseColor("#CC0000"));
                 errorField.setText(message);
                 errorField.requestFocus();

@@ -176,11 +176,11 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/emergancyRegText"
+                    android:id="@+id/emergencyRegText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Emergancy Number"
+                    android:hint="Emergency Number"
                     android:inputType="phone" />
 
             </android.support.design.widget.TextInputLayout>
