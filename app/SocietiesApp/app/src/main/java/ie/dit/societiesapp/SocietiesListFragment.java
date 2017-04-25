@@ -230,8 +230,11 @@ public class SocietiesListFragment extends Fragment implements View.OnClickListe
 
     public class UpdateSocietiesTask extends AsyncTask<Void, Void, Boolean> {
 
-        public UpdateSocietiesTask() {
+        @Override
+        protected void onPreExecute()
+        {
             searchBox.setFocusable(false);
+            searchBox.setText("");
             loadSocietyButton.setEnabled(false);
         }
 

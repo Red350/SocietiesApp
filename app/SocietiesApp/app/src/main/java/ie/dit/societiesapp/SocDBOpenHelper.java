@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,7 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
                 + "emergency_ph TEXT,"
                 + "full_part_time TEXT);"
         );
+        Log.d("DBDEBUG", "Database created");
     }
 
     @Override
@@ -48,7 +50,7 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("SELECT * FROM society WHERE(society_id = " + id + ");", null);
         return res;
     }
-    
+
     public ArrayList<String> getSocietyNames() {
         ArrayList<String> socs = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();

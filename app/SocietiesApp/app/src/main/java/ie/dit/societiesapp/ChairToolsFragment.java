@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -181,6 +182,12 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         }
 
         @Override
+        protected void onPreExecute() {
+            addButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+        }
+
+        @Override
         protected Boolean doInBackground(Void... params)
         {
             Http conn = new Http();
@@ -215,12 +222,19 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            // Buttons re-enabled and visible
             addProgress.setVisibility(View.GONE);
             addButton.setVisibility(View.VISIBLE);
+            addButton.setEnabled(true);
+            deleteButton.setEnabled(true);
             if (success)
             {
+                Toast.makeText(getActivity(), "Added committee member",
+                        Toast.LENGTH_LONG).show();
                 Log.d("CHAIRTOOLSDEBUG", "Added successfully");
             } else {
+                Toast.makeText(getActivity(), "Failed to add committee member",
+                        Toast.LENGTH_LONG).show();
                 Log.d("CHAIRTOOLSDEBUG", "Failed to add");
             }
         }
@@ -232,6 +246,12 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
         private deleteCommitteeTask(int committee_id) {
             this.committee_id = committee_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            addButton.setEnabled(false);
+            deleteButton.setEnabled(false);
         }
 
         @Override
@@ -269,12 +289,19 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            // Buttons re-enabled and visible
             deleteProgress.setVisibility(View.GONE);
             deleteButton.setVisibility(View.VISIBLE);
+            addButton.setEnabled(true);
+            deleteButton.setEnabled(true);
             if (success)
             {
+                Toast.makeText(getActivity(), "Deleted committee member",
+                        Toast.LENGTH_LONG).show();
                 Log.d("CHAIRDEBUG", "Deleted successfully");
             } else {
+                Toast.makeText(getActivity(), "Failed to delete committee member",
+                        Toast.LENGTH_LONG).show();
                 Log.d("CHAIRDEBUG", "Failed to delete");
             }
         }
