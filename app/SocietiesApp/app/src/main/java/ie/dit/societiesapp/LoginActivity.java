@@ -270,10 +270,25 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         // Update the user's local society db
-                        SocDBUpdater db = new SocDBUpdater(getApplicationContext());
+                        final SocDBUpdater db = new SocDBUpdater(getApplicationContext());
                         try {
                             Log.d("SOCDEBUG", "Attempting to update local database");
                             db.updateAllSocietyData();
+
+                            // Update user details
+                            new Thread(new Runnable() {
+                                public void run() {
+                                    try {
+                                        Log.d("SOCDEBUG", "Before update");
+                                        db.updateUserDetails();
+                                        Log.d("SOCDEBUG", "After update");
+                                    } catch(JSONException e) {
+                                        e.printStackTrace();
+                                    } catch(IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
                         } catch(Exception e) {
                             e.printStackTrace();
                         }

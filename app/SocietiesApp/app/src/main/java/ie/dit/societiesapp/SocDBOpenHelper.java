@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,7 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
                 + "emergency_ph TEXT,"
                 + "full_part_time TEXT);"
         );
+        Log.d("DBDEBUG", "Database created");
     }
 
     @Override
@@ -72,6 +74,12 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         } else {
             return -1;
         }
+    }
+
+    public Cursor getUserDetails(int member_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM user_details WHERE(member_id = " + member_id + ");", null);
+        return res;
     }
 
     /* Check if user is a member, committee member, or chair of a society */
