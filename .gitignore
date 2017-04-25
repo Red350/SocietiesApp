@@ -41,8 +41,11 @@ captures/
 
 # Server stuff
 db/load.txt
-server/.idea/
-server/connect.py
+server/api/.idea
+server/api/__pycache__
 
 # Vim swap files
 *.swp
+
+#pycharm
+.idea
