@@ -31,23 +31,15 @@ import layout.SocietyFragment;
  * {@link UserDetailsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link UserDetailsFragment#newInstance} factory method to
-        * create an instance of this fragment.
-        */
+ * create an instance of this fragment.
+ */
 public class UserDetailsFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
-
-    private ArrayList<String> currentSelected;
-    private ArrayList<String> allSocieties = new ArrayList<String>();
-    private ArrayList<String> memberSocieties = new ArrayList<String>();
-    private ArrayList<String> committeeSocieties = new ArrayList<String>();
-    private ArrayList<String> chairSocieties = new ArrayList<String>();
 
     private OnFragmentInteractionListener mListener;
 
     private SwipeRefreshLayout swipeLayout;
 
-    private TextView IDView;
     private EditText editNameView, editMobileView, editPhoneView;
-    private RadioButton editFulltimeView;
 
     public UserDetailsFragment() {
         // Required empty public constructor
@@ -64,26 +56,6 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get a list of the society names from the local db
-        SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
-        allSocieties = db.getSocietyNames();
-
-        // Create the array lists for each society subgroup
-        for(String soc : allSocieties) {
-            int society_id = db.getSocietyIdByName(soc);
-            if(db.checkMember(society_id)) {
-                memberSocieties.add(soc);
-            }
-            if(db.checkCommittee(society_id)) {
-                committeeSocieties.add(soc);
-            }
-            if(db.checkChair(society_id)) {
-                chairSocieties.add(soc);
-            }
-        }
-
-        // Default selected group is all
-        currentSelected = allSocieties;
     }
 
     @Override
@@ -102,11 +74,9 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        IDView = (TextView) v.findViewById(R.id.textViewID);
         editNameView = (EditText) v.findViewById(R.id.editNameView);
         editMobileView = (EditText) v.findViewById(R.id.editMobileView);
-        editPhoneView = (EditText) v.findViewById(R.id.editPhoneView);
-        editFulltimeView = (RadioButton) v.findViewById(R.id.fullTimePartRadio);
+        editPhoneView = (EditText) v.findViewById(R.id.editEmergancyView);
 
         return v;
     }
@@ -137,20 +107,17 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         String userPhone = cursor.getString(phone_column);
         String fullPartTime = cursor.getString(full_time_column);
 
-        IDView.setText(Integer.toString(userID));
         editNameView.setText(userName);
         editMobileView.setText(userMobile);
         editPhoneView.setText(userPhone);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
 
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -167,18 +134,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-            * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-             * >Communicating with Other Fragments</a> for more information.
-            */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -218,7 +174,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
     public class UpdateSocietiesTask extends AsyncTask<Void, Void, Boolean> {
 
-        public UpdateSocietiesTask() {
+        public UpdateSocietiesTask()
+        {
 
         }
 
@@ -238,7 +195,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Boolean success)
+        {
             swipeLayout.setRefreshing(false);
         }
     }
