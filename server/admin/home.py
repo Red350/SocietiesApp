@@ -144,20 +144,27 @@ print("""Content-Type: text/html\n\n
         background-color: #4564a8;
         color: white;
     }
+
+    div.home
+    {
+        width: 20%%;
+        margin: auto;
+    }
     </style>
     </head>
 <body>
-                <p>
+<div class="main">
                 <form class="logout" action="home.py" method="post">
                     <input type="submit" name="logout" value="logout"> <br>
                 </form>
-                </p>
-                <p>Hello There</p>
+                <div class="home">
                 <h3>Search</h3>
                 <form class="search" action="home.py" method="post">
                     <select name="table">%s</select>
                     <input type="submit" name="search" value="search"> 
                 </form>
-                %s <br>
+                </div>
+
                 %s
-                </body></html>""" % (redirect, select, addLink, show_table))
+</div>
+                </body></html>""" % (redirect, select, show_table))

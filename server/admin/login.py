@@ -61,6 +61,12 @@ output = """<html>
         10px
     }
 
+    div
+    {
+        width: 50%%;
+        margin: auto;
+    }
+
     h1,h2,h3{line-height:1.2}
 
     </style>
@@ -68,14 +74,18 @@ output = """<html>
             <title>Login</title>
             </head>
             <body>
+            <div>
+                <p><h3>Societies App Admin</h3></p>
                 <p><form class="reg"action="login.py" method="post">
                     <label for="user">User Name</label><input type="text" name="user" value="%s"> <br>
                     <label for="pass">Password</label><input type="password" name="pass"> <br>
                     <label for="Submit">Submit</label><input type="submit" value="Submit"> <br>
                 </form></p>
                 <p>%s</p>
+                </div>
             </body>
             </html>""" % (redirect, user, err)
+
 
 print("Content-Type: text/html\n")
 print(output)
