@@ -10,6 +10,10 @@ The following is a submission for the third Object Oriented Programming assignme
 
 # You Tube
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Cg_J-sKSj7Q/0.jpg)](https://www.youtube.com/watch?v=Cg_J-sKSj7Q)
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/oROsaa0amNU/0.jpg)](https://www.youtube.com/watch?v=oROsaa0amNU)
+
 # Concept
 
 During the beginning of Dublin Institute of Technology's academic year of 2016/2017, each contributor to this repository recruited members for the Computer Science Society within the college. During this time period, it was then each contributor realised that there is no dedicated society application that is utilised across all institutes of education that students may use to get information about societies available to them. Once a few months past, the aforementioned contributors arranged to create a project together which shall be used as a submission for their Object Oriented Programmingc assignment. Through various meetings on what to design, it was then that student and contributor, Robert Vaughan, realised that the project provided the perfect opportunity to develop an application that can allow users to easily join societies and pull information on them.
