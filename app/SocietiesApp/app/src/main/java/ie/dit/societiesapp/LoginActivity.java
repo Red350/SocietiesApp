@@ -30,19 +30,9 @@ import java.util.ArrayList;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
-
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-     */
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+public class LoginActivity extends AppCompatActivity
+{
+    //Creating views
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -54,7 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     private String message = "";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         Log.d("LOGINDEBUG", "Activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -65,10 +56,14 @@ public class LoginActivity extends AppCompatActivity {
         errorField = (TextView)findViewById(R.id.loginErrorTextView);
         errorField.setText("");
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        {
             @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent)
+            {
+                //Checks for login call
+                if (id == R.id.login || id == EditorInfo.IME_NULL)
+                {
                     attemptLogin();
                     return true;
                 }
@@ -76,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //Button view
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
         //Login Button call
@@ -88,12 +84,13 @@ public class LoginActivity extends AppCompatActivity {
 
         Button registerButton = (Button) findViewById(R.id.registerSwitchButton);
 
+        //Listens for a register button click
         registerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
 
-                // if login is successful transition to main activity
+                //Goes to register activity
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
@@ -160,15 +157,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Shows the progress UI and hides the login form.
+    /*
+        Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+    private void showProgress(final boolean show)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2)
+        {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
@@ -197,9 +193,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+    /*
+        Represents an asynchronous login/registration task used to authenticate
+        the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -211,6 +207,7 @@ public class LoginActivity extends AppCompatActivity {
             mPassword = password;
         }
 
+        //Async task that will show animation while querying the database
         @Override
         protected Boolean doInBackground(Void... params)
         {
@@ -239,7 +236,9 @@ public class LoginActivity extends AppCompatActivity {
                         return false;
                     }
                     return true;
-                } else {
+                }
+                else
+                {
                     message = response.getMessage();
                 }
             }

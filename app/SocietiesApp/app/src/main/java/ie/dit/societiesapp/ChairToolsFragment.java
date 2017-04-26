@@ -20,16 +20,9 @@ import java.util.ArrayList;
 import layout.QRGenFragment;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ChairToolsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ChairToolsFragment#newInstance} factory method to
-        * create an instance of this fragment.
-        */
-public class ChairToolsFragment extends Fragment implements View.OnClickListener {
-
+public class ChairToolsFragment extends Fragment implements View.OnClickListener
+{
+    //Creation of views and listeners
     private OnFragmentInteractionListener mListener;
 
     private int society_id;
@@ -58,6 +51,8 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Retrieves stored ID
         if (getArguments() != null)
         {
             society_id = getArguments().getInt("society_id");
@@ -87,10 +82,10 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         deleteProgress = v.findViewById(R.id.chair_delete_progress);
 
         // Auto complete text view and searchAdapter for society names R.id.testytest
-//        ArrayAdapter<String> searchAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, societies);
-//        AutoCompleteTextView acTextView = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
-//        acTextView.setThreshold(1);
-//        acTextView.setAdapter(searchAdapter);
+        //ArrayAdapter<String> searchAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.select_dialog_singlechoice, societies);
+        //AutoCompleteTextView acTextView = (AutoCompleteTextView) v.findViewById(R.id.soc_search_field);
+        //acTextView.setThreshold(1);
+        //acTextView.setAdapter(searchAdapter);
 
         return v;
     }
@@ -119,22 +114,13 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-            * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-             * >Communicating with Other Fragments</a> for more information.
-            */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+    public interface OnFragmentInteractionListener
+    {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void addCommittee() {
+    private void addCommittee()
+    {
         String committee_email;
         committee_email = addTextView.getText().toString();
         addButton.setVisibility(View.GONE);
@@ -143,7 +129,9 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         addTask.execute();
     }
 
-    private void deleteCommittee() {
+    private void deleteCommittee()
+    {
+        //Send query with email to delete committee member
         String committee_email;
         committee_email = deleteTextView.getText().toString();
         deleteButton.setVisibility(View.GONE);
@@ -153,7 +141,11 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
     }
 
-    public void onClick(View v) {
+    /*
+        Listener for button clicks
+    */
+    public void onClick(View v)
+    {
         switch(v.getId()) {
             case R.id.chair_add_button:
                 addCommittee();
@@ -164,6 +156,10 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    /*
+        AsyncTask task with will query the database and add a member to the committee
+        if successful
+    */
     public class addCommitteeTask extends AsyncTask<Void, Void, Boolean> {
 
         private String committee_email;
@@ -173,7 +169,8 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         }
 
         @Override
-        protected void onPreExecute() {
+        protected void onPreExecute()
+        {
             // Disable views during execution
             addButton.setEnabled(false);
             deleteButton.setEnabled(false);
@@ -193,6 +190,7 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
             String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.add_committee_script);
 
+            //Creates connection to database and retrieves JSON response
             try
             {
                 String s = conn.post(url, args, getActivity().getApplicationContext());
@@ -202,7 +200,9 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
                 if(response.isValid())
                 {
                     return true;
-                } else {
+                }
+                else
+                {
                     return false;
                 }
             }
@@ -214,8 +214,13 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
             return false;
         }
 
+        /*
+            Checks the query result once finished to see if it true. The user will receive a
+            Toast for a true or false query
+        */
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Boolean success)
+        {
             // Buttons re-enabled and visible
             addProgress.setVisibility(View.GONE);
             addButton.setVisibility(View.VISIBLE);
@@ -229,7 +234,9 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), "Added committee member",
                         Toast.LENGTH_LONG).show();
                 Log.d("CHAIRTOOLSDEBUG", "Added successfully");
-            } else {
+            }
+            else
+            {
                 Toast.makeText(getActivity(), "Failed to add committee member",
                         Toast.LENGTH_LONG).show();
                 Log.d("CHAIRTOOLSDEBUG", "Failed to add");
@@ -237,6 +244,10 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    /*
+        AsyncTask task with will query the database and add a member to the committee
+        if successful
+    */
     public class deleteCommitteeTask extends AsyncTask<Void, Void, Boolean> {
 
         private String committee_email;
@@ -254,6 +265,7 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
             addTextView.setEnabled(false);
         }
 
+        //AsyncTask
         @Override
         protected Boolean doInBackground(Void... params)
         {
@@ -275,7 +287,9 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
                 if(response.isValid())
                 {
                     return true;
-                } else {
+                }
+                else
+                {
                     return false;
                 }
             }
@@ -287,6 +301,10 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
             return false;
         }
 
+        /*
+            Checks the query result once finished to see if it true. The user will receive a
+            Toast for a true or false query
+        */
         @Override
         protected void onPostExecute(final Boolean success) {
             // Buttons re-enabled and visible

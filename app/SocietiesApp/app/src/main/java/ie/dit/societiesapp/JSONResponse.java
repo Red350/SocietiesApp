@@ -9,7 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JSONResponse {
+public class JSONResponse
+{
     public static final String PREFS_NAME = "userData";
     private JSONObject json;
     private SharedPreferences userData;
@@ -18,7 +19,8 @@ public class JSONResponse {
     private int return_code;
     private String return_msg;
 
-    public JSONResponse(String s, Context context) throws JSONException {
+    public JSONResponse(String s, Context context) throws JSONException
+    {
         rawResponse = s;
         Log.d("JSONDEBUG", "Received: " + rawResponse);
         json = new JSONObject(rawResponse);
@@ -34,7 +36,8 @@ public class JSONResponse {
         }
     }
 
-    public JSONArray getArrayByKey(String key) throws JSONException {
+    public JSONArray getArrayByKey(String key) throws JSONException
+    {
         return json.getJSONArray(key);
     }
 
@@ -70,7 +73,7 @@ public class JSONResponse {
         }
     }
 
-
+    //Returns message
     public String getMessage()
     {
         return return_msg;
