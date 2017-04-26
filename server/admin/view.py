@@ -120,7 +120,7 @@ print("""
     </head>
 <body>
                 <p>
-                <form class="logout"action="home.py" method="post">
+                <form class="logout" action="home.py" method="post">
                     <input type="submit" name="logout" value="logout"> <br>
                 </form>
                 </p>
