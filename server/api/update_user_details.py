@@ -22,14 +22,11 @@ if api.check_keys(("member_id", "session_id", "name", "mobile", "emergency_ph"))
                + "name = '" + name + "', "
                + "mobile = '" + mobile + "', "
                + "emergency_ph = '" + emergency_ph + "' "
-               + "WHERE member_id = " + member_id
+               + "WHERE member_id = " + member_id + ";"
                )
         db.cur.execute(sql)
-        # Check that the user was created successfully
-        if db.cur.rowcount != 0:
-            response = api.set_returncode(0)
-        else:
-            response = api.set_returncode(6)
+
+        response = api.set_returncode(0)
     else:
         response = api.set_return_code(1)
 else:
