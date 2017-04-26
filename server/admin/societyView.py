@@ -29,7 +29,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
         database.cur.execute(sql)
         if database.cur.rowcount > 0:
             query = database.cur.fetchone()
-            
+            #Displays society details            
             show_table += "<table>"
             show_table += "<tr><th>Column Name</th><th>Column Value</th></tr>"
             show_table += "<tr><th>society_id</th><td>%s</td></tr>" % query[0]
@@ -38,6 +38,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':
             show_table += "<tr><th>description</th><td>%s</td></tr>" % query[3]
 
             show_table += "<tr><th>Society Chair</th><td>"
+
+            #Displays society chair
             sql = "SELECT member.name, member.email FROM member INNER JOIN society ON chair_id = member_id WHERE society_id = %s" % http.post['society_id'].value
             database.cur.execute(sql)
             if database.cur.rowcount > 0:
@@ -46,6 +48,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                     show_table += "%s %s<br>" % (soc[0], soc[1])
 
             show_table += "</td></tr>"
+
+            #Displays society committee members
             show_table += "<th>Society Committee Members</th><td>"
             sql = "SELECT member.name, member.email FROM member INNER JOIN committee_society USING (member_id) INNER JOIN society USING (society_id) WHERE society.society_id = %s" % http.post['society_id'].value
             database.cur.execute(sql)
@@ -54,7 +58,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                 for soc in societies:
                     show_table += "%s %s<br>" % (soc[0], soc[1]) 
             show_table += "</td></tr>"
-
+            
+            #Displays society members
             show_table += "<th>Society Members</th><td>"
             sql = "SELECT member.name, member.email FROM member INNER JOIN member_society USING (member_id) INNER JOIN society USING (society_id) WHERE society.society_id = %s" % http.post['society_id'].value
             database.cur.execute(sql)

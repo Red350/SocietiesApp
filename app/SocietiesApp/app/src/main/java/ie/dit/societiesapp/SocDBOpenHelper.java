@@ -141,6 +141,21 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean partialUpdateUserDetails(String name, String mobile, String emergency_ph) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("name", name);
+        cv.put("mobile", mobile);
+        cv.put("emergency_ph", emergency_ph);
+        long result = db.replace("user_details", null, cv);
+
+        if(result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     // Clear the user from being a member of any society
     public boolean clearMember() {
         return clearField("is_member");

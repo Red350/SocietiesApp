@@ -37,6 +37,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
     private EditText editNameView, editMobileView, editEmergencyPhoneView;
 
+    private View userUpdateProgress;
+
     public UserDetailsFragment() {
         // Required empty public constructor
     }
@@ -77,6 +79,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         updateButton = (Button) v.findViewById(R.id.updateButton);
         updateButton.setOnClickListener(this);
 
+        userUpdateProgress = v.findViewById(R.id.user_update_progress);
+
         return v;
     }
 
@@ -84,6 +88,10 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
     {
         super.onResume();
 
+        setTextFields();
+    }
+
+    private void setTextFields() {
         // get user data
         SharedPreferences userData = getContext().getSharedPreferences("userData", 0);
 
@@ -165,9 +173,28 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         }
     }
 
+    // Update the local database when the screen is pulled down
     public void onRefresh() {
-//        UpdateSocietiesTask updateTask = new UpdateSocietiesTask();
-//        updateTask.execute();
+        GetUserDetailsTask getUserDetailsTask = new GetUserDetailsTask();
+        getUserDetailsTask.execute();
+    }
+
+    // Disable view elements during an update
+    private void disableView() {
+        updateButton.setEnabled(false);
+
+        editNameView.setEnabled(false);
+        editMobileView.setEnabled(false);
+        editEmergencyPhoneView.setEnabled(false);
+    }
+
+    // Re-enable view updates
+    private void enableView() {
+        updateButton.setEnabled(true);
+
+        editNameView.setEnabled(true);
+        editMobileView.setEnabled(true);
+        editEmergencyPhoneView.setEnabled(true);
     }
 
     // Send the updated user details to the server
@@ -180,6 +207,15 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
             this.name = name;
             this.mobile = mobile;
             this.emergencyPhone = emergencyPhone;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // Make the view unclickable
+            disableView();
+            swipeLayout.setEnabled(false);
+            updateButton.setVisibility(View.GONE);
+            userUpdateProgress.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -203,7 +239,14 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
                 // Check if the details updated successfully
                 if(response.isValid())
                 {
-                    return true;
+                    // Only update the local database if the server updated
+                    SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
+                    if (db.partialUpdateUserDetails(name, mobile, emergencyPhone)) {
+                        return true;
+                    } else {
+                        Log.d("DETAILSDEBUG", "Failed to update local database");
+                        return false;
+                    }
                 } else {
                     Log.d("DETAILSDEBUG", response.getMessage());
                     return false;
@@ -221,6 +264,10 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         @Override
         protected void onPostExecute(final Boolean success)
         {
+            enableView();
+            swipeLayout.setEnabled(true);
+            updateButton.setVisibility(View.VISIBLE);
+            userUpdateProgress.setVisibility(View.GONE);
             if(success) {
                 Toast.makeText(getActivity(), "Details updated",
                         Toast.LENGTH_LONG).show();
@@ -237,7 +284,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
         public GetUserDetailsTask()
         {
-
+            disableView();
         }
 
         @Override
@@ -246,8 +293,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
             SocDBUpdater db = new SocDBUpdater(getActivity().getApplicationContext());
             try {
-                Log.d("SOCDEBUG", "Attempting to update local database");
-                db.updateAllSocietyData();
+                Log.d("DETAILSDEBUG", "Attempting to update local database");
+                db.updateUserDetails();
                 return true;
             } catch(Exception e) {
                 e.printStackTrace();
@@ -259,6 +306,9 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         protected void onPostExecute(final Boolean success)
         {
             swipeLayout.setRefreshing(false);
+            enableView();
+            // Refresh the text fields with the new values
+            setTextFields();
         }
     }
 }
