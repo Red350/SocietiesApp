@@ -74,7 +74,7 @@ All of the user’s information is stored on a local database once they login. W
 With the use of the ZXing library, the application can open the user’s camera to display a code scanner. Once the code is scanned, a thread will send a query that the QR has been scanned by that user to the server. The server will then add them to the society from which the code was generated from. 
 
 ### Society Search
-A search will me made to the local database of the list of available societies. A drop-down list will display of results that will allow a user to click into the result list of societies pages. Radio buttons under the search bar allow the search to. These pages will pull information from a database that will describe the society and depending on the user's credentials, buttons will display allowing them to either generate a QR code or utilise the Chair Tools. 
+Allows the user to search for a society by name. Possible results will display in a drop-down list. Radio buttons under the search bar allow the user to dynamically refine the list of searchable societies based on whether they are a member/committee/chair of a society. These pages will pull information from the local database that will describe the society and depending on the user's credentials, buttons will display allowing them to either generate a QR code or utilise the Chair Tools. 
 
 
 # API
@@ -82,9 +82,9 @@ A search will me made to the local database of the list of available societies. 
 The API is built in Python, and is connected to a MySQL database. Originally we intended to design a RESTful API, but that proved difficult as we were also using Python for the first time.
 Instead we have one script for each piece of functionality that the app requires for interacting with the database.
 
-All scripts take a post request, and return a JSON object.
+All callable scripts take a post request, and return a JSON object.
 The JSON always contains the fields "return_code" and "return_msg", to inform the app what the result of the request was.
-The following return_codes are also used in the case of an error:
+The following return codes are also used in the case of an error:
 
 | Return code | Return message                      |
 |-------------|-------------------------------------|
@@ -98,6 +98,8 @@ The following return_codes are also used in the case of an error:
 |      7      | Invalid permissions for this action |
 |      8      | Invalid join token                  |
 |      9      | Already a member                    |
+
+The scripts all make use of the api.py script to get the post data, set return codes, set the header, and send the response. Database access is done through the database.py module.
 
 ## Security
 Two things that were never implemented HTTPS support and defending against SQL injections. Both of these would be quite simple to fit into the system, and other than that, the server is very secure.
@@ -139,6 +141,7 @@ Views societies in more detail including their members/committee members/chair
 
 * Secure password salting and hashing
 * Dynamically updated search view using radio buttons
+* Progress bars during app operations
 * Pull down screen to refresh local data from server
 * QR codes generated and stored on server
 * Fully operational login/register features that are handled on Raspberry Pi
