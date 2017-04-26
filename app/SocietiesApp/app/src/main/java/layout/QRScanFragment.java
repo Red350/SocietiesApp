@@ -3,6 +3,7 @@ package layout;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -32,6 +33,7 @@ import ie.dit.societiesapp.Http;
 import ie.dit.societiesapp.JSONResponse;
 import ie.dit.societiesapp.NameValuePair;
 import ie.dit.societiesapp.R;
+import ie.dit.societiesapp.SocDBOpenHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -183,6 +185,12 @@ public class QRScanFragment extends Fragment
                 // Check to see if login succeeded
                 if(response.isValid())
                 {
+                    // Set the user as a member in the local database
+                    SharedPreferences userData = getContext().getSharedPreferences("userData", 0);
+                    int userID = Integer.parseInt(userData.getString("member_id", "-1"));
+                    SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
+                    db.setMember(userID, 1);
+
                     return true;
                 } else {
                     Log.d("QRDEBUG", "Failed to join soc: " + response.getMessage());

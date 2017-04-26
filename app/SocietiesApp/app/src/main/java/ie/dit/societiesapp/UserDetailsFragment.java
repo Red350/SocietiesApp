@@ -37,6 +37,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
     private EditText editNameView, editMobileView, editEmergencyPhoneView;
 
+    private View userUpdateProgress;
+
     public UserDetailsFragment() {
         // Required empty public constructor
     }
@@ -77,6 +79,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         updateButton = (Button) v.findViewById(R.id.updateButton);
         updateButton.setOnClickListener(this);
 
+        userUpdateProgress = v.findViewById(R.id.user_update_progress);
+
         return v;
     }
 
@@ -84,6 +88,10 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
     {
         super.onResume();
 
+        setTextFields();
+    }
+
+    private void setTextFields() {
         // get user data
         SharedPreferences userData = getContext().getSharedPreferences("userData", 0);
 
@@ -165,12 +173,13 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         }
     }
 
+    // Update the local database when the screen is pulled down
     public void onRefresh() {
         GetUserDetailsTask getUserDetailsTask = new GetUserDetailsTask();
         getUserDetailsTask.execute();
-
     }
 
+    // Disable view elements during an update
     private void disableView() {
         updateButton.setEnabled(false);
 
@@ -179,6 +188,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         editEmergencyPhoneView.setEnabled(false);
     }
 
+    // Re-enable view updates
     private void enableView() {
         updateButton.setEnabled(true);
 
@@ -204,6 +214,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
             // Make the view unclickable
             disableView();
             swipeLayout.setEnabled(false);
+            updateButton.setVisibility(View.GONE);
+            userUpdateProgress.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -254,6 +266,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         {
             enableView();
             swipeLayout.setEnabled(true);
+            updateButton.setVisibility(View.VISIBLE);
+            userUpdateProgress.setVisibility(View.GONE);
             if(success) {
                 Toast.makeText(getActivity(), "Details updated",
                         Toast.LENGTH_LONG).show();
@@ -293,6 +307,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         {
             swipeLayout.setRefreshing(false);
             enableView();
+            // Refresh the text fields with the new values
+            setTextFields();
         }
     }
 }
