@@ -65,6 +65,18 @@ Queries a database on a webserver once someone logs in or registers. Both operat
 ### Home
 Makes use of fragments to display different layouts within the homepage. A navigation drawer will control the movement between different fragments. All user data is pulled from a local database or instance while the app is running. 
 
+### QR Generator
+Server is queried to create a token which will be return upon success. This token will be intserted into a URL which will point to the the QR code. The app with display the QR code and shall only be readable once.
+
+### User Details
+All of the users information is stored on a local database once they login. When they wish to edit their data, the database will be queried to return all required information. The information will be displayed in edit text fields, allowing a user to update their data. If an update query is made, the server will update will update the users information.
+
+### QR Scanner
+With the use of the ZXing library, the application can open the users camera to display a code scanner. Once the code is scanned, a thread will send a query that the QR has been scanned by that user to the server. The server will then add them to the society from which the code was generated from. 
+
+### Society Search
+A search will me made to the local database of the list of available socities. A drop-down list will display of results that will allow a user to click into the result list of socities pages. Radio buttons under the serach bar allow the search to  These pages will pull information from a database that will describe the society and depending on the user's credentials, buttons will display allowing them to either generate a QR code or utilise the Chair Tools. 
+
 ## Back-End
 
 ## Admin Tools
@@ -78,8 +90,6 @@ Makes use of fragments to display different layouts within the homepage. A navig
 * Fragmentation within that app utilised
 * Application utilises session_id's to keep the user logged in
 * Error handling on login and register
-
-# Code
 
 # Download
 
