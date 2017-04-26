@@ -97,23 +97,54 @@ A search will me made to the local database of the list of available societies. 
 
 ## Back-End
 
-## Admin Tools
+### API
+The API is built in Python, and is connected to a MySQL database. Originally we intended to design a RESTful API, but that proved difficult as we were also using Python for the first time.
+Instead we have one script for each piece of functionality that the app requires for interacting with the database.
 
-### Login
+All scripts take a post request, and return a JSON object.
+The JSON always contains the fields "return_code" and "return_msg", to inform the app what the result of the request was.
+The following return_codes are also used in the case of an error:
+
+| 0 | Success                             |
+|---|-------------------------------------|
+| 1 | Invalid session id                  |
+| 2 | Invalid username or password        |
+| 3 | Email already in use                |
+| 4 | Email not verified                  |
+| 5 | Incorrectly formatted request       |
+| 6 | Database error                      |
+| 7 | Invalid permissions for this action |
+| 8 | Invalid join token                  |
+| 9 | Already a member                    |
+
+## Security
+Two things we never succeeded in completely were HTTPS support and defending against SQL injections. Both of these would be quite simple to fit in to our system, and other than that, the server is very secure. When logging in, the user's password is paired with a randomly generated 128 bit salt, and passed to a cryptographic hash function. Both the resulting hash and the salt are the only things stored.
+This method protects against both rainbow tables and brute force attacks, even if the database is compromised.
+
+After the server confirms the user's login, it returns a randomly generated 128bit session ID, which paired with the user's member ID, is the only way to validate themselves with the server for future requests. With this setup, the user's password is only ever sent to the server once, and is never stored on either the server or the app.
+
+## QR Code Generation
+To join a society, the user must scan a generated QR code from a committee member's app. The QR code consists of two JSON fields, the society ID and a token. When the QR code is generated, these two values are stored in the database, along with the timestamp of the creation time. When a user sends a request to join a society, the token and society ID are checked against that database to ensure they are valid, along with checking the timestamp. QR codes are setup to expire after 5 minutes, and in the case where they do, the user will not be permitted to join the society with that token.
+
+On a request being received, the server will check the database for expired QR codes, and will delete the locally stored images along with the database entries.
+
+### Admin Tools
+
+#### Login
 This is where the admin logs in to the tools. If the admin enters the details correctly they are issue in session_id
 in the form of a cookie. This cookie must be recieved in every other page otherwise the admin will be redirected back to
 the login page.
 
-### home
+#### home
 This is where the admin can view the contents of all tables. They can view certain tables 
 in more detail.
 
-### edit
+#### edit
 Allows the user to edit fields in a database entry.
 The user is not allowed edit primary keys or timestamps to prevent them breaking the db
-### view
+#### view
 Views a memeber in more detail including societies they are chair/committee/member of.
-### societiesView
+#### societiesView
 Views societies in more detail including their members/committee members/chair
  
 # Key Notes
