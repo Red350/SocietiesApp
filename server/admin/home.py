@@ -57,6 +57,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
             query = database.cur.fetchall()
             #stores all column names
             for row in query:
+                #excludes hashes and salts
                 if row[0].find('pass_hash') >= 0:
                     pass
                 elif row[0].find('salt') >= 0:
@@ -73,7 +74,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                 sql += " %s," % name
                 #adds column name to table header
                 show_table += "<th>%s</th>" % name
-
+            
             show_table += "<th>Options</th>"
             show_table += "</tr>"
 
@@ -94,8 +95,9 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                     if second == 1:
                         sndkey = row[1]
                         
-                        
+                    #Adds edit option to row      
                     show_table += """<td><form method="POST" action="edit.py" id="edit"><button form="edit" name="edit" type="submit" value="%s">Edit</button><input type="hidden" name="key" value="%s"><input type="hidden" name="table" value="%s"></form>""" % (row[0], sndkey, http.post['table'].value)
+                    #Addes view option to table if available
                     if http.post['table'].value == 'member':
                         show_table += """<form method="POST" action="view.py" id="view"><button form="view" name="member_id" type="submit" value="%s">View</button></form>""" % row[0]
 
