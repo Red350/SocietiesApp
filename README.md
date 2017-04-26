@@ -55,6 +55,24 @@ If a user wishes to edit their details, their current information will be displa
 
 The chair tools allows a Chair user of a society to add and remove members from the society with their emails. 
 
+## Back-End
+
+### Admin Tools
+
+### Home
+Allows the admin to view all entries in the database.
+
+### Edit
+Allows the admin to edit all entries excluding primary keys and timestamps
+
+### View
+Allows the admin to view memmbers in more detail
+
+### SocietiesView
+Allows the admin to view societies in more detail
+
+###
+
 # Implementation
 
 ## Front-End
@@ -80,6 +98,23 @@ A search will me made to the local database of the list of available societies. 
 ## Back-End
 
 ## Admin Tools
+
+### Login
+This is where the admin logs in to the tools. If the admin enters the details correctly they are issue in session_id
+in the form of a cookie. This cookie must be recieved in every other page otherwise the admin will be redirected back to
+the login page.
+
+### home
+This is where the admin can view the contents of all tables. They can view certain tables 
+in more detail.
+
+### edit
+Allows the user to edit fields in a database entry.
+The user is not allowed edit primary keys or timestamps to prevent them breaking the db
+### view
+Views a memeber in more detail including societies they are chair/committee/member of.
+### societiesView
+Views societies in more detail including their members/committee members/chair
  
 # Key Notes
 
