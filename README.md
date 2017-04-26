@@ -100,10 +100,12 @@ The following return_codes are also used in the case of an error:
 |      9      | Already a member                    |
 
 ## Security
-Two things we never succeeded in completely were HTTPS support and defending against SQL injections. Both of these would be quite simple to fit in to our system, and other than that, the server is very secure. When logging in, the user's password is paired with a randomly generated 128 bit salt, and passed to a cryptographic hash function. Both the resulting hash and the salt are the only things stored.
+Two things that were never implemented HTTPS support and defending against SQL injections. Both of these would be quite simple to fit into the system, and other than that, the server is very secure.
+
+When logging in, the user's password is paired with a randomly generated 128 bit salt, and passed to a cryptographic hash function. Both the resulting 256 bit hash and the salt are the only things stored.
 This method protects against both rainbow tables and brute force attacks, even if the database is compromised.
 
-After the server confirms the user's login, it returns a randomly generated 128bit session ID, which paired with the user's member ID, is the only way to validate themselves with the server for future requests. With this setup, the user's password is only ever sent to the server once, and is never stored on either the server or the app.
+After the server confirms the user's login, it returns a randomly generated 128 bit session ID, which paired with the user's member ID, is the only way to validate themselves with the server for future requests. With this setup, the user's password is only ever sent to the server once, and is never stored on either the server or the app.
 
 ## QR Code Generation
 To join a society, the user must scan a generated QR code from a committee member's app. The QR code consists of two JSON fields, the society ID and a token. When the QR code is generated, these two values are stored in the database, along with the timestamp of the creation time. When a user sends a request to join a society, the token and society ID are checked against that database to ensure they are valid, along with checking the timestamp. QR codes are setup to expire after 5 minutes, and in the case where they do, the user will not be permitted to join the society with that token.
@@ -149,7 +151,9 @@ Views societies in more detail including their members/committee members/chair
  
 # Key Notes
 
-* QR generator within the application
+* Secure password salting and hashing
+* Dynamically updated search view using radio buttons
+* QR codes generated and stored on server
 * Fully operation login/register features that are handled on Raspberry Pi
 * All server capabilities are hosted on a Raspberry Pi
 * QR scanner within the application
