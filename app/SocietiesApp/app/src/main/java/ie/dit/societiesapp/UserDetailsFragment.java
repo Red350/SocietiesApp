@@ -12,17 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-
-import layout.SocietyFragment;
 
 
 /**
@@ -39,7 +33,9 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
     private SwipeRefreshLayout swipeLayout;
 
-    private EditText editNameView, editMobileView, editPhoneView;
+    private Button updateButton;
+
+    private EditText editNameView, editMobileView, editEmergencyPhoneView;
 
     public UserDetailsFragment() {
         // Required empty public constructor
@@ -76,7 +72,10 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
         editNameView = (EditText) v.findViewById(R.id.editNameView);
         editMobileView = (EditText) v.findViewById(R.id.editMobileView);
-        editPhoneView = (EditText) v.findViewById(R.id.editEmergancyView);
+        editEmergencyPhoneView = (EditText) v.findViewById(R.id.editEmergencyView);
+
+        updateButton = (Button) v.findViewById(R.id.updateButton);
+        updateButton.setOnClickListener(this);
 
         return v;
     }
@@ -104,11 +103,11 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
         String userName = emptyString(cursor.getString(name_column));
         String userMobile = emptyString(cursor.getString(mobile_column));
-        String emergancyPhone = emptyString(cursor.getString(phone_column));
+        String emergencyPhone = emptyString(cursor.getString(phone_column));
 
         editNameView.setText(userName);
         editMobileView.setText(userMobile);
-        editPhoneView.setText(emergancyPhone);
+        editEmergencyPhoneView.setText(emergencyPhone);
     }
 
     public void onButtonPressed(Uri uri) {
@@ -149,43 +148,94 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         void onFragmentInteraction(Uri uri);
     }
 
-    public void loadSocFragment() {
-        AutoCompleteTextView searchView = (AutoCompleteTextView) getView().findViewById(R.id.soc_search_field);
-        String s = searchView.getText().toString();
-        SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
-        int id = db.getSocietyIdByName(s);
-
-        if(id != -1) {
-            SocietyFragment societyFragment = SocietyFragment.newInstance(id);
-            this.getFragmentManager().beginTransaction().replace(
-                    R.id.relative_layout_for_fragment,
-                    societyFragment,
-                    societyFragment.getTag())
-                    .addToBackStack(societyFragment.getTag())
-                    .commit();
-        }
-
-    }
 
     public void onClick(View v) {
+        Log.d("DETAILSDEBUG", "Screen pressed");
         switch(v.getId()) {
-            case R.id.soc_search_button:
-                Log.d("SOCDEBUG", "Button clicked");
-                loadSocFragment();
+            // Send the user's details to the server
+            case R.id.updateButton:
+                Log.d("DETAILSDEBUG", "Button clicked");
+                String name = editNameView.getText().toString();
+                String mobile = editMobileView.getText().toString();
+                String emergencyPhone = editEmergencyPhoneView.getText().toString();
+
+                UpdateUserDetailsTask updateUserDetailsTask = new UpdateUserDetailsTask(name, mobile, emergencyPhone);
+                updateUserDetailsTask.execute();
                 break;
-            case R.id.radio_search:
-                Log.d("RADIODEBUG", "Radio clicked");
         }
     }
 
     public void onRefresh() {
-        UpdateSocietiesTask updateTask = new UpdateSocietiesTask();
-        updateTask.execute();
+//        UpdateSocietiesTask updateTask = new UpdateSocietiesTask();
+//        updateTask.execute();
     }
 
-    public class UpdateSocietiesTask extends AsyncTask<Void, Void, Boolean> {
+    // Send the updated user details to the server
+    public class UpdateUserDetailsTask extends AsyncTask<Void, Void, Boolean> {
 
-        public UpdateSocietiesTask()
+        private String name, mobile, emergencyPhone;
+
+        public UpdateUserDetailsTask(String name, String mobile, String emergencyPhone)
+        {
+            this.name = name;
+            this.mobile = mobile;
+            this.emergencyPhone = emergencyPhone;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            Http conn = new Http();
+            JSONResponse response;
+
+            ArrayList<NameValuePair> args = new ArrayList<NameValuePair>();
+            args.add(new NameValuePair("name", name));
+            args.add(new NameValuePair("mobile", mobile));
+            args.add(new NameValuePair("emergency_ph", emergencyPhone));
+
+            String url = getString(R.string.base_url) + getString(R.string.script_bin) + getString(R.string.update_user_details_script);
+
+            try
+            {
+                String s = conn.post(url, args, getActivity().getApplicationContext());
+                response = new JSONResponse(s, getActivity().getApplicationContext());
+
+                // Check if the details updated successfully
+                if(response.isValid())
+                {
+                    return true;
+                } else {
+                    Log.d("DETAILSDEBUG", response.getMessage());
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                Log.d("DETAILSDEBUG", e.toString());
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success)
+        {
+            if(success) {
+                Toast.makeText(getActivity(), "Details updated",
+                        Toast.LENGTH_LONG).show();
+                Log.d("DETAILSDEBUG", "Details updated");
+            } else {
+                Toast.makeText(getActivity(), "Failed to update details",
+                        Toast.LENGTH_LONG).show();
+                Log.d("DETAILSDEBUG", "Failed to update details");
+            }
+        }
+    }
+
+    public class GetUserDetailsTask extends AsyncTask<Void, Void, Boolean> {
+
+        public GetUserDetailsTask()
         {
 
         }
