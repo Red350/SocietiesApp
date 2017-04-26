@@ -100,21 +100,32 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         int name_column = cursor.getColumnIndex("name");
         int mobile_column = cursor.getColumnIndex("mobile");
         int phone_column = cursor.getColumnIndex("emergency_ph");
-        int full_time_column = cursor.getColumnIndex("full_part_time");
+        //int full_time_column = cursor.getColumnIndex("full_part_time");
 
-        String userName = cursor.getString(name_column);
-        String userMobile = cursor.getString(mobile_column);
-        String userPhone = cursor.getString(phone_column);
-        String fullPartTime = cursor.getString(full_time_column);
+        String userName = emptyString(cursor.getString(name_column));
+        String userMobile = emptyString(cursor.getString(mobile_column));
+        String emergancyPhone = emptyString(cursor.getString(phone_column));
 
         editNameView.setText(userName);
         editMobileView.setText(userMobile);
-        editPhoneView.setText(userPhone);
+        editPhoneView.setText(emergancyPhone);
     }
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    private String emptyString(String value)
+    {
+        if (value.equals("-"))
+        {
+            return "";
+        }
+        else
+        {
+            return value;
         }
     }
 
