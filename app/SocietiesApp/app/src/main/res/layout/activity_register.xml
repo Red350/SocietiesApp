@@ -51,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Name"
+                    android:maxLines="1"
                     android:inputType="textPersonName" />
             </android.support.design.widget.TextInputLayout>
 
@@ -63,6 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:maxLines="1"
                     android:hint="StudentID"
                     android:inputType="textPersonName" />
 
@@ -109,7 +111,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Email"
-                    android:inputType="textPersonName" />
+                    android:maxLines="1"
+                    android:inputType="textEmailAddress" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -122,6 +125,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:maxLines="1"
                     android:hint="Password"
                     android:inputType="textPassword" />
 
@@ -136,6 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:maxLines="1"
                     android:hint="Re-enter Password"
                     android:inputType="textPassword" />
 
@@ -152,6 +157,7 @@
                     android:ems="10"
                     android:hint="Date of Birth"
                     android:focusable="false"
+                    android:maxLines="1"
                     android:onClick="setDate"
                     android:inputType="datetime" />
 
@@ -167,6 +173,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Phone Number"
+                    android:maxLines="1"
                     android:inputType="phone" />
 
             </android.support.design.widget.TextInputLayout>
@@ -180,6 +187,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:maxLines="1"
                     android:hint="Emergency Number"
                     android:inputType="phone" />
 
