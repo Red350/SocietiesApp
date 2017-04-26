@@ -114,21 +114,7 @@ On a request being received, the server will check the database for expired QR c
 
 # Admin Tools
 
-## Features
-
-### Home
-Allows the admin to view all entries in the database.
-
-### Edit
-Allows the admin to edit all entries excluding primary keys and timestamps
-
-### View
-Allows the admin to view memmbers in more detail
-
-### SocietiesView
-Allows the admin to view societies in more detail
-
-## Implementation
+## Features/Implementation
 
 ### Login
 This is where the admin logs in to the tools. If the admin enters the details correctly they are issue in session_id
