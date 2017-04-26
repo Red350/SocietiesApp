@@ -205,14 +205,14 @@ public class QRScanFragment extends Fragment
                 Log.d("QRDEBUG", "Society Successfully joined");
                 //statusField.setTextColor(Color.parseColor("#0061AA"));
                 //statusField.setText("Joined");
-                Toast.makeText(getActivity(), "Joined", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "Joined", Toast.LENGTH_LONG).show();
             }
             else
             {
                 // Show an error message to the user I suppose
                 //statusField.setTextColor(Color.parseColor("#CC0000"));
                 //statusField.setText("Failed to join");
-                Toast.makeText(getActivity(), "Failed to Join", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "Failed to Join", Toast.LENGTH_LONG).show();
             }
         }
     }
