@@ -32,13 +32,14 @@ public class HomeActivity extends AppCompatActivity
         QRGenFragment.OnFragmentInteractionListener,
         SocietyFragment.OnFragmentInteractionListener,
         ChairToolsFragment.OnFragmentInteractionListener,
-        UserDetailsFragment.OnFragmentInteractionListener
-{
+        UserDetailsFragment.OnFragmentInteractionListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        //Gets tools
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -101,9 +102,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         /*
         //noinspection SimplifiableIfStatement
@@ -115,6 +113,9 @@ public class HomeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+        Method that checks the navigation bar and listens for a clicked option
+    */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

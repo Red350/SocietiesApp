@@ -8,10 +8,16 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-public class StartupActivity extends AppCompatActivity {
 
+/*
+    On startup, this activity will be called to check whether the user is logged in or not.
+    If so, they will pass the login page
+*/
+public class StartupActivity extends AppCompatActivity
+{
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup);
 
@@ -22,7 +28,8 @@ public class StartupActivity extends AppCompatActivity {
         checkAlreadyLoggedInTask.execute();
     }
 
-    public class CheckAlreadyLoggedInTask extends AsyncTask<Void, Void, Boolean> {
+    public class CheckAlreadyLoggedInTask extends AsyncTask<Void, Void, Boolean>
+    {
 
         @Override
         protected Boolean doInBackground(Void... params)
@@ -43,7 +50,9 @@ public class StartupActivity extends AppCompatActivity {
                 if(response.isValid())
                 {
                     return true;
-                } else {
+                }
+                else
+                {
                     return false;
                 }
             }
@@ -56,14 +65,17 @@ public class StartupActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Boolean success)
+        {
             if (success)
             {
                 finish();
                 // If already logged in, transition to home activity
                 Intent intent = new Intent(StartupActivity.this, HomeActivity.class);
                 startActivity(intent);
-            } else {
+            }
+            else
+            {
                 finish();
                 // If not logged in, transition to login activity
                 Intent intent = new Intent(StartupActivity.this, LoginActivity.class);

@@ -20,12 +20,17 @@ print("Content-Type: text/html\r\n\r\n");
 redirect = database.check_cookie(os.environ)
 
 if os.environ['REQUEST_METHOD'] == 'POST':
+    #Selects all column names
     if 'table' in http.post:
         sql = "SHOW columns FROM %s" % http.post['table'].value
         database.cur.execute(sql)
         show_form += """<form action="edit.py" method="POST">"""
+
         if database.cur.rowcount > 0:
             query = database.cur.fetchall()
+            #filters out primary keys and timestamps and 
+            #hashes and salts
+            #Decides the correct input type for each column
             for row in query:
                 name = [row[0]]
                 if name[0].find('pass') >= 0:
@@ -53,6 +58,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':
                 else:
                     varList += ['text']
                     varLength += ['10']
+
+            #Retrieves data from columns
             sql = "SELECT"
             for name in nameList:
                 sql += " %s," % name
@@ -64,14 +71,14 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 
             database.cur.execute(sql)
             query = database.cur.fetchone();
-
+            #Creates header for form
             show_form += "<table>"
             show_form += "<tr>"
             for name in nameList:
                 show_form += "<th>%s</th>" % name
             show_form += "</tr><tr>"
 
-
+            #Generates form
             for i in range(len(varList)):
                 show_form += """<td><input name="%s" type="%s" maxlength="%s" value="%s"></td>""" % (nameList[i], varList[i], varLength[i], query[i])
 
@@ -83,6 +90,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
 
             show_form += "</table>"
 
+#Updates table with new values
 if 'insert_table' in http.post:
     sql = "SHOW COLUMNS FROM %s" % http.post['insert_table'].value
     database.cur.execute(sql)
@@ -107,8 +115,11 @@ if 'insert_table' in http.post:
     sql += " WHERE %s=%s" % (query[0][0], http.post[query[0][0]].value)
     if query[1][3] == 'PRI':
         sql += " AND %s=%s" % (query[1][0], http.post[query[1][0]].value)
-    print("Successfully added<br>")
     database.cur.execute(sql)   
+    if database.cur.rowcount > 0:
+        print("Successfully Updated<br>")
+    else:
+        print("No changes/Failed to update<br>")
 
 database.close()
 

@@ -58,6 +58,7 @@ public class RegisterActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //Point variables to views
         nameView = (EditText) findViewById(R.id.nameRegText);
         idView = (EditText) findViewById(R.id.idRegText);
         emailView = (EditText) findViewById(R.id.emailRegText);
@@ -106,6 +107,7 @@ public class RegisterActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    //Date picker object created
     @Override
     protected Dialog onCreateDialog(int id) {
         // TODO Auto-generated method stub
@@ -163,6 +165,7 @@ public class RegisterActivity extends AppCompatActivity
         }
     }
 
+    //Points to login
     public void sendMessage(View view)
     {
         Intent intent = new Intent(this, LoginActivity.class);
@@ -310,6 +313,7 @@ public class RegisterActivity extends AppCompatActivity
         }
     }
 
+    //Formats the date of birth
     private String formatDOB(String inputDate)
     {
         String[] parts = inputDate.split("/");
