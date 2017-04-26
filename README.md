@@ -156,6 +156,8 @@ Views societies in more detail including their members/committee members/chair
 * Fragmentation within that app utilised
 * Application utilises session_id's to keep the user logged in
 * Error handling on login and register
+* Back end is written entirely in python, which we had to learn ourselves.
+* Admin tools generates html tables dynamically based on tables in the database.
 
 # Download
 
