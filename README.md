@@ -16,9 +16,10 @@ During the beginning of Dublin Institute of Technology's academic year of 2016/2
 
 The original concept agreed by the group was to create an application where a user could scan a generated QR Code that would instantly add them to a society. This is to reduce the time a person takes filling out forms for every society that takes around two to three minutes into a ten to fifteen second interaction. The application will also allow a user to search all of the available societies within the college and give any committee member user tools to add people to the society by generating QR codes. A Chair user may also have the power to update the committee and society with in-app tools. The group also deemed it fit to create an admin web interface that will allow administrators to view requested data. 
 
-# Features
 
-## Front-End
+# App
+
+## Features
 
 The front end of the application was developed using Android Studio. The application will launch with a Stater Activity that will check if the user has valid credentials saved within the application's database to log in. If so, the application will direct the user to the homepage. If not, the user will be sent to the to the Login Activity. The Login utilises support text hint layouts to allow the fields to animate movement once clicked on and contains two buttons, 'Login' and 'Register'. If a user attempts a login, error checking will occur and the entered fields to ensure if they are valid. If the fields are not valid, a focus will be set on the field with the error message, if the credentials are valid but the login fails, an error message will return to the user. All of these features may also be found in the Register Activity.
 
@@ -55,27 +56,7 @@ If a user wishes to edit their details, their current information will be displa
 
 The chair tools allows a Chair user of a society to add and remove members from the society with their emails. 
 
-## Back-End
-
-### Admin Tools
-
-### Home
-Allows the admin to view all entries in the database.
-
-### Edit
-Allows the admin to edit all entries excluding primary keys and timestamps
-
-### View
-Allows the admin to view memmbers in more detail
-
-### SocietiesView
-Allows the admin to view societies in more detail
-
-###
-
-# Implementation
-
-## Front-End
+## Implementation
 
 ### Login/Register
 Queries a database on a webserver once someone logs in or registers. Both operations deal with input errors and failed queries and will display appropriate error messaging.
@@ -95,9 +76,9 @@ With the use of the ZXing library, the application can open the user’s camera 
 ### Society Search
 A search will me made to the local database of the list of available societies. A drop-down list will display of results that will allow a user to click into the result list of societies pages. Radio buttons under the search bar allow the search to. These pages will pull information from a database that will describe the society and depending on the user's credentials, buttons will display allowing them to either generate a QR code or utilise the Chair Tools. 
 
-## Back-End
 
-### API
+# API
+
 The API is built in Python, and is connected to a MySQL database. Originally we intended to design a RESTful API, but that proved difficult as we were also using Python for the first time.
 Instead we have one script for each piece of functionality that the app requires for interacting with the database.
 
@@ -105,17 +86,18 @@ All scripts take a post request, and return a JSON object.
 The JSON always contains the fields "return_code" and "return_msg", to inform the app what the result of the request was.
 The following return_codes are also used in the case of an error:
 
-| 0 | Success                             |
-|---|-------------------------------------|
-| 1 | Invalid session id                  |
-| 2 | Invalid username or password        |
-| 3 | Email already in use                |
-| 4 | Email not verified                  |
-| 5 | Incorrectly formatted request       |
-| 6 | Database error                      |
-| 7 | Invalid permissions for this action |
-| 8 | Invalid join token                  |
-| 9 | Already a member                    |
+| Return code | Return message                      |
+|-------------|-------------------------------------|
+|      0      | Success                             |
+|      1      | Invalid session id                  |
+|      2      | Invalid username or password        |
+|      3      | Email already in use                |
+|      4      | Email not verified                  |
+|      5      | Incorrectly formatted request       |
+|      6      | Database error                      |
+|      7      | Invalid permissions for this action |
+|      8      | Invalid join token                  |
+|      9      | Already a member                    |
 
 ## Security
 Two things we never succeeded in completely were HTTPS support and defending against SQL injections. Both of these would be quite simple to fit in to our system, and other than that, the server is very secure. When logging in, the user's password is paired with a randomly generated 128 bit salt, and passed to a cryptographic hash function. Both the resulting hash and the salt are the only things stored.
@@ -128,23 +110,41 @@ To join a society, the user must scan a generated QR code from a committee membe
 
 On a request being received, the server will check the database for expired QR codes, and will delete the locally stored images along with the database entries.
 
-### Admin Tools
+# Admin Tools
 
-#### Login
+## Features
+
+### Home
+Allows the admin to view all entries in the database.
+
+### Edit
+Allows the admin to edit all entries excluding primary keys and timestamps
+
+### View
+Allows the admin to view memmbers in more detail
+
+### SocietiesView
+Allows the admin to view societies in more detail
+
+## Implementation
+
+### Login
 This is where the admin logs in to the tools. If the admin enters the details correctly they are issue in session_id
 in the form of a cookie. This cookie must be recieved in every other page otherwise the admin will be redirected back to
 the login page.
 
-#### home
+### home
 This is where the admin can view the contents of all tables. They can view certain tables 
 in more detail.
 
-#### edit
+### edit
 Allows the user to edit fields in a database entry.
 The user is not allowed edit primary keys or timestamps to prevent them breaking the db
-#### view
+
+### view
 Views a memeber in more detail including societies they are chair/committee/member of.
-#### societiesView
+
+### societiesView
 Views societies in more detail including their members/committee members/chair
  
 # Key Notes
