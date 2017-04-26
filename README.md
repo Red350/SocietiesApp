@@ -139,13 +139,12 @@ Views societies in more detail including their members/committee members/chair
 
 * Secure password salting and hashing
 * Dynamically updated search view using radio buttons
+* Pull down screen to refresh local data from server
 * QR codes generated and stored on server
-* Fully operation login/register features that are handled on Raspberry Pi
+* Fully operational login/register features that are handled on Raspberry Pi
 * All server capabilities are hosted on a Raspberry Pi
 * QR scanner within the application
-* Fragmentation within that app utilised
 * Application utilises session_id's to keep the user logged in
-* Error handling on login and register
 * Back end is written entirely in python, which we had to learn ourselves.
 * Admin tools generates html tables dynamically based on tables in the database.
 

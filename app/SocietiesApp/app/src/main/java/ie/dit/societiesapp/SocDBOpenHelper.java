@@ -141,13 +141,14 @@ public class SocDBOpenHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean partialUpdateUserDetails(String name, String mobile, String emergency_ph) {
+    // Used to update user details through the user details fragment
+    public boolean partialUpdateUserDetails(int member_id, String name, String mobile, String emergency_ph) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("name", name);
         cv.put("mobile", mobile);
         cv.put("emergency_ph", emergency_ph);
-        long result = db.replace("user_details", null, cv);
+        long result = db.update("user_details", cv, "member_id = " + member_id, null);
 
         if(result == -1) {
             return false;
