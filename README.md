@@ -24,8 +24,8 @@ The front end of the application was developed using Android Studio. The applica
 
 Once the user has entered valid details, they are placed in the Home Activity. The Home Activity contains Fragments which allow for modularity to take place within the application. These fragments are controlled by a navigation drawer which acts as a sub-menu within the application. The following is the list of fragments/sub-headings:
 
-* Socitey Fragment
-* Search Sociteies
+* Society Fragment
+* Search Societies
 * Scan QR Code
 * Generate QR Code
 * Update User Details
@@ -41,15 +41,15 @@ This fragment allows a user to search for societies within the app. The search d
 
 ### Scan QR Code
 
-When a user clicks on 'Scan QR' in the navigation drawer, a QR scanner will access their camera and display a code reader. Once a user scans a QR code, a query will be sent to the server to detmine if the QR code is valid. If not, the appropriate error handling will take place. If so, the user will be apart of that socitey.
+When a user clicks on 'Scan QR' in the navigation drawer, a QR scanner will access their camera and display a code reader. Once a user scans a QR code, a query will be sent to the server to determine if the QR code is valid. If not, the appropriate error handling will take place. If so, the user will be apart of that society.
 
 ### Generate QR Code
 
-When a committee member user wishes to generate a QR Code for a member to signup to their society. This fragment will request a QR token from the database, once this token is recieved, a webview will open the token's URL and display a QR code that is valid for 5 minutes. 
+When a committee member user wishes to generate a QR Code for a member to signup to their society. This fragment will request a QR token from the database, once this token is recieved, a WebView will open the token's URL and display a QR code that is valid for 5 minutes. 
 
 ### Update User Details
 
-If a user wishes to edit their details, their current information will be displayed on edit text fields. When a user clicks on the the 'Update' button, it will update the database.  
+If a user wishes to edit their details, their current information will be displayed on edit text fields. When a user clicks on the 'Update' button, it will update the database.  
 
 ### Chair Tools
 
@@ -60,22 +60,22 @@ The chair tools allows a Chair user of a society to add and remove members from 
 ## Front-End
 
 ### Login/Register
-Queries a database on a webserver once someone logs in or registers. Both operations deal with input errors and and failed queries and will display appropriate error messaging.
+Queries a database on a webserver once someone logs in or registers. Both operations deal with input errors and failed queries and will display appropriate error messaging.
 
 ### Home
 Makes use of fragments to display different layouts within the homepage. A navigation drawer will control the movement between different fragments. All user data is pulled from a local database or instance while the app is running. 
 
 ### QR Generator
-Server is queried to create a token which will be return upon success. This token will be intserted into a URL which will point to the the QR code. The app with display the QR code and shall only be readable once.
+Server is queried to create a token which will be return upon success. This token will be intserted into a URL which will point to the QR code. The app with display the QR code and shall only be readable once.
 
 ### User Details
-All of the users information is stored on a local database once they login. When they wish to edit their data, the database will be queried to return all required information. The information will be displayed in edit text fields, allowing a user to update their data. If an update query is made, the server will update will update the users information.
+All of the user’s information is stored on a local database once they login. When they wish to edit their data, the database will be queried to return all required information. The information will be displayed in edit text fields, allowing a user to update their data. If an update query is made, the server will update will update the user’s information.
 
 ### QR Scanner
-With the use of the ZXing library, the application can open the users camera to display a code scanner. Once the code is scanned, a thread will send a query that the QR has been scanned by that user to the server. The server will then add them to the society from which the code was generated from. 
+With the use of the ZXing library, the application can open the user’s camera to display a code scanner. Once the code is scanned, a thread will send a query that the QR has been scanned by that user to the server. The server will then add them to the society from which the code was generated from. 
 
 ### Society Search
-A search will me made to the local database of the list of available socities. A drop-down list will display of results that will allow a user to click into the result list of socities pages. Radio buttons under the serach bar allow the search to  These pages will pull information from a database that will describe the society and depending on the user's credentials, buttons will display allowing them to either generate a QR code or utilise the Chair Tools. 
+A search will me made to the local database of the list of available societies. A drop-down list will display of results that will allow a user to click into the result list of societies pages. Radio buttons under the search bar allow the search to. These pages will pull information from a database that will describe the society and depending on the user's credentials, buttons will display allowing them to either generate a QR code or utilise the Chair Tools. 
 
 ## Back-End
 
@@ -84,7 +84,7 @@ A search will me made to the local database of the list of available socities. A
 # Key Notes
 
 * QR generator within the application
-* Fully operation login/register features that are handled on Rasberry Pi
+* Fully operation login/register features that are handled on Raspberry Pi
 * All server capabilities are hosted on a Raspberry Pi
 * QR scanner within the application
 * Fragmentation within that app utilised
