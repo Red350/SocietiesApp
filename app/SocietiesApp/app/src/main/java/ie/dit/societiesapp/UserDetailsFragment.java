@@ -92,6 +92,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
     }
 
     private void setTextFields() {
+        Log.d("DETAILSDEBUG", "Updating local fields");
         // get user data
         SharedPreferences userData = getContext().getSharedPreferences("userData", 0);
 
@@ -107,7 +108,6 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         int name_column = cursor.getColumnIndex("name");
         int mobile_column = cursor.getColumnIndex("mobile");
         int phone_column = cursor.getColumnIndex("emergency_ph");
-        //int full_time_column = cursor.getColumnIndex("full_part_time");
 
         String userName = emptyString(cursor.getString(name_column));
         String userMobile = emptyString(cursor.getString(mobile_column));
@@ -158,11 +158,9 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
 
     public void onClick(View v) {
-        Log.d("DETAILSDEBUG", "Screen pressed");
         switch(v.getId()) {
             // Send the user's details to the server
             case R.id.updateButton:
-                Log.d("DETAILSDEBUG", "Button clicked");
                 String name = editNameView.getText().toString();
                 String mobile = editMobileView.getText().toString();
                 String emergencyPhone = editEmergencyPhoneView.getText().toString();
@@ -240,8 +238,10 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
                 if(response.isValid())
                 {
                     // Only update the local database if the server updated
+                    SharedPreferences userData = getContext().getSharedPreferences("userData", 0);
+                    int userID = Integer.parseInt(userData.getString("member_id", "-1"));
                     SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
-                    if (db.partialUpdateUserDetails(name, mobile, emergencyPhone)) {
+                    if (db.partialUpdateUserDetails(userID, name, mobile, emergencyPhone)) {
                         return true;
                     } else {
                         Log.d("DETAILSDEBUG", "Failed to update local database");
@@ -268,6 +268,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
             swipeLayout.setEnabled(true);
             updateButton.setVisibility(View.VISIBLE);
             userUpdateProgress.setVisibility(View.GONE);
+            // Refresh the text fields with the new values
+            setTextFields();
             if(success) {
                 Toast.makeText(getActivity(), "Details updated",
                         Toast.LENGTH_LONG).show();
