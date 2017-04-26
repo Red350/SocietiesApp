@@ -152,7 +152,7 @@ Views societies in more detail including their members/committee members/chair
 * All server capabilities are hosted on a Raspberry Pi
 * QR scanner within the application
 * Application utilises session_id's to keep the user logged in
-* Back end is written entirely in python, which we had to learn ourselves.
+* Back end is written entirely in python, which we learned ourselves
 * Admin tools generates html tables dynamically based on tables in the database.
 
 # Download
