@@ -166,8 +166,25 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
     }
 
     public void onRefresh() {
-//        UpdateSocietiesTask updateTask = new UpdateSocietiesTask();
-//        updateTask.execute();
+        GetUserDetailsTask getUserDetailsTask = new GetUserDetailsTask();
+        getUserDetailsTask.execute();
+
+    }
+
+    private void disableView() {
+        updateButton.setEnabled(false);
+
+        editNameView.setEnabled(false);
+        editMobileView.setEnabled(false);
+        editEmergencyPhoneView.setEnabled(false);
+    }
+
+    private void enableView() {
+        updateButton.setEnabled(true);
+
+        editNameView.setEnabled(true);
+        editMobileView.setEnabled(true);
+        editEmergencyPhoneView.setEnabled(true);
     }
 
     // Send the updated user details to the server
@@ -180,6 +197,13 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
             this.name = name;
             this.mobile = mobile;
             this.emergencyPhone = emergencyPhone;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // Make the view unclickable
+            disableView();
+            swipeLayout.setEnabled(false);
         }
 
         @Override
@@ -203,7 +227,14 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
                 // Check if the details updated successfully
                 if(response.isValid())
                 {
-                    return true;
+                    // Only update the local database if the server updated
+                    SocDBOpenHelper db = new SocDBOpenHelper(getActivity().getApplicationContext());
+                    if (db.partialUpdateUserDetails(name, mobile, emergencyPhone)) {
+                        return true;
+                    } else {
+                        Log.d("DETAILSDEBUG", "Failed to update local database");
+                        return false;
+                    }
                 } else {
                     Log.d("DETAILSDEBUG", response.getMessage());
                     return false;
@@ -221,6 +252,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         @Override
         protected void onPostExecute(final Boolean success)
         {
+            enableView();
+            swipeLayout.setEnabled(true);
             if(success) {
                 Toast.makeText(getActivity(), "Details updated",
                         Toast.LENGTH_LONG).show();
@@ -237,7 +270,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
         public GetUserDetailsTask()
         {
-
+            disableView();
         }
 
         @Override
@@ -246,8 +279,8 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
 
             SocDBUpdater db = new SocDBUpdater(getActivity().getApplicationContext());
             try {
-                Log.d("SOCDEBUG", "Attempting to update local database");
-                db.updateAllSocietyData();
+                Log.d("DETAILSDEBUG", "Attempting to update local database");
+                db.updateUserDetails();
                 return true;
             } catch(Exception e) {
                 e.printStackTrace();
@@ -259,6 +292,7 @@ public class UserDetailsFragment extends Fragment implements View.OnClickListene
         protected void onPostExecute(final Boolean success)
         {
             swipeLayout.setRefreshing(false);
+            enableView();
         }
     }
 }
