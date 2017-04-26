@@ -13,7 +13,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:hint="Member ID"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:hint="Email"
             android:ems="10" />
     </android.support.design.widget.TextInputLayout>
 
@@ -45,7 +47,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:hint="Member ID"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:hint="Email"
             android:ems="10" />
     </android.support.design.widget.TextInputLayout>
 

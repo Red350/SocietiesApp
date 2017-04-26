@@ -34,6 +34,9 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
     private int society_id;
 
+    AutoCompleteTextView addTextView;
+    AutoCompleteTextView deleteTextView;
+
     private Button addButton;
     private Button deleteButton;
 
@@ -70,6 +73,9 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         // Create a listener for the search button
         View v = inflater.inflate(R.layout.fragment_chairtools, container, false);
+
+        addTextView = (AutoCompleteTextView) v.findViewById(R.id.chair_add_field);
+        deleteTextView = (AutoCompleteTextView) v.findViewById(R.id.chair_delete_field);
 
         addButton = (Button) v.findViewById(R.id.chair_add_button);
         addButton.setOnClickListener(this);
@@ -129,38 +135,23 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
     }
 
     private void addCommittee() {
-        AutoCompleteTextView addTextView = (AutoCompleteTextView) getView().findViewById(R.id.chair_add_field);
         String committee_email;
-        try {
-            committee_email = addTextView.getText().toString();
-            addButton.setVisibility(View.GONE);
-            addProgress.setVisibility(View.VISIBLE);
-            addCommitteeTask addTask = new addCommitteeTask(committee_email);
-            addTask.execute();
-        }
-        catch(NumberFormatException e) {
-            e.printStackTrace();
-            Log.d("CHAIRTOOLSDEBUG", "Add committee: not a number");
-        }
-
+        committee_email = addTextView.getText().toString();
+        addButton.setVisibility(View.GONE);
+        addProgress.setVisibility(View.VISIBLE);
+        addCommitteeTask addTask = new addCommitteeTask(committee_email);
+        addTask.execute();
     }
 
     private void deleteCommittee() {
-        AutoCompleteTextView addTextView = (AutoCompleteTextView) getView().findViewById(R.id.chair_delete_field);
         String committee_email;
-        try {
-            committee_email = addTextView.getText().toString();
-            deleteButton.setVisibility(View.GONE);
-            deleteProgress.setVisibility(View.VISIBLE);
-            deleteCommitteeTask deleteTask = new deleteCommitteeTask(committee_email);
-            deleteTask.execute();
-        }
-        catch(NumberFormatException e) {
-            e.printStackTrace();
-            Log.d("CHAIRTOOLSDEBUG", "Add committee: not a number");
-        }
-    }
+        committee_email = deleteTextView.getText().toString();
+        deleteButton.setVisibility(View.GONE);
+        deleteProgress.setVisibility(View.VISIBLE);
+        deleteCommitteeTask deleteTask = new deleteCommitteeTask(committee_email);
+        deleteTask.execute();
 
+    }
 
     public void onClick(View v) {
         switch(v.getId()) {
@@ -183,8 +174,11 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
         @Override
         protected void onPreExecute() {
+            // Disable views during execution
             addButton.setEnabled(false);
             deleteButton.setEnabled(false);
+            addTextView.setEnabled(false);
+            addTextView.setEnabled(false);
         }
 
         @Override
@@ -227,8 +221,11 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
             addButton.setVisibility(View.VISIBLE);
             addButton.setEnabled(true);
             deleteButton.setEnabled(true);
+            addTextView.setEnabled(true);
+            deleteTextView.setEnabled(true);
             if (success)
             {
+                addTextView.setText("");
                 Toast.makeText(getActivity(), "Added committee member",
                         Toast.LENGTH_LONG).show();
                 Log.d("CHAIRTOOLSDEBUG", "Added successfully");
@@ -250,8 +247,11 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
 
         @Override
         protected void onPreExecute() {
+            // Disable views during execution
             addButton.setEnabled(false);
             deleteButton.setEnabled(false);
+            addTextView.setEnabled(false);
+            addTextView.setEnabled(false);
         }
 
         @Override
@@ -294,8 +294,11 @@ public class ChairToolsFragment extends Fragment implements View.OnClickListener
             deleteButton.setVisibility(View.VISIBLE);
             addButton.setEnabled(true);
             deleteButton.setEnabled(true);
+            addTextView.setEnabled(true);
+            deleteTextView.setEnabled(true);
             if (success)
             {
+                deleteTextView.setText("");
                 Toast.makeText(getActivity(), "Deleted committee member",
                         Toast.LENGTH_LONG).show();
                 Log.d("CHAIRDEBUG", "Deleted successfully");
