@@ -10,9 +10,9 @@ The following is a submission for the third Object Oriented Programming assignme
 
 # You Tube
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Cg_J-sKSj7Q/0.jpg)](https://www.youtube.com/watch?v=Cg_J-sKSj7Q)
+[![Joining a Society](https://img.youtube.com/vi/mr11fARf72I/0.jpg)](https://www.youtube.com/watch?v=mr11fARf72I)
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/oROsaa0amNU/0.jpg)](https://www.youtube.com/watch?v=oROsaa0amNU)
+[![App Functionality](https://img.youtube.com/vi/oROsaa0amNU/0.jpg)](https://www.youtube.com/watch?v=oROsaa0amNU)
 
 # Concept
 
